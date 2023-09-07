@@ -1,20 +1,16 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoginEroor extends StatefulWidget {
+class LoginEroor extends StatelessWidget {
   const LoginEroor({super.key});
 
-  @override
-  State<LoginEroor> createState() => _LoginEroorState();
-}
-
-class _LoginEroorState extends State<LoginEroor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 130.0),
-        children: <Widget>[
+        children: const <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

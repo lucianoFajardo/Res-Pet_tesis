@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:respet_app/src/views/login/login_view.dart';
-
+import 'package:respet_app/src/routers/routers.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -12,12 +11,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter pet rest',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginView()
+      initialRoute: Routers.initialRoute,
+      routes: Routers.routes,
+      onGenerateRoute: Routers.onGenerateRoutesProvider
     );
   }
 }

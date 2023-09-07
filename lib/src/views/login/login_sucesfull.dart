@@ -1,20 +1,17 @@
 //import 'package:flutter/cupertino.dart';
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
-class LoginSucesFull extends StatefulWidget {
+class LoginSucesFull extends StatelessWidget {
   const LoginSucesFull({super.key});
 
-  @override
-  State<LoginSucesFull> createState() => _LoginSucesFullState();
-}
-
-class _LoginSucesFullState extends State<LoginSucesFull> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 130.0),
-        children: <Widget>[
+        children: const <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

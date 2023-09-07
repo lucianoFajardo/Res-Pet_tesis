@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatelessWidget {
@@ -23,7 +24,6 @@ class LoginView extends StatelessWidget {
                         textAlign: TextAlign.center,
                       )),
                     )),
-
                 SizedBox(
                   width: double
                       .maxFinite, //! tener en cuenta esto para las posibles actualizaciones de pantalla que se tengan.
@@ -37,7 +37,6 @@ class LoginView extends StatelessWidget {
                             color: Colors.black)),
                   ),
                 ),
-
                 Padding(
                   padding: EdgeInsets.all(10),
                   child: TextField(
@@ -82,7 +81,10 @@ class LoginView extends StatelessWidget {
                     child: MaterialButton(
                       height: 50,
                       color: Colors.amber,
-                      onPressed: () => print("Enviar a redireccionar"),
+                      onPressed: () {
+                        print("");
+                        Navigator.pushNamed(context, 'register');
+                      },
                       child: const Text(
                         'Registrate',
                         style: TextStyle(color: Colors.black),
@@ -104,9 +106,7 @@ class LoginView extends StatelessWidget {
                         child: Text('¿Olvidaste tu contraseña? Te ayudamos',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
-                                color: Colors.black
-                              )
-                            ),
+                                color: Colors.black)),
                       )),
                 ),
                 Padding(
