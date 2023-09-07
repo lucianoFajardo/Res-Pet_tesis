@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +13,7 @@ class LoginView extends StatelessWidget {
               children: <Widget>[
                 //? aqui va el logo
                 Padding(
-                    padding: EdgeInsets.only(top: 50, bottom: 10),
+                    padding: EdgeInsets.only(top: 80, bottom: 10),
                     child: SizedBox(
                       width: 150,
                       height: 200,
