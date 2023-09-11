@@ -65,7 +65,7 @@ class homepageView extends StatelessWidget {
           child: ListTile(title: Text("pass : ${user.pass}")),
         ),
 
-        const Text("me vine dentro del bastian ? ")
+        const Text("Estoy en el home")
       ],
     );
   }

@@ -5,5 +5,6 @@ abstract class LoginEvent {}
 
 class LoginInWithEmailButtonPressed extends LoginEvent {
   final User user;
-  LoginInWithEmailButtonPressed({required this.user});
+  final bool? userTrue;
+  LoginInWithEmailButtonPressed({required this.user , this.userTrue});
 }

@@ -1,3 +1,4 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:respet_app/src/Models/user_model.dart';
