@@ -8,6 +8,11 @@ part of 'login_bloc.dart';
 abstract class LoginEvent {}
 
 class ActivateUser extends LoginEvent {
-  final User user;
+  final User user;  //? User ya trae los campos nombre y contraseña integrados dentro de si asi que no es necesario llamarlos dos veces
   ActivateUser(this.user);
+}
+
+class LoginInWithEmailButtonPressed extends LoginEvent {
+  final User user;
+  LoginInWithEmailButtonPressed({required this.user});
 }

@@ -4,7 +4,7 @@ import 'package:respet_app/src/views/login/login_view.dart';
 import 'package:respet_app/src/views/register/register_view.dart';
 
 class Routers {
-  static const initialRoute = 'home_view';
+  static const initialRoute = 'login';
   static Map<String, Widget Function(BuildContext)> routes = {
     'login': (context) => const LoginView(),
     'register': (context) => const RegisterView(),

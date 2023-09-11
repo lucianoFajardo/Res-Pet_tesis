@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => LoginBloc())
       ],
-      
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter pet rest',

@@ -29,11 +29,11 @@ class _HomeViewPageState extends State<HomeViewPage> {
                       color: Colors.blue,
                       onPressed: () {
                         final userSend = User(
-                            name: "luciano fajardo",
-                            pass: "el bastian es maricon?");
+                            name: "luciano@gmail.com",
+                            pass: "123456789");
                         //! dentro de este boton puedo llamara a las funciones que se necesitan para ocupar la data ejemplo seria pasar los campos que necesito renderizar como nombre y estado
                         BlocProvider.of<LoginBloc>(context, listen: false)
-                            .add(ActivateUser(userSend));
+                            .add(LoginInWithEmailButtonPressed(user: userSend));
                       },
                       child: const Text(
                         'Inicializar data',
@@ -65,7 +65,7 @@ class homepageView extends StatelessWidget {
           child: ListTile(title: Text("pass : ${user.pass}")),
         ),
 
-        const Text("estoy dentro del home")
+        const Text("me vine dentro del bastian ? ")
       ],
     );
   }
