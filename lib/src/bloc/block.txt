@@ -10,3 +10,33 @@
 
 
                             // contraseña : hola12345
+
+
+
+
+
+                                Future _currentSession() async {
+      setState(() {
+        user = client.auth.currentUser;
+      });
+      client.auth.onAuthStateChange.listen((event) {
+        if (event == AuthChangeEvent.signedIn) {
+          print("user data LoginView: ${user!.email}");
+          setState(() {
+            _isLogOut = true;
+          });
+        }
+      });
+    }
+
+
+        Future createUser({
+      required final String name,
+      required final String contra,
+    }) async {
+      try {
+        final res = await client.auth.signUp(email: name, password: contra);
+      } catch (e) {
+        print("error type : -> ${e}");
+      }
+    }

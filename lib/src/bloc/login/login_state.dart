@@ -24,10 +24,22 @@ class LoginSetInitState extends LoginState {
 }
 
 class LoginSuccesFull extends LoginState {
-  final String teseccesfull;
-  LoginSuccesFull(this.teseccesfull,);
-    @override
-  List<Object> get props => [teseccesfull];
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}
+
+class LoginLoading extends LoginState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}
+
+class LoginExitSuccesfull extends LoginState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+
 }
 
 class ErrorLogin extends LoginState {
@@ -35,4 +47,13 @@ class ErrorLogin extends LoginState {
   ErrorLogin(this.errorView);
   @override
   List<Object> get props => [errorView];
+}
+
+class ErrorExitUser extends LoginState {
+  final String exitUser;
+  ErrorExitUser(this.exitUser);
+  @override
+  // TODO: implement props
+  List<Object?> get props => [exitUser];
+
 }
