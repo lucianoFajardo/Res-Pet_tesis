@@ -1,0 +1,12 @@
+                            final userSend = User(
+                                name: _inputUser.value.text, pass: _inputPass.value.text);
+                            //! dentro de este boton puedo llamara a las funciones que se necesitan para ocupar la data ejemplo seria pasar los campos que necesito renderizar como nombre y estado
+                            BlocProvider.of<LoginBloc>(context, listen: false)
+                                .add(LoginInWithEmailButtonPressed(
+                                    user: userSend));
+
+                            Navigator.pushNamed(context, 'home_view');
+
+
+
+                            // contraseña : hola12345

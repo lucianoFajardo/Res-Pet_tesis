@@ -1,19 +1,60 @@
-// ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers, unused_local_variable
+// ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers, unused_local_variable, unused_element, use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:respet_app/src/Models/user_model.dart';
-import 'package:respet_app/src/bloc/bloc_login/login_bloc.dart';
+import 'package:respet_app/main.dart';
+import 'package:respet_app/src/bloc/login/login_cubit.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  User? user;
+  bool _isLogOut = false;
+
   @override
   Widget build(BuildContext context) {
     final _inputPass = TextEditingController();
     final _inputUser = TextEditingController();
 
+    Future createUser({
+      required final String name,
+      required final String contra,
+    }) async {
+      try {
+        final res = await client.auth.signUp(email: name, password: contra);
+      } catch (e) {
+        print("error type : -> ${e}");
+      }
+    }
+
+    Future _currentSession() async {
+      setState(() {
+        user = client.auth.currentUser;
+      });
+      client.auth.onAuthStateChange.listen((event) {
+        if (event == AuthChangeEvent.signedIn) {
+          print("user data LoginView: ${user!.email}");
+          setState(() {
+            _isLogOut = true;
+          });
+        }
+      });
+    }
+
+    @override
+    void initState() {
+      _currentSession();
+      super.initState();
+    }
+    
     return Scaffold(
-      body: BlocBuilder<LoginBloc, LoginState>(
-        builder: (_, state) {
+      body: BlocBuilder<LoginCubit, LoginState>(
+        builder: (context, state) {
           return Stack(
             children: [
               SingleChildScrollView(
@@ -31,7 +72,7 @@ class LoginView extends StatelessWidget {
                             textAlign: TextAlign.center,
                           )),
                         )),
-                    Text(""),
+                    // Text(dotenv.get('SUPABASE_URL' , fallback: "not found url"))
                     SizedBox(
                       width: double
                           .maxFinite, //! tener en cuenta esto para las posibles actualizaciones de pantalla que se tengan.
@@ -49,9 +90,7 @@ class LoginView extends StatelessWidget {
                       padding: EdgeInsets.all(10),
                       child: TextField(
                         controller: _inputUser,
-                        onChanged: (value) {
-                          
-                        },
+                        onChanged: (value) {},
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20)),
@@ -77,26 +116,45 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
+
+                    /**                Padding(
                         padding: EdgeInsets.only(bottom: 5),
                         child: MaterialButton(
                           height: 50,
                           color: Colors.amber,
-                          onPressed: () {
-                            final userSend = User(
-                                name: _inputUser.value.text, pass: _inputPass.value.text);
-                            //! dentro de este boton puedo llamara a las funciones que se necesitan para ocupar la data ejemplo seria pasar los campos que necesito renderizar como nombre y estado
-                            BlocProvider.of<LoginBloc>(context, listen: false)
-                                .add(LoginInWithEmailButtonPressed(
-                                    user: userSend));
-
-                            Navigator.pushNamed(context, 'home_view');
+                          onPressed: () async {
+                            // aqui va toda la logica 🤨  de supabase
+                            try {
+                              final obj1 = await createUser(
+                                  name: _inputUser.text, contra: _inputPass.text);
+                              print(obj1);
+                            } catch (e) {
+                              print("error create user because :  ");
+                            }
                           },
                           child: const Text(
                             'Iniciar sesion',
                             style: TextStyle(color: Colors.black),
                           ),
                         )),
+                        
+                        Esta funcion es de ingresar a su session
+                        try {
+                              final obj = await ingresar(
+                                      name: _inputUser.text,
+                                      pass: _inputPass.text)
+                                  .then((value) {
+                                Navigator.of(context)
+                                    .pushReplacementNamed('home_view');
+                              });
+                            } catch (e) {
+                              print("error because : ");
+                            }
+                        
+                        */
+
+                    //TODO: habilitar el boton para agregar un usuario
+
                     SizedBox(
                       height: 30,
                       child: Text("o"),
@@ -106,9 +164,11 @@ class LoginView extends StatelessWidget {
                         child: MaterialButton(
                           height: 50,
                           color: Colors.amber,
-                          onPressed: () {
-                            print("");
-                            Navigator.pushNamed(context, 'register');
+                          onPressed: () async {
+                            await context.read<LoginCubit>().SingInUser(
+                                userName: _inputUser.text,
+                                passUser: _inputPass.text,
+                                contextClass: this.context);
                           },
                           child: const Text(
                             'Registrate',
@@ -138,7 +198,15 @@ class LoginView extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       child: Text(
                           "los datos de la aplicación como los terminos y condiciones que se ocuparanal desarrollar la app"),
-                    )
+                    ),
+
+                    _isLogOut
+                        ? Text("Salir de la session",
+                            style: TextStyle(color: Colors.green))
+                        : Text(
+                            "No se puede salir de la session",
+                            style: TextStyle(color: Colors.red),
+                          ),
                   ],
                 ),
               ),
