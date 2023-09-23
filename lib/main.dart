@@ -20,6 +20,7 @@ Future<void> main() async {
 }
 
 final client = Supabase.instance.client;
+final userPersistence = client.auth.currentSession != null;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

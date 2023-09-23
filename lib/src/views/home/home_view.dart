@@ -27,7 +27,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                   duration: Duration(seconds: 3)));
             }
             if (state is LoginExitSuccesfull) {
-              Navigator.popAndPushNamed(context, 'login');
+              Navigator.pop(context, 'login');
             }
           },
           builder: (context, state) {

@@ -5,22 +5,15 @@ part of 'login_cubit.dart';
 abstract class LoginState extends Equatable {}
 
 class LoginInitial extends LoginState {
-  final String? nombre;
-  final String? pass;
-  LoginInitial({this.nombre, this.pass});
-  //LoginState copyWith({String? nombre, String? pass}) {
-   // return LoginInitial(nombre: nombre ?? this.nombre, pass: pass ?? this.pass);
-  //}
   @override
-  List<Object> get props => [nombre!, pass!];
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 }
 
 class LoginSetInitState extends LoginState {
-  final String nombre;
-  final String pass;
-  LoginSetInitState({required this.nombre, required this.pass});
   @override
-  List<Object> get props => [nombre, pass];
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
 }
 
 class LoginSuccesFull extends LoginState {
@@ -39,7 +32,6 @@ class LoginExitSuccesfull extends LoginState {
   @override
   // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
-
 }
 
 class ErrorLogin extends LoginState {
@@ -55,5 +47,4 @@ class ErrorExitUser extends LoginState {
   @override
   // TODO: implement props
   List<Object?> get props => [exitUser];
-
 }

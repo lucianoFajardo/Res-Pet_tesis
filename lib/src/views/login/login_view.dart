@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers, unused_local_variable, unused_element, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers, unused_local_variable, unused_element, use_build_context_synchronously, avoid_print
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
@@ -29,9 +29,7 @@ class LoginView extends StatelessWidget {
       }
     }, builder: (context, state) {
       if (state is LoginLoading) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return Center(child: CircularProgressIndicator());
       } else {
         return Stack(
           children: [
@@ -128,11 +126,13 @@ class LoginView extends StatelessWidget {
                       child: MaterialButton(
                         height: 50,
                         color: Colors.amber,
+
                         onPressed: () {
                           _loginCubitState.SingInUser(
                               userName: _inputUser.text,
                               passUser: _inputPass.text);
                         },
+                        
                         child: const Text(
                           'Registrate',
                           style: TextStyle(color: Colors.black),
