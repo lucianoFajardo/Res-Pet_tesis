@@ -2,6 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:respet_app/src/bloc/login/login_cubit.dart';
+import 'package:respet_app/src/views/login/login_view.dart';
 
 class SettingPageUI extends StatefulWidget {
   const SettingPageUI({super.key});
@@ -35,73 +38,99 @@ class _SettingPageUIState extends State<SettingPageUI> {
 
   @override
   Widget build(BuildContext context) {
+    final _loginExitState = BlocProvider.of<LoginCubit>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Configuraciones', style: TextStyle(fontSize: 22)),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: Icon(
             Icons.arrow_back, //flecha de regreso //
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: [
-            SizedBox(height: 40),
-            Row(
+      body: BlocBuilder<LoginCubit, LoginState>(
+        builder: (context, state) {
+          if (state is ErrorExit) {
+            return Center(child: Text("error: ${state.errorView.toString()}"));
+          }
+          if (state is LoginLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Container(
+            padding: const EdgeInsets.all(10),
+            child: ListView(
               children: [
-                Icon(
-                  Icons.person,
-                  color: Colors.blue,
+                SizedBox(height: 40),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      color: Colors.blue,
+                    ),
+                    SizedBox(width: 10),
+                    Text("Mi Cuenta",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold))
+                  ],
                 ),
-                SizedBox(width: 10),
-                Text("Mi Cuenta",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                Divider(height: 20, thickness: 1),
+                SizedBox(height: 10), //creador de separador de liena//
+                buildAccountOption(context, "Cuenta"),
+                buildAccountOption(context, "Privacidad"),
+                buildAccountOption(context, 'Seguridad'),
+                buildAccountOption(context, "lenguaje"),
+                buildAccountOption(context, "Temas de Servicios"),
+                SizedBox(height: 40),
+                Row(
+                  children: [
+                    Icon(Icons.volume_up_outlined, color: Colors.blue),
+                    SizedBox(width: 10),
+                    Text('Notifications',
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold))
+                  ],
+                ),
+                Divider(height: 20, thickness: 1),
+                SizedBox(
+                  height: 10,
+                ),
+                buildNotificationOption(
+                    "Nuevas Publicaciones", valNotify1, onChangeFunction1),
+                buildNotificationOption(
+                    "Previsualizar", valNotify2, onChangeFunction2),
+                SizedBox(height: 15),
+                Center(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                    onPressed: () async {
+                      Future.delayed(Duration(seconds: 3), () {
+                        _loginExitState.SingOut();
+                          //TODO : Agregar la ruta para volver al login o cerrar la sesion.
+                          //Navigator.popUntil(context, ModalRoute.withName('login'));
+                      });
+                    },
+                    child: Text('Cerrar Cuenta',
+                        style: TextStyle(
+                            fontSize: 16,
+                            letterSpacing: 2.2,
+                            color: Colors.black)),
+                  ),
+                ),
               ],
             ),
-            Divider(height: 20, thickness: 1),
-            SizedBox(height: 10), //creador de separador de liena//
-            buildAccountOption(context, "Cuenta"),
-            buildAccountOption(context, "Privacidad"),
-            buildAccountOption(context, 'Seguridad'),
-            buildAccountOption(context, "lenguaje"),
-            buildAccountOption(context, "Temas de Servicios"),
-            SizedBox(height: 40),
-            Row(
-              children: [
-                Icon(Icons.volume_up_outlined, color: Colors.blue),
-                SizedBox(width: 10),
-                Text('Notifications',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-              ],
-            ),
-            Divider(height: 20, thickness: 1),
-            SizedBox(
-              height: 10,
-            ),
-            buildNotificationOption(
-                "Nuevas Publicaciones", valNotify1, onChangeFunction1),
-            buildNotificationOption(
-                "Previsualizar", valNotify2, onChangeFunction2),
-            buildNotificationOption("Anuncios", valNotify3, onChangeFunction3),
-            SizedBox(height: 50),
-            Center(
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20))),
-                onPressed: () {},
-                child: Text('Cerrar Cuenta',
-                    style: TextStyle(
-                        fontSize: 16, letterSpacing: 2.2, color: Colors.black)),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

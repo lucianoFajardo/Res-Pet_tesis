@@ -1,0 +1,42 @@
+                            final userSend = User(
+                                name: _inputUser.value.text, pass: _inputPass.value.text);
+                            //! dentro de este boton puedo llamara a las funciones que se necesitan para ocupar la data ejemplo seria pasar los campos que necesito renderizar como nombre y estado
+                            BlocProvider.of<LoginBloc>(context, listen: false)
+                                .add(LoginInWithEmailButtonPressed(
+                                    user: userSend));
+
+                            Navigator.pushNamed(context, 'home_view');
+
+
+
+                            // contraseña : hola12345
+
+
+
+
+
+                                Future _currentSession() async {
+      setState(() {
+        user = client.auth.currentUser;
+      });
+      client.auth.onAuthStateChange.listen((event) {
+        if (event == AuthChangeEvent.signedIn) {
+          print("user data LoginView: ${user!.email}");
+          setState(() {
+            _isLogOut = true;
+          });
+        }
+      });
+    }
+
+
+        Future createUser({
+      required final String name,
+      required final String contra,
+    }) async {
+      try {
+        final res = await client.auth.signUp(email: name, password: contra);
+      } catch (e) {
+        print("error type : -> ${e}");
+      }
+    }
