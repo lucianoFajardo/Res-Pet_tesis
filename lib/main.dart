@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
+import 'package:respet_app/src/bloc/register/register_cubit.dart';
 import 'package:respet_app/src/routers/routers.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,7 +28,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => LoginCubit())],
+      providers: [
+        BlocProvider(create: (_) => LoginCubit()),
+        BlocProvider(create: (_) => RegisterCubit()),],
+      
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter pet rest',
