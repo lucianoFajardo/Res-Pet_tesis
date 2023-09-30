@@ -19,7 +19,7 @@ class LoginView extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(state.errorView.toString()),
-            duration: Duration(seconds: 3),
+            duration: Duration(seconds: 2),
           ),
         );
       }
@@ -29,7 +29,7 @@ class LoginView extends StatelessWidget {
       }
     }, builder: (context, state) {
       if (state is LoginLoading) {
-        return Center(child: CircularProgressIndicator());
+        return Center(child: CircularProgressIndicator(color: Colors.red,));
       } else {
         return Stack(
           children: [
@@ -53,12 +53,14 @@ class LoginView extends StatelessWidget {
                         .maxFinite, //! tener en cuenta esto para las posibles actualizaciones de pantalla que se tengan.
                     child: Padding(
                       padding: const EdgeInsets.only(left: 10),
-                      child: Text("Inicio de sesión",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
+                      child: Center(
+                        child: Text("Inicio de sesión",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black)),
+                      ),
                     ),
                   ),
                   Padding(
@@ -92,28 +94,21 @@ class LoginView extends StatelessWidget {
                     ),
                   ),
 
-                  /**                Padding(
-                                padding: EdgeInsets.only(bottom: 5),
-                                child: MaterialButton(
-                                  height: 50,
-                                  color: Colors.amber,
-                                  onPressed: () async {
-                                    // aqui va toda la logica 🤨  de supabase
-                                    try {
-                                      final obj1 = await createUser(
-                                          name: _inputUser.text, contra: _inputPass.text);
-                                      print(obj1);
-                                    } catch (e) {
-                                      print("error create user because :  ");
-                                    }
-                                  },
-                                  child: const Text(
-                                    'Iniciar sesion',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                )),
-                              
-                                */
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 5),
+                      child: MaterialButton(
+                        height: 50,
+                        color: Colors.amber,
+                        onPressed: () {
+                          _loginCubitState.SingInUser(
+                              userName: _inputUser.text,
+                              passUser: _inputPass.text);
+                        },
+                        child: const Text(
+                          'Iniciar sesion',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      )),
 
                   //TODO: habilitar el boton para agregar un usuario
 
@@ -126,13 +121,9 @@ class LoginView extends StatelessWidget {
                       child: MaterialButton(
                         height: 50,
                         color: Colors.amber,
-
                         onPressed: () {
-                          _loginCubitState.SingInUser(
-                              userName: _inputUser.text,
-                              passUser: _inputPass.text);
+                          Navigator.pushNamed(context, 'register');
                         },
-                        
                         child: const Text(
                           'Registrate',
                           style: TextStyle(color: Colors.black),

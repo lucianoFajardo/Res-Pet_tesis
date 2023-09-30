@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => LoginCubit()),
-        BlocProvider(create: (_) => RegisterCubit()),],
-      
+        BlocProvider(create: (_) => RegisterCubit()),
+      ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter pet rest',
