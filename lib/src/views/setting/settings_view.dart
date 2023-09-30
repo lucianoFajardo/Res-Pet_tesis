@@ -116,8 +116,8 @@ class _SettingPageUIState extends State<SettingPageUI> {
                     onPressed: () async {
                       Future.delayed(Duration(seconds: 3), () {
                         _loginExitState.SingOut();
-                          //TODO : Agregar la ruta para volver al login o cerrar la sesion.
-                          //Navigator.popUntil(context, ModalRoute.withName('login'));
+                        //TODO : Agregar la ruta para volver al login o cerrar la sesion.
+                        //Navigator.popUntil(context, ModalRoute.withName('login'));
                       });
                     },
                     child: Text('Cerrar Cuenta',
