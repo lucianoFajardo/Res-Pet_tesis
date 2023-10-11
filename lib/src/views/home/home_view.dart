@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers, deprecated_member_use
 import 'package:flutter/material.dart';
+import 'package:respet_app/main.dart';
 import 'package:respet_app/src/views/home/app_bar.dart';
 
 class HomeViewPage extends StatefulWidget {
@@ -36,7 +37,9 @@ class _HomeViewPageState extends State<HomeViewPage> {
                 child: MaterialButton(
                   height: 50,
                   color: Colors.amber,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'new_post');
+                  },
                   child: const Text(
                     'subir imagen',
                     style: TextStyle(color: Colors.black),
@@ -137,10 +140,51 @@ class GridC extends StatefulWidget {
   State<GridC> createState() => _GridCState();
 }
 
+//TODO -> publicaciones en este apartado
+
 class _GridCState extends State<GridC> {
+  Color _isButtonColor = Colors.grey;
+  bool _isFavorite = true;
+  List dataList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  void _isFunctionFavorite() {
+    setState(() {
+      if (_isFavorite) {
+        _isButtonColor = Colors.red;
+        print('Agregar a lista de favoritos');
+      } else {
+        _isButtonColor = Colors.grey;
+        print('eliminar de la lista de favoritos');
+      }
+      _isFavorite = !_isFavorite;
+    });
+  }
+
+  Future<dynamic> getData() async {
+    try {
+      // final response = await client.from('countries').select('*').execute();
+      final resdata = await client.from('public_pets').select('*').execute();
+      final data = resdata.data as List;
+      print(data);
+      setState(() {
+        dataList = data;
+      });
+      return data;
+    } catch (e) {
+      print('Error al obtener datos: ${e}');
+    }
+  }
+
+//TODO -> revisar mañana el tema de la lectura de datos la idea es que si tiene datos me tiene que imprimir por consola el nombre del perro
+
   @override
   Widget build(BuildContext context) {
-    bool isFavorite = true;
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -150,8 +194,9 @@ class _GridCState extends State<GridC> {
         mainAxisSpacing: 12.0,
         mainAxisExtent: 120, //! this part is a height
       ),
-      itemCount: 1,
+      itemCount: 2,
       itemBuilder: (_, index) {
+        //print(index);
         return Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
@@ -160,7 +205,7 @@ class _GridCState extends State<GridC> {
             color: Colors.amberAccent.shade700,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(10),
@@ -172,19 +217,21 @@ class _GridCState extends State<GridC> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(5),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Nombre de mascota",
+                      "${dataList[index]['name']}",
                       style: TextStyle(fontSize: 15),
                     ),
                     Text(
-                      "Meses de vida",
+                      "${dataList[index]['location']}",
                       style: TextStyle(fontSize: 15),
                     ),
                     Text(
-                      "Localizacion",
+                      "${dataList[index]['isAdopted']}",
                       style: TextStyle(fontSize: 15),
                     ),
                     Container(
@@ -201,19 +248,19 @@ class _GridCState extends State<GridC> {
                 padding: const EdgeInsets.all(5),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: CircleAvatar(
-                          backgroundColor:
-                              isFavorite ? Colors.red : Colors.grey,
-                          child: IconButton(
-                            icon: Icon(Icons.favorite),
-                            onPressed: () => {
-                              //TODO: Cuando el usuario le de like el corazon debe de estar en rojo pero sino se debe de mostrar en gris.
-                              //TODO: Por defecto se debe mostrar como que no esta en favoritos.
-                            },
-                            color: Colors.white,
-                          )),
+                    Expanded(
+                      
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: CircleAvatar(
+                            backgroundColor: _isButtonColor,
+                            child: IconButton(
+                              icon: Icon(Icons.favorite),
+                              onPressed:
+                                  _isFunctionFavorite, //TODO : -> revisar esta funcion para tomar los indices que tengo y solo agregar el que yo seleccione.
+                              color: Colors.white,
+                            )),
+                      ),
                     ),
                     CircleAvatar(
                         backgroundColor: Colors.pink.shade300,
@@ -228,3 +275,29 @@ class _GridCState extends State<GridC> {
     );
   }
 }
+
+
+/**
+ *               Padding(
+                padding: const EdgeInsets.all(5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: CircleAvatar(
+                          backgroundColor: _isButtonColor,
+                          child: IconButton(
+                            icon: Icon(Icons.favorite),
+                            onPressed:
+                                _isFunctionFavorite, //TODO : -> revisar esta funcion para tomar los indices que tengo y solo agregar el que yo seleccione.
+                            color: Colors.white,
+                          )),
+                    ),
+                    CircleAvatar(
+                        backgroundColor: Colors.pink.shade300,
+                        child: Icon(Icons.female)),
+                  ],
+                ),
+              )
+ */

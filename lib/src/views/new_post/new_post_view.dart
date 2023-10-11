@@ -215,7 +215,7 @@ class _NewPostViewState extends State<NewPostView> {
 
             ConstrainedBox(
               constraints: const BoxConstraints(
-                minHeight: 50,
+                minHeight: 40,
               ),
               child: TextButton(
                 child: Row(
@@ -230,7 +230,7 @@ class _NewPostViewState extends State<NewPostView> {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(width: 270),
+                    const SizedBox(width: 250),
                     Icon(Icons.arrow_forward_ios_rounded,
                         color: Colors.deepPurple[600]),
                   ],
@@ -263,7 +263,7 @@ class _NewPostViewState extends State<NewPostView> {
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(width: 305),
+                    const SizedBox(width: 280),
                     Icon(Icons.arrow_forward_ios_rounded,
                         color: Colors.deepPurple[600]),
                   ],
