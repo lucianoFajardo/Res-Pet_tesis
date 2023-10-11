@@ -1,4 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:respet_app/main.dart';
+import 'package:respet_app/src/views/example/example_view.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({super.key});
@@ -8,55 +13,153 @@ class NewPostView extends StatefulWidget {
 }
 
 class _NewPostViewState extends State<NewPostView> {
+
+  File ? _imagenSeleccionada;
+  bool _botonActivado = false;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Colors.deepPurple[600],
-        backgroundColor: Colors.grey[300],
-        title: const Text("Nueva Publicacion"),
+        
+        appBar: AppBar(
+          foregroundColor: Colors.deepPurple[600],
+          backgroundColor: Colors.grey[300],
+          title: const Text("Nueva Publicacion"),
 
-        //*Boton
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
-            child: ElevatedButton(
-              onPressed: null,
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 18),
+          //*Boton
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11), 
+              child: ElevatedButton(
+                onPressed: _botonActivado
+                ? () async {
+                  
+                  try {
+
+                    final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
+                    final imagenBytes = await _imagenSeleccionada?.readAsBytes();
+                    final usuarioID = client.auth.currentUser!.id;
+                    final imagenPath = "/$usuarioID/imagen";
+
+                    await client.storage.from("imagenes").uploadBinary(imagenPath, imagenBytes!, fileOptions: FileOptions(upsert: true, contentType: "imagen/$imagenTipo"));
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Imagen subida"),
+                        duration: Duration(seconds: 4),
+                      ),
+                    );
+
+                    String imagenUrl = client.storage.from("imagenes").getPublicUrl(imagenPath);
+                      imagenUrl = Uri.parse(imagenUrl).replace(queryParameters: {"t": DateTime.now().millisecondsSinceEpoch.toString()}).toString();
+                    
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ExampleView(imagenURL: imagenUrl)));
+                    
+                  } catch (e) {
+                    print("Tipo de Error: $e");
+
+                  }
+
+                }
+                : null,
+
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(fontSize: 18),
+                ), 
+                
+                child: const Text(" Publicar "),
               ),
-              child: const Text(" Publicar "),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
 
-      //*Medio
-      body: SingleChildScrollView(
-        child: Column(
+        //*Medio
+        body: SingleChildScrollView(
+          child:  Column(
           children: <Widget>[
-            //?Cambiar imagen por una Card
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(width: 15, style: BorderStyle.solid)),
-              child: Image.network(
-                  "https://static.fundacion-affinity.org/cdn/farfuture/PVbbIC-0M9y4fPbbCsdvAD8bcjjtbFc0NSP3lRwlWcE/mtime:1643275542/sites/default/files/los-10-sonidos-principales-del-perro.jpg"),
-            ),
 
-            Divider(
-                indent: 5, endIndent: 5, thickness: 1, color: Colors.grey[500]),
+            const Divider(height: 5),
+        
+            _imagenSeleccionada != null 
+              ? Stack(
+                children: <Widget>[
+                  Card(
+                    clipBehavior: Clip.hardEdge,
+                    color: Colors.blueGrey[100],
+                    child: InkWell(
+                      splashColor: Colors.purple,
+
+                      onTap: (){
+                        seleccionarImagenDeGaleria();
+                      },
+                      
+                      child: SizedBox(
+                        height: 300,
+                        width: 370,
+
+                        child: Image.file(_imagenSeleccionada!, fit: BoxFit.fill, filterQuality: FilterQuality.low)
+                      ),
+                    ),
+                  ),
+
+                  Positioned(
+                    bottom: 6,
+                    right: 8,
+                    child: SizedBox(
+                      child: IconButton(
+                        color: const Color.fromARGB(255, 209, 13, 13),
+                        splashColor: const Color.fromARGB(255, 255, 41, 41),
+
+                        iconSize: 30,
+                        icon: const Icon(Icons.cancel_outlined),
+                        onPressed: (){
+                          setState(() {
+                            _imagenSeleccionada = null;
+                            _botonActivado = false;
+                          });
+                        }
+                      ),
+                    )
+                  ),
+                ],
+              )
+              : Card(
+                clipBehavior: Clip.hardEdge,
+                color: Colors.blueGrey[100],
+                child: InkWell(
+                  splashColor: Colors.purple,
+                      
+                  onTap: (){
+                    seleccionarImagenDeGaleria();
+                    
+                  },
+
+                  child: const SizedBox(
+                    height: 300,
+                     width: 370,
+                    child: Center(
+                      child: Text("Seleccione una Imagen de su Galeria."),
+                    ),
+                  ),
+                ),  
+              ),
+
+            Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500]),
 
             ConstrainedBox(
               constraints: const BoxConstraints(
                 maxHeight: 300,
               ),
+              
               child: const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: TextField(
-                  maxLines: null,
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(), hintText: "Pie de Foto"),
+                maxLines: null,
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Pie de Foto"
                 ),
+              ),
               ),
             ),
 
@@ -66,12 +169,16 @@ class _NewPostViewState extends State<NewPostView> {
               constraints: const BoxConstraints(
                 maxHeight: 300,
               ),
+              
               child: const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: TextField(
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(), hintText: "Nombre"),
+                
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Nombre"
                 ),
+              ),
               ),
             ),
 
@@ -81,13 +188,16 @@ class _NewPostViewState extends State<NewPostView> {
               constraints: const BoxConstraints(
                 maxHeight: 300,
               ),
+              
               child: const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: TextField(
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: "Color del Pelaje"),
+                
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Color del Pelaje"
                 ),
+              ),
               ),
             ),
 
@@ -97,13 +207,16 @@ class _NewPostViewState extends State<NewPostView> {
               constraints: const BoxConstraints(
                 maxHeight: 300,
               ),
+              
               child: const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: TextField(
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: "Peso en Kilos"),
+                
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Peso en Kilos"
                 ),
+              ),
               ),
             ),
 
@@ -113,12 +226,16 @@ class _NewPostViewState extends State<NewPostView> {
               constraints: const BoxConstraints(
                 maxHeight: 300,
               ),
+              
               child: const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: TextField(
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(), hintText: "Edad"),
+                
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Edad"
                 ),
+              ),
               ),
             ),
 
@@ -128,12 +245,16 @@ class _NewPostViewState extends State<NewPostView> {
               constraints: const BoxConstraints(
                 maxHeight: 300,
               ),
+              
               child: const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: TextField(
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(), hintText: "Sexo"),
+                
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: "Sexo"
                 ),
+              ),
               ),
             ),
 
@@ -144,29 +265,28 @@ class _NewPostViewState extends State<NewPostView> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: Text(
-                  "Agregar Ubicacion",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Colors.deepPurple[600],
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+                  "Agregar Ubicacion", 
+                  textAlign: TextAlign.left, 
+                  style: TextStyle(color: Colors.deepPurple[600], fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-
+            
             const SizedBox(height: 8),
 
             ConstrainedBox(
               constraints: const BoxConstraints(
                 maxHeight: 30,
               ),
+
               child: Padding(
                 padding: const EdgeInsets.only(left: 6),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: (){}, 
+                      
                       style: TextButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 16),
                         backgroundColor: Colors.white60,
@@ -175,10 +295,12 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                       child: const Text(" Iquique "),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: (){}, 
+                        
                         style: TextButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 16),
                           backgroundColor: Colors.white60,
@@ -188,10 +310,12 @@ class _NewPostViewState extends State<NewPostView> {
                         child: const Text(" Alto Hospicio "),
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: (){}, 
+                        
                         style: TextButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 16),
                           backgroundColor: Colors.white60,
@@ -206,198 +330,178 @@ class _NewPostViewState extends State<NewPostView> {
               ),
             ),
 
-            Divider(
-                indent: 5,
-                endIndent: 5,
-                thickness: 1,
-                color: Colors.grey[500],
-                height: 30),
+            Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500], height: 30),
 
             ConstrainedBox(
               constraints: const BoxConstraints(
                 minHeight: 50,
               ),
+
               child: TextButton(
                 child: Row(
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Vacunas",
-                        style: TextStyle(
-                            color: Colors.deepPurple[600],
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold),
+                        "Vacunas", 
+                        style: TextStyle(color: Colors.deepPurple[600], fontSize: 19, fontWeight: FontWeight.bold), 
                       ),
                     ),
+
                     const SizedBox(width: 270),
-                    Icon(Icons.arrow_forward_ios_rounded,
-                        color: Colors.deepPurple[600]),
+
+                    Icon(Icons.arrow_forward_ios_rounded, color: Colors.deepPurple[600]),
                   ],
                 ),
-                onPressed: () {},
+                onPressed: (){},
+
               ),
             ),
 
-            Divider(
-                indent: 5,
-                endIndent: 5,
-                thickness: 1,
-                color: Colors.grey[500],
-                height: 30),
+            Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500], height: 30),
 
             ConstrainedBox(
               constraints: const BoxConstraints(
                 minHeight: 50,
               ),
+
               child: TextButton(
                 child: Row(
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Chip",
-                        style: TextStyle(
-                            color: Colors.deepPurple[600],
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold),
+                        "Chip", 
+                        style: TextStyle(color: Colors.deepPurple[600], fontSize: 19, fontWeight: FontWeight.bold), 
                       ),
                     ),
+
                     const SizedBox(width: 305),
-                    Icon(Icons.arrow_forward_ios_rounded,
-                        color: Colors.deepPurple[600]),
+
+                    Icon(Icons.arrow_forward_ios_rounded, color: Colors.deepPurple[600]),
                   ],
                 ),
-                onPressed: () {},
+                onPressed: (){},
+
               ),
             ),
-
-            Divider(
-                indent: 5,
-                endIndent: 5,
-                thickness: 1,
-                color: Colors.grey[500],
-                height: 30),
+            
+            Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500], height: 30),
 
             ConstrainedBox(
               constraints: const BoxConstraints(
                 minHeight: 50,
               ),
+
               child: TextButton(
                 child: Row(
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Estirilización",
-                        style: TextStyle(
-                            color: Colors.deepPurple[600],
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold),
+                        "Estirilización", 
+                        style: TextStyle(color: Colors.deepPurple[600], fontSize: 19, fontWeight: FontWeight.bold), 
                       ),
                     ),
+
                     const SizedBox(width: 230),
-                    Icon(Icons.arrow_forward_ios_rounded,
-                        color: Colors.deepPurple[600]),
+
+                    Icon(Icons.arrow_forward_ios_rounded, color: Colors.deepPurple[600]),
                   ],
                 ),
-                onPressed: () {},
+                onPressed: (){},
+
               ),
             ),
-
-            Divider(
-                indent: 5,
-                endIndent: 5,
-                thickness: 1,
-                color: Colors.grey[500],
-                height: 30),
+            
+            Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500], height: 30),
 
             ConstrainedBox(
               constraints: const BoxConstraints(
                 minHeight: 50,
               ),
+
               child: TextButton(
                 child: Row(
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Tamaño",
-                        style: TextStyle(
-                            color: Colors.deepPurple[600],
-                            fontSize: 19,
-                            fontWeight: FontWeight.bold),
+                        "Tamaño", 
+                        style: TextStyle(color: Colors.deepPurple[600], fontSize: 19, fontWeight: FontWeight.bold), 
                       ),
                     ),
+
                     const SizedBox(width: 270),
-                    Icon(Icons.arrow_forward_ios_rounded,
-                        color: Colors.deepPurple[600]),
+
+                    Icon(Icons.arrow_forward_ios_rounded, color: Colors.deepPurple[600]),
                   ],
                 ),
-                onPressed: () {},
+                onPressed: (){},
+
               ),
             ),
-
-            Divider(
-                indent: 5,
-                endIndent: 5,
-                thickness: 1,
-                color: Colors.grey[500],
-                height: 30),
+            
+            Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500], height: 30),
 
             ConstrainedBox(
               constraints: const BoxConstraints(
                 maxHeight: 300,
               ),
+              
               child: const Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: TextField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    icon: Icon(Icons.phone),
-                    hintText: "+56 9 ",
-                  ),
+                
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  icon: Icon(Icons.phone),
+                  hintText: "+56 9 ",
                 ),
+              ),
               ),
             ),
 
-            Divider(
-                indent: 5,
-                endIndent: 5,
-                thickness: 1,
-                color: Colors.grey[500],
-                height: 30),
+            Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500], height: 30),
 
             SizedBox(
               width: double.infinity,
               child: Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          "Cuidados Específicos",
-                          style: TextStyle(
-                              color: Colors.deepPurple[600],
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        ),
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Column(
+                  children: [
+                    Align (
+                      alignment: Alignment.topLeft,
+                      child: Text("Cuidados Específicos", style: TextStyle(color: Colors.deepPurple[600], fontSize: 18, fontWeight: FontWeight.bold),),
+                    ),
+                    
+                    const TextField(
+                      maxLines: null,
+                      textAlign: TextAlign.left, 
+                      decoration: InputDecoration(
+                        hintText: "Escriba aqui.",
                       ),
-                      const TextField(
-                        textAlign: TextAlign.left,
-                        decoration: InputDecoration(
-                          hintText: "Escriba aqui.",
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
 
+                    ),
+                  ],
+                  
+                )
+              ),
+            ),
+            
             const SizedBox(height: 10),
           ],
         ),
       ),
     );
+  }
+
+  Future seleccionarImagenDeGaleria() async {
+    final _imagenIngresada = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imagenSeleccionada = File(_imagenIngresada!.path);
+      _botonActivado = true;
+    });
   }
 }
