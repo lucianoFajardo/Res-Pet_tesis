@@ -194,7 +194,7 @@ class _GridCState extends State<GridC> {
         mainAxisSpacing: 12.0,
         mainAxisExtent: 120, //! this part is a height
       ),
-      itemCount: 2,
+      itemCount: 1,
       itemBuilder: (_, index) {
         //print(index);
         return Container(
