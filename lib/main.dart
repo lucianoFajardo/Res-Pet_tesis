@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/bloc/CRUD/get_data_five_pets_cubit.dart';
 import 'package:respet_app/src/bloc/CRUD/operation_crud_cubit.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
+import 'package:respet_app/src/bloc/new_post/new_post_cubit.dart';
 import 'package:respet_app/src/bloc/register/register_cubit.dart';
 import 'package:respet_app/src/routers/routers.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => LoginCubit()),
         BlocProvider(create: (_) => RegisterCubit()),
+        BlocProvider(create: (_) => NewPostCubit()),
         BlocProvider(create: (_) => OperationCrudCubit()),
         BlocProvider(create: (_) => GetDataFivePetsCubit())
       ],
