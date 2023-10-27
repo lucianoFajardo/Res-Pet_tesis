@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
-import 'package:respet_app/src/views/login/login_view.dart';
 
 class SettingPageUI extends StatefulWidget {
   const SettingPageUI({super.key});
@@ -48,7 +47,7 @@ class _SettingPageUIState extends State<SettingPageUI> {
             Navigator.pop(context);
           },
           icon: Icon(
-            Icons.arrow_back, //flecha de regreso //
+            Icons.arrow_back_ios, //flecha de regreso //
             color: Colors.black,
           ),
         ),
@@ -114,10 +113,11 @@ class _SettingPageUIState extends State<SettingPageUI> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
                     onPressed: () async {
-                      Future.delayed(Duration(seconds: 3), () {
+                      Future.delayed(Duration(seconds: 1), () {
                         _loginExitState.SingOut();
-                          //TODO : Agregar la ruta para volver al login o cerrar la sesion.
-                          //Navigator.popUntil(context, ModalRoute.withName('login'));
+                        //TODO : Agregar la ruta para volver al login o cerrar la sesion.
+                        //Navigator.popUntil(context, ModalRoute.withName('login'));
+                        Navigator.pushReplacementNamed(context, 'login');
                       });
                     },
                     child: Text('Cerrar Cuenta',

@@ -6,16 +6,15 @@ class SplashScreeen extends StatefulWidget {
 
   @override
   State<SplashScreeen> createState() => _SplashScreeenState();
-} 
+}
+
 class _SplashScreeenState extends State<SplashScreeen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (userPersistence) {
-        print('si existe un usuario dentro de la aplicacion');
         Navigator.pushReplacementNamed(context, 'home_view');
       } else {
-        print('no existe un usario dentro de la aplicacion');
         Navigator.pushReplacementNamed(context, 'login');
       }
     });
@@ -24,6 +23,6 @@ class _SplashScreeenState extends State<SplashScreeen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: CircularProgressIndicator());
+    return const Center(child: CircularProgressIndicator());
   }
 }

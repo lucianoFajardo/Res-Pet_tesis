@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/bloc/register/register_cubit.dart';
 
-
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -46,7 +45,6 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-
     final _registerCubitState = BlocProvider.of<RegisterCubit>(context);
 
     return Scaffold(
@@ -63,40 +61,28 @@ class _RegisterViewState extends State<RegisterView> {
       //*Medio
       body: BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
-         
           // TODO: implement listener
           if (state is RegisterFailed) {
-            // ignore: avoid_print
-            print("Hay un Error: ${state.errorView.toString()}" );
-
+            print("Hay un Error: ${state.errorView.toString()}");
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorView.toString()),
                 duration: Duration(seconds: 4),
               ),
-
             );
-            
           }
-
           if (state is RegisterSuccessfull) {
-            // ignore: avoid_print
-            print("Usuario Registrado: ${state.toString()}" ); 
-            
+            print("Usuario Registrado: ${state.toString()}");
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text("Registrado con Exito"),
                 duration: Duration(seconds: 4),
               ),
             );
-            
             Navigator.pushReplacementNamed(context, 'home_view');
           }
-            
         },
-
         builder: (context, state) {
-          
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
             child: Form(
@@ -125,7 +111,6 @@ class _RegisterViewState extends State<RegisterView> {
                       onChanged: (value) {
                         _formKey.currentState?.validate();
                       },
-
                     ),
                     SizedBox(height: 20),
                     TextFormField(
@@ -149,9 +134,7 @@ class _RegisterViewState extends State<RegisterView> {
                         _formKey.currentState?.validate();
                       },
                     ),
-                    
                     SizedBox(height: 20),
-                    
                     TextFormField(
                       controller: correoController,
                       enableInteractiveSelection: true,
@@ -174,9 +157,7 @@ class _RegisterViewState extends State<RegisterView> {
                         _formKey.currentState?.validate();
                       },
                     ),
-                    
                     SizedBox(height: 20),
-                    
                     TextFormField(
                       onChanged: (contra) => laContrasenaCambiada(contra),
                       controller: contrasenaController,
@@ -188,7 +169,7 @@ class _RegisterViewState extends State<RegisterView> {
                         hintText: "Ingresar Contraseña",
                         suffixIcon: IconButton(
                           onPressed: () {
-                            setState( () {
+                            setState(() {
                               _esVisible = !_esVisible;
                             });
                           },
@@ -197,16 +178,13 @@ class _RegisterViewState extends State<RegisterView> {
                               : Icon(Icons.visibility_off, color: Colors.grey),
                         ),
                       ),
-                      
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Llene la casilla";
                         }
                       },
                     ),
-
                     SizedBox(height: 10),
-                    
                     Row(
                       children: [
                         AnimatedContainer(
@@ -259,7 +237,6 @@ class _RegisterViewState extends State<RegisterView> {
                         prefixText: "+56 9 ",
                         labelText: "Numero de Celular",
                       ),
-                      
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "LLene la Casilla";
@@ -336,10 +313,14 @@ class _RegisterViewState extends State<RegisterView> {
                                     "El Nombre y Apellido no pueden ser el mismo."),
                               ),
                             );
-                          } else if (_formKey.currentState!.validate() && _esContrasena6Caracteres == true) {
-                            
-                            _registerCubitState.RegisterUser(email: correo, password: contrasena, name: nombre, lastName: apellido, phone: numCelular, address: dirCasa);
-                            
+                          } else if (_formKey.currentState!.validate() &&
+                              _esContrasena6Caracteres == true) {
+                            _registerCubitState.RegisterUser(
+                              email: correo,
+                              password: contrasena,
+                              name: nombre,
+                              phone: numCelular,
+                            );
                           }
                         },
                       ),

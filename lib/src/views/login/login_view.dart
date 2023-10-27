@@ -25,11 +25,13 @@ class LoginView extends StatelessWidget {
       }
       if (state is LoginSuccesFull) {
         Navigator.pushReplacementNamed(context, 'home_view');
-        print("LoginSuccesfull : -> user navigater login");
       }
     }, builder: (context, state) {
       if (state is LoginLoading) {
-        return Center(child: CircularProgressIndicator(color: Colors.red,));
+        return Center(
+            child: CircularProgressIndicator(
+          color: Colors.red,
+        ));
       } else {
         return Stack(
           children: [

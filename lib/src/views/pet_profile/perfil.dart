@@ -1,66 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:respet_app/src/models/data_pet.dart';
 
-class perfil extends StatefulWidget {
-  const perfil({super.key});
+class PerfilViewData extends StatelessWidget {
+  PerfilViewData({super.key, required this.dataPetGet});
 
-  @override
-  State<perfil> createState() => _perfilState();
-}
+  final data_pet dataPetGet;
 
-class _perfilState extends State<perfil> {
   @override
   Widget build(BuildContext context) {
+    // TODO _< tengo un error aqui en el data formater MM revisar despues
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.more_horiz),
-            onPressed: () {},
-          )
-        ],
       ),
       body: SingleChildScrollView(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.network(
-              'https://t2.ea.ltmcdn.com/es/razas/2/3/5/pug-o-carlino_532_0_orig.jpg'),
+              'https://ornozywckhnefywxirvu.supabase.co/storage/v1/object/public/imagenes/a0ed9dbe-74e3-459a-82e9-522712b2c740/imagen2023-10-15T01:18:12.129808'),
           Row(
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "NOMBRE",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
+                  dataPetGet.name,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 35),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
-                  Icons.male,
-                  color: Colors.blue,
+                  dataPetGet.gender ? Icons.male : Icons.female,
+                  color: dataPetGet.gender ? Colors.blue : Colors.pink,
                   size: 55.0,
                 ),
               )
             ],
           ),
           Row(children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child:  Icon(
                 Icons.location_on,
-                color: Colors.transparent,
-                size: 20,
+                color: Colors.grey,
+                size: 30,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(5.0),
-              child: Text("UBICACION"),
+              child: Text(dataPetGet.location),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -70,7 +66,7 @@ class _perfilState extends State<perfil> {
                 height: 25,
                 alignment: Alignment.center,
                 child: Text(
-                  "ESTADO",
+                  'estado',
                 ),
               ),
             ),
@@ -84,9 +80,7 @@ class _perfilState extends State<perfil> {
                       width: 113,
                       height: 50,
                       alignment: Alignment.center,
-                      child: Text(
-                        "EDAD",
-                      ))),
+                      child: Text(dataPetGet.years))),
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -95,7 +89,7 @@ class _perfilState extends State<perfil> {
                       height: 50,
                       alignment: Alignment.center,
                       child: Text(
-                        "COLOR",
+                        "COLOR : cafe",
                       ))),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -104,15 +98,15 @@ class _perfilState extends State<perfil> {
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
-                  child: Text(
-                    "KILOS",
+                  child: const Text(
+                    "KILOS : 10 kg",
                   ),
                 ),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               'HISTORIA',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
@@ -121,44 +115,43 @@ class _perfilState extends State<perfil> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'AQUI IRIA UNA BREVE HISTORIA DEL PERRO QUE CUENTE CON DETALLES SU RESCATE Y CIERTAS COASAS MAS ',
-              style: TextStyle(fontSize: 15),
+              dataPetGet.id_pet,
+              style: const TextStyle(fontSize: 15),
             ),
           ),
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(5),
                 child: CircleAvatar(
                   backgroundColor: Colors.green,
-                  radius: 40,
-                  backgroundImage: NetworkImage(
-                      "https://static.vecteezy.com/system/resources/previews/008/302/516/original/eps10-green-user-icon-or-logo-in-simple-flat-trendy-modern-style-isolated-on-white-background-free-vector.jpg"),
+                  radius: 30,
+                 child: Icon(Icons.person_sharp , size: 50, color: Colors.white,),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(right: 5),
                 child: Text(
-                  'Luciano\n Fajardo',
-                  style: TextStyle(fontSize: 21),
+                  dataPetGet.nameUser,
+                  style: const TextStyle(fontSize: 20),
                 ),
               ),
               TextButton(
                 onPressed: () {},
-                child: Text(
-                  'CONTACTAR',
-                  style: TextStyle(fontSize: 22),
-                ),
                 style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.white),
                     backgroundColor: MaterialStateProperty.all(
-                      Color.fromARGB(255, 121, 223, 124),
+                      const Color.fromARGB(255, 121, 223, 124),
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
+                            side: const BorderSide(
                                 color: Color.fromARGB(255, 94, 218, 98))))),
+                child: Text(
+                  'CONTACTAR',
+                  style: const TextStyle(fontSize: 22),
+                ),
               )
             ],
           ),

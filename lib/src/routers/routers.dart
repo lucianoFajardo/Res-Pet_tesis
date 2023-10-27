@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+// import 'package:respet_app/src/views/example/examplepruebaPubli.dart.lk';
 import 'package:respet_app/src/views/home/home_view.dart';
 import 'package:respet_app/src/views/login/login_view.dart';
 import 'package:respet_app/src/views/new_post/new_post_view.dart';
+import 'package:respet_app/src/views/new_post/view_all_post.dart';
 import 'package:respet_app/src/views/register/register_view.dart';
 import 'package:respet_app/src/views/setting/settings_view.dart';
 import 'package:respet_app/src/views/splashScreen/splash_screen.dart';
@@ -14,7 +16,9 @@ class Routers {
     'home_view': (context) => const HomeViewPage(),
     'splash_screen': (context) => const SplashScreeen(),
     'new_post': (contex) => const NewPostView(),
-    'settings':(context) => const SettingPageUI(),
+    'settings': (context) => const SettingPageUI(),
+    //'example': (context) => const HomePagePrueba(),
+    'view_all_post':(context) => const ViewAllPostPets()
   };
 
   static Route<dynamic> onGenerateRoutesProvider(RouteSettings) {

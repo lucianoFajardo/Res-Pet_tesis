@@ -1,0 +1,246 @@
+import 'package:flutter/material.dart';
+import 'package:respet_app/main.dart';
+import 'package:respet_app/src/models/data_pet.dart';
+
+class HomePagePrueba extends StatefulWidget {
+  const HomePagePrueba({super.key});
+
+  @override
+  State<HomePagePrueba> createState() => _HomePagePruebaState();
+}
+
+class _HomePagePruebaState extends State<HomePagePrueba> {
+  List<data_pet> dataList =
+      []; // aqui se guardan los datos que necesito inicializar
+
+  final List _favoritePet = [];
+
+  Future<List<data_pet>> getData() async {
+    try {
+      final resdata =
+          await client.from('publicaciones_prueba').select('*').execute();
+      final data = resdata.data as List;
+      List<data_pet> dataList = data.map((i) {
+        return data_pet(
+            id_pet: i['id_pet'],
+            gender: i['gender'],
+            createdAt: i['created_at'],
+            years: i['years_pet'],
+            location: i['location_pet'],
+            name: i['name_pet']);
+      }).toList();
+      return dataList;
+    } catch (e) {
+      print('Error al obtener datos: ${e}');
+      // en caso de error devolver una lista vacia.
+      return [];
+    }
+  }
+
+  void isFavorite(data_pet dataSelec, datatrue) {
+    if (datatrue) {
+      _favoritePet.remove(dataSelec);
+      print(
+          'data eliminada -> ${_favoritePet} \n largo -> ${_favoritePet.length}');
+    } else {
+      _favoritePet.add(dataSelec);
+      //TODO ->  agregar por el ID de la creacion de la mascota 
+      print(
+          'data Agregada -> ${_favoritePet} \n largo -> ${_favoritePet.length}');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData().then((data) {
+      setState(() {
+        dataList = data;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text('prueba')),
+        body: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: dataList.length,
+          itemBuilder: (BuildContext context, int index) {
+            final data = dataList[index];
+            print(data);
+
+            return Padding(
+              padding: const EdgeInsets.all(3),
+              child: Card(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ClipRRect(
+                        //borderRadius: BorderRadius.all(Radius.circular(60)),
+                        child: Image.network(
+                          'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
+                          height: 100,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(data.name),
+                        Text(data.createdAt),
+                        Text(data.years)
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            final data_pet dataSelec = data;
+                            final bool datatrue =
+                                _favoritePet.contains(dataList[index]);
+                            isFavorite(dataSelec, datatrue);
+                          },
+                          icon: const Icon(Icons.favorite),
+                          color: _favoritePet.contains(dataList[index])
+                              ? Colors.red
+                              : Colors.grey.shade400,
+                        ),
+                        Icon(
+                          data.gender ? Icons.male : Icons.female,
+                          color: data.gender ? Colors.blue : Colors.pink,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ));
+  }
+}
+
+
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:respet_app/src/bloc/CRUD/operation_crud_cubit.dart';
+import 'package:respet_app/src/models/data_pet.dart';
+
+class HomePagePrueba extends StatefulWidget {
+  const HomePagePrueba({super.key});
+
+  @override
+  State<HomePagePrueba> createState() => _HomePagePruebaState();
+}
+
+class _HomePagePruebaState extends State<HomePagePrueba> {
+  final OperationCrudCubit petdata = OperationCrudCubit();
+  @override
+  void initState() {
+    super.initState();
+    petdata.getData();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    petdata.close();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text('prueba')),
+        body: BlocConsumer<OperationCrudCubit, OperationCrudState>(
+          listener: (BuildContext context, OperationCrudState state) {
+            if (state is ErrorStateOperation) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error.toString()),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            }
+            if (state is LoadingStateOperation) {
+              return print('cargando data');
+            }
+          },
+          builder: (context, state) {
+            if (state is ErrorStateOperation) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error.toString()),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            } else if (state is GetDataStateOperation) {
+              final data = state.data;
+              return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final petData = data[index];
+                  print(petData.name);
+                  return Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Card(
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: ClipRRect(
+                              //borderRadius: BorderRadius.all(Radius.circular(60)),
+                              child: Image.network(
+                                'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
+                                height: 100,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(petData.name),
+                              Text(petData.location),
+                              Text(petData.createdAt)
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              IconButton(
+                                  icon: const Icon(Icons.favorite),
+                                  onPressed: () => print('hola')),
+                              /* final data_pet dataSelec = data;
+                                  final bool datatrue =
+                                      _favoritePet.contains(dataList[index]);
+                                  isFavorite(dataSelec, datatrue);
+                                },
+                                icon: const Icon(Icons.favorite),
+                                color: _favoritePet.contains(dataList[index])
+                                    ? Colors.red
+                                    : Colors.grey.shade400,
+                              ),*/
+
+                              Icon(
+                                petData.gender ? Icons.male : Icons.female,
+                                color:
+                                    petData.gender ? Colors.blue : Colors.pink,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+            return CircularProgressIndicator();
+          },
+        ));
+  }
+}

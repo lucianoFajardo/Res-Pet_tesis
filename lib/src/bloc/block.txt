@@ -40,3 +40,62 @@
         print("error type : -> ${e}");
       }
     }
+
+
+
+/**
+ *   
+                            color: 
+ *  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                                color: _favoritePet.contains(dataList[index])
+                                    ? Colors.red
+                                    : Colors.amber,
+                                onPressed: () {
+                                  final dataSelec = data;
+                                  final datatrue =
+                                      _favoritePet.contains(dataList[index]);
+                                  // print('indice seleccionado -> $index , $data');
+                                  isFavorite(dataSelec, datatrue);
+                                },
+                                icon: Icon(Icons.favorite)),
+                          ),
+                        ),
+                        CircleAvatar(
+                            backgroundColor: Colors.pink.shade300,
+                            child: Icon(Icons.female)),
+                      ],
+                    ),
+                  )
+
+                    void isFavorite(data, bool dataTrue) {
+    if (dataTrue) {
+      _favoritePet.remove(data);
+    } else {
+      _favoritePet.add(data);
+    }
+    print(
+        'data lengt -> ${_favoritePet.length} \n data view -> ${_favoritePet}');
+  }
+  Future<dynamic> getData() async {
+    try {
+      final resdata =
+          await client.from('publicaciones_prueba').select('*').execute();
+      final data = resdata.data;
+      setState(() {
+        dataList = data;
+      });
+      return data;
+    } catch (e) {
+      print('Error al obtener datos: ${e}');
+    }
+  }
+
+                  
+ */
