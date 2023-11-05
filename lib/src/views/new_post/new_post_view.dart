@@ -14,7 +14,6 @@ class NewPostView extends StatefulWidget {
 }
 
 class _NewPostViewState extends State<NewPostView> {
-
   //!Controladores de Texto
   TextEditingController pieFotoController = TextEditingController();
   TextEditingController nombreController = TextEditingController();
@@ -44,75 +43,89 @@ class _NewPostViewState extends State<NewPostView> {
 
   @override
   Widget build(BuildContext context) {
-
     final _newPostCubitState = BlocProvider.of<NewPostCubit>(context);
 
     return Scaffold(
-
         appBar: AppBar(
           foregroundColor: Colors.deepPurple[600],
           backgroundColor: Colors.grey[300],
           title: const Text("Nueva Publicacion"),
-          
+
           //*Boton
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11), 
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
               child: ElevatedButton(
                 onPressed: _hayImagen && _formKey.currentState!.validate()
-                ? () async {
-                  
-                  try {
+                    ? () async {
+                        try {
+                          final imagenTipo = _imagenSeleccionada?.path
+                              .split(".")
+                              .last
+                              .toLowerCase();
+                          final imagenBytes =
+                              await _imagenSeleccionada?.readAsBytes();
+                          final usuarioID = client.auth.currentUser!.id;
+                          String fechaHora = DateTime.now().toIso8601String();
+                          final imagenPath = "/$usuarioID/imagen$fechaHora";
 
-                    final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
-                    final imagenBytes = await _imagenSeleccionada?.readAsBytes();
-                    final usuarioID = client.auth.currentUser!.id;
-                    String fechaHora = DateTime.now().toIso8601String();
-                    final imagenPath = "/$usuarioID/imagen$fechaHora";
+                          String imagenUrl = client.storage
+                              .from("imagenes")
+                              .getPublicUrl(imagenPath);
+                          imagenUrl = Uri.parse(imagenUrl)
+                              .replace(queryParameters: {
+                            "t":
+                                DateTime.now().millisecondsSinceEpoch.toString()
+                          }).toString();
 
-                    String imagenUrl = client.storage.from("imagenes").getPublicUrl(imagenPath);
-                      imagenUrl = Uri.parse(imagenUrl).replace(queryParameters: {"t": DateTime.now().millisecondsSinceEpoch.toString()}).toString();
-                    
-                    String nombreMascota = nombreController.text.trim();
-                    String descripcion = pieFotoController.text.trim();
-                    String colorPelaje = colorPelajeController.text.trim();
-                    //
-                    String peso = pesoController.text.trim();
-                    double pesoFloat = double.parse(peso);
-                    //
-                    String edad = edadController.text.trim();
-                    int? edadInt = int.tryParse(edad);
-                    //
-                    String tamano = tamanoController.text.trim();
-                    int? tamanoInt = int.tryParse(tamano);
-                    //
-                    String cuidadoEspecial = cuidadoController.text.trim();
+                          String nombreMascota = nombreController.text.trim();
+                          String descripcion = pieFotoController.text.trim();
+                          String colorPelaje =
+                              colorPelajeController.text.trim();
+                          //
+                          String peso = pesoController.text.trim();
+                          double pesoFloat = double.parse(peso);
+                          //
+                          String edad = edadController.text.trim();
+                          int? edadInt = int.tryParse(edad);
+                          //
+                          String tamano = tamanoController.text.trim();
+                          int? tamanoInt = int.tryParse(tamano);
+                          //
+                          String cuidadoEspecial =
+                              cuidadoController.text.trim();
 
-                    setState(() {
-                      if(selectedItemEstirilizado == "Si"){
-                        esterilizado = true;
-                      }else{
-                        esterilizado = false;
+                          setState(() {
+                            if (selectedItemEstirilizado == "Si") {
+                              esterilizado = true;
+                            } else {
+                              esterilizado = false;
+                            }
+                          });
+
+                          _newPostCubitState.NewPostUpload(
+                              fotoMascota: imagenUrl,
+                              nombreMascota: nombreMascota,
+                              descripcionMascota: descripcion,
+                              colorPelaje: colorPelaje,
+                              pesoMascota: pesoFloat,
+                              edadMascota: edadInt!,
+                              generoMascota: selectedItemSexo!,
+                              localidadMascota: selectedItemLocalidad!,
+                              esterilizadoMascota: esterilizado!,
+                              tamanoMascota: tamanoInt!,
+                              cuidadoMascota: cuidadoEspecial,
+                              imagenPath: imagenPath,
+                              imagenBytes: imagenBytes,
+                              imagenTipo: imagenTipo);
+                        } catch (e) {
+                          print("Tipo de Error: $e");
+                        }
                       }
-                    });
-                    
-                    _newPostCubitState.NewPostUpload(
-                      fotoMascota: imagenUrl, nombreMascota: nombreMascota, descripcionMascota: descripcion, colorPelaje: colorPelaje, 
-                      pesoMascota: pesoFloat, edadMascota: edadInt!, generoMascota: selectedItemSexo!, localidadMascota: selectedItemLocalidad!, 
-                      esterilizadoMascota: esterilizado!, tamanoMascota: tamanoInt!, cuidadoMascota: cuidadoEspecial, imagenPath: imagenPath, 
-                      imagenBytes: imagenBytes, imagenTipo: imagenTipo);
-
-                  } catch (e) {
-                    print("Tipo de Error: $e");
-                  }
-
-                }
-                : null,
-
+                    : null,
                 style: TextButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 18),
-                ), 
-                
+                ),
                 child: const Text(" Publicar "),
               ),
             ),
@@ -121,113 +134,106 @@ class _NewPostViewState extends State<NewPostView> {
 
         //*Medio
         body: BlocConsumer<NewPostCubit, NewPostState>(
-          listener: (context, state){
-            
-            // TODO: implement listener
-            if (state is NewPostFailed) {
-              // ignore: avoid_print
-              print("Hay un Error: ${state.errorView.toString()}" );
+            listener: (context, state) {
+          // TODO: implement listener
+          if (state is NewPostFailed) {
+            // ignore: avoid_print
+            print("Hay un Error: ${state.errorView.toString()}");
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorView.toString()),
-                  duration: const Duration(seconds: 4),
-                ),
-              );            
-            }
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorView.toString()),
+                duration: const Duration(seconds: 4),
+              ),
+            );
+          }
 
-            if (state is NewPostSuccessful) {
-              // ignore: avoid_print
-              print("Nuevo Post: ${state.toString()}" ); 
-              
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Post agregado con Exito"),
-                  duration: Duration(seconds: 4),
-                ),
-              );
-              
-              Navigator.pushReplacementNamed(context, 'home_view');
-            }
-          },
+          if (state is NewPostSuccessful) {
+            // ignore: avoid_print
+            print("Nuevo Post: ${state.toString()}");
 
-          builder: (context, state) {
-            return Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child:  Column(
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Post agregado con Exito"),
+                duration: Duration(seconds: 4),
+              ),
+            );
+
+            Navigator.pushReplacementNamed(context, 'home_view');
+          }
+        }, builder: (context, state) {
+          return Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
                 children: <Widget>[
                   const Divider(height: 5),
-                  _imagenSeleccionada != null 
-                    ? Stack(
-                      children: <Widget>[
-                        Card(
+                  _imagenSeleccionada != null
+                      ? Stack(
+                          children: <Widget>[
+                            Card(
+                              clipBehavior: Clip.hardEdge,
+                              color: Colors.blueGrey[100],
+                              child: InkWell(
+                                splashColor: Colors.purple,
+                                onTap: () {
+                                  seleccionarImagenDeGaleria();
+                                },
+                                child: SizedBox(
+                                    height: 300,
+                                    width: 370,
+                                    child: Image.file(_imagenSeleccionada!,
+                                        fit: BoxFit.fill,
+                                        filterQuality: FilterQuality.low)),
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 6,
+                                right: 8,
+                                child: SizedBox(
+                                  child: IconButton(
+                                      color: const Color.fromARGB(
+                                          255, 209, 13, 13),
+                                      splashColor: const Color.fromARGB(
+                                          255, 255, 41, 41),
+                                      iconSize: 30,
+                                      icon: const Icon(Icons.cancel_outlined),
+                                      onPressed: () {
+                                        setState(() {
+                                          _imagenSeleccionada = null;
+                                          _hayImagen = false;
+                                        });
+                                      }),
+                                )),
+                          ],
+                        )
+                      : Card(
                           clipBehavior: Clip.hardEdge,
                           color: Colors.blueGrey[100],
                           child: InkWell(
                             splashColor: Colors.purple,
-                            
-                            onTap: (){
+                            onTap: () {
                               seleccionarImagenDeGaleria();
                             },
-                            
-                            child: SizedBox(
+                            child: const SizedBox(
                               height: 300,
                               width: 370,
-            
-                              child: Image.file(_imagenSeleccionada!, fit: BoxFit.fill, filterQuality: FilterQuality.low)
+                              child: Center(
+                                child: Text(
+                                    "Seleccione una Imagen de su Galeria."),
+                              ),
                             ),
                           ),
                         ),
-            
-                        Positioned(
-                          bottom: 6,
-                          right: 8,
-                          child: SizedBox(
-                            child: IconButton(
-                              color: const Color.fromARGB(255, 209, 13, 13),
-                              splashColor: const Color.fromARGB(255, 255, 41, 41),
-            
-                              iconSize: 30,
-                              icon: const Icon(Icons.cancel_outlined),
-                              onPressed: (){
-                                setState(() {
-                                  _imagenSeleccionada = null;
-                                  _hayImagen = false;
-                                });
-                              }
-                            ),
-                          )
-                        ),
-                      ],
-                    )
-                    : Card(
-                      clipBehavior: Clip.hardEdge,
-                      color: Colors.blueGrey[100],
-                      child: InkWell(
-                        splashColor: Colors.purple,
-                            
-                        onTap: (){
-                          seleccionarImagenDeGaleria();
-                        },
-            
-                        child: const SizedBox(
-                          height: 300,
-                          width: 370,
-                          child: Center(
-                            child: Text("Seleccione una Imagen de su Galeria."),
-                          ),
-                        ),
-                      ),  
-                    ),
-
-                  Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500]),
-                  
+                  Divider(
+                      indent: 5,
+                      endIndent: 5,
+                      thickness: 1,
+                      color: Colors.grey[500]),
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
                     ),
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextFormField(
@@ -236,14 +242,13 @@ class _NewPostViewState extends State<NewPostView> {
                         enableInteractiveSelection: true,
                         maxLength: 200,
                         decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "Pie de Foto"
-                        ),
-
+                            border: UnderlineInputBorder(),
+                            hintText: "Pie de Foto"),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(value)) {
+                          } else if (!RegExp(r'^[a-zA-Z0-9_.-]+$')
+                              .hasMatch(value)) {
                             return "No ocupe signos ni simbolos";
                           } else {
                             return null;
@@ -255,14 +260,11 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
-            
                   const SizedBox(height: 10),
-            
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
                     ),
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextFormField(
@@ -271,10 +273,7 @@ class _NewPostViewState extends State<NewPostView> {
                         maxLength: 10,
                         maxLines: 1,
                         decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "Nombre"
-                        ),
-
+                            border: UnderlineInputBorder(), hintText: "Nombre"),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
@@ -284,22 +283,17 @@ class _NewPostViewState extends State<NewPostView> {
                             return null;
                           }
                         },
-
                         onChanged: (value) {
                           _formKey.currentState?.validate();
                         },
-
                       ),
                     ),
                   ),
-            
                   const SizedBox(height: 10),
-            
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
                     ),
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextFormField(
@@ -308,10 +302,8 @@ class _NewPostViewState extends State<NewPostView> {
                         maxLength: 8,
                         maxLines: 1,
                         decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "Color del Pelaje"
-                        ),
-
+                            border: UnderlineInputBorder(),
+                            hintText: "Color del Pelaje"),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
@@ -327,14 +319,11 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
-            
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
                     ),
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextFormField(
@@ -343,10 +332,8 @@ class _NewPostViewState extends State<NewPostView> {
                         maxLines: 1,
                         keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "Peso en Kilos"
-                        ),
-
+                            border: UnderlineInputBorder(),
+                            hintText: "Peso en Kilos"),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
@@ -362,14 +349,11 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
-            
                   const SizedBox(height: 10),
-            
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
                     ),
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextFormField(
@@ -378,10 +362,7 @@ class _NewPostViewState extends State<NewPostView> {
                         maxLines: 1,
                         keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "Edad"
-                        ),
-
+                            border: UnderlineInputBorder(), hintText: "Edad"),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
@@ -397,113 +378,132 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
-            
                   const SizedBox(height: 10),
-            
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 40,
                     ),
-                    
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Sexo",
-                              style: TextStyle(color: Colors.deepPurple[600], fontSize: 19, fontWeight: FontWeight.bold),
+                        padding: const EdgeInsets.only(left: 5, right: 5),
+                        child: Row(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Sexo",
+                                style: TextStyle(
+                                    color: Colors.deepPurple[600],
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-            
-                          const SizedBox(width: 30),
-            
-                          DropdownButton<String>(
-                            value: selectedItemSexo,
-                            items: itemsSexo.map((e) => DropdownMenuItem<String>(
-                              value: e, child: Text(e, style: const TextStyle(fontSize: 15),))).toList(),
-                          
-                            onChanged: (e) => setState(() => selectedItemSexo = e)
-                          ),
-                        ],
-                      )
-                    ),
+                            const SizedBox(width: 30),
+                            DropdownButton<String>(
+                                value: selectedItemSexo,
+                                items: itemsSexo
+                                    .map((e) => DropdownMenuItem<String>(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: const TextStyle(fontSize: 15),
+                                        )))
+                                    .toList(),
+                                onChanged: (e) =>
+                                    setState(() => selectedItemSexo = e)),
+                          ],
+                        )),
                   ),
-            
-                  Divider(height: 30, indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500]),
-            
+                  Divider(
+                      height: 30,
+                      indent: 5,
+                      endIndent: 5,
+                      thickness: 1,
+                      color: Colors.grey[500]),
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 40,
                     ),
-            
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Localidad",
-                              style: TextStyle(color: Colors.deepPurple[600], fontSize: 19, fontWeight: FontWeight.bold),
+                        padding: const EdgeInsets.only(left: 5, right: 5),
+                        child: Row(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Localidad",
+                                style: TextStyle(
+                                    color: Colors.deepPurple[600],
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-            
-                          const SizedBox(width: 30),
-            
-                          DropdownButton<String>(
-                            value: selectedItemLocalidad,
-                            items: itemsLocalidad.map((e) => DropdownMenuItem<String>(
-                              value: e, child: Text(e, style: const TextStyle(fontSize: 15),))).toList(),
-                          
-                            onChanged: (e) => setState(() => selectedItemLocalidad = e)
-                          ),
-                        ],
-                      )
-                    ),
+                            const SizedBox(width: 30),
+                            DropdownButton<String>(
+                                value: selectedItemLocalidad,
+                                items: itemsLocalidad
+                                    .map((e) => DropdownMenuItem<String>(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: const TextStyle(fontSize: 15),
+                                        )))
+                                    .toList(),
+                                onChanged: (e) =>
+                                    setState(() => selectedItemLocalidad = e)),
+                          ],
+                        )),
                   ),
-                  
-                  Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500], height: 30),
-            
+                  Divider(
+                      indent: 5,
+                      endIndent: 5,
+                      thickness: 1,
+                      color: Colors.grey[500],
+                      height: 30),
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 40,
                     ),
-                    
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Estirilizado",
-                              style: TextStyle(color: Colors.deepPurple[600], fontSize: 19, fontWeight: FontWeight.bold),
+                        padding: const EdgeInsets.only(left: 5, right: 5),
+                        child: Row(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Estirilizado",
+                                style: TextStyle(
+                                    color: Colors.deepPurple[600],
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-            
-                          const SizedBox(width: 40),
-            
-                          DropdownButton<String>(
-                            value: selectedItemEstirilizado,
-                            items: itemsEstirilizado.map((e) => DropdownMenuItem<String>(
-                              value: e, child: Text(e, style: const TextStyle(fontSize: 15),))).toList(),
-                          
-                            onChanged: (e) => setState(() => selectedItemEstirilizado = e),
-                          ),
-                        ],
-                      )
-                    ),
+                            const SizedBox(width: 40),
+                            DropdownButton<String>(
+                              value: selectedItemEstirilizado,
+                              items: itemsEstirilizado
+                                  .map((e) => DropdownMenuItem<String>(
+                                      value: e,
+                                      child: Text(
+                                        e,
+                                        style: const TextStyle(fontSize: 15),
+                                      )))
+                                  .toList(),
+                              onChanged: (e) =>
+                                  setState(() => selectedItemEstirilizado = e),
+                            ),
+                          ],
+                        )),
                   ),
-            
-                  Divider(indent: 5, endIndent: 5,thickness: 1, color: Colors.grey[500], height: 25),
-            
+                  Divider(
+                      indent: 5,
+                      endIndent: 5,
+                      thickness: 1,
+                      color: Colors.grey[500],
+                      height: 25),
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
                     ),
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextFormField(
@@ -511,14 +511,13 @@ class _NewPostViewState extends State<NewPostView> {
                         textCapitalization: TextCapitalization.words,
                         maxLength: 150,
                         decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "Vacunas"
-                        ),
-
+                            border: UnderlineInputBorder(),
+                            hintText: "Vacunas"),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-zA-Z0-9_.-]*$').hasMatch(value)) {
+                          } else if (!RegExp(r'^[a-zA-Z0-9_.-]*$')
+                              .hasMatch(value)) {
                             return "No ocupe signos ni simbolos";
                           } else {
                             return null;
@@ -527,18 +526,14 @@ class _NewPostViewState extends State<NewPostView> {
                         onChanged: (value) {
                           _formKey.currentState?.validate();
                         },
-
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
-                  
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
                     ),
-                    
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextFormField(
@@ -551,7 +546,6 @@ class _NewPostViewState extends State<NewPostView> {
                           border: UnderlineInputBorder(),
                           hintText: "Tamaño en centimetros",
                         ),
-
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
@@ -567,58 +561,58 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
-                  
                   const SizedBox(height: 10),
-            
                   SizedBox(
                     width: double.infinity,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: Column(
-                        children: [
-                          Align (
-                            alignment: Alignment.topLeft,
-                            child: Text("Cuidados Específicos", style: TextStyle(color: Colors.deepPurple[600], fontSize: 18, fontWeight: FontWeight.bold),),
-                          ),
-
-                          TextFormField(
-                            controller: cuidadoController,
-                            textAlign: TextAlign.left,
-                            maxLength: 200,
-                            decoration: const InputDecoration(
-                              hintText: "Escriba aqui.",
+                        padding: const EdgeInsets.only(left: 5, right: 5),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Cuidados Específicos",
+                                style: TextStyle(
+                                    color: Colors.deepPurple[600],
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Llene la casilla";
-                              } else if (!RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(value)) {
-                                return "No ocupe signos ni simbolos";
-                              } else {
-                                return null;
-                              }
-                            },
-                            
-                            onChanged: (value) {
-                              _formKey.currentState?.validate();
-                            },
-                          ),
-                        ],
-                      )
-                    ),
+                            TextFormField(
+                              controller: cuidadoController,
+                              textAlign: TextAlign.left,
+                              maxLength: 200,
+                              decoration: const InputDecoration(
+                                hintText: "Escriba aqui.",
+                              ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Llene la casilla";
+                                } else if (!RegExp(r'^[a-zA-Z0-9_.-]+$')
+                                    .hasMatch(value)) {
+                                  return "No ocupe signos ni simbolos";
+                                } else {
+                                  return null;
+                                }
+                              },
+                              onChanged: (value) {
+                                _formKey.currentState?.validate();
+                              },
+                            ),
+                          ],
+                        )),
                   ),
                   const SizedBox(height: 10),
                 ],
               ),
             ),
           );
-        }
-      )
-    );
+        }));
   }
 
   Future seleccionarImagenDeGaleria() async {
-    final _imagenIngresada = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final _imagenIngresada =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imagenSeleccionada = File(_imagenIngresada!.path);

@@ -1,8 +1,7 @@
-// ignore_for_file: avoid_print
-
+// ignore_for_file: avoid_print, non_constant_identifier_names
 import 'package:flutter/material.dart';
 
-AppBar AppBarView() {
+AppBarView(){
   return AppBar(
     leading: Builder(
       builder: (BuildContext context) {

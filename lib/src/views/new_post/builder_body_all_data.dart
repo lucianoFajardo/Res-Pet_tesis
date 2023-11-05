@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:respet_app/src/bloc/CRUD/operation_crud_cubit.dart';
 import 'package:respet_app/src/views/pet_profile/perfil.dart';
+
+import '../../bloc/get_data/data_post_all/get_all_data_pets_cubit.dart';
 
 class ViewDataAllPet extends StatefulWidget {
   const ViewDataAllPet({super.key});

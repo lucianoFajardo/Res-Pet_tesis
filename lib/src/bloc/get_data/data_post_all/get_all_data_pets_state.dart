@@ -1,4 +1,4 @@
-part of 'operation_crud_cubit.dart';
+part of 'get_all_data_pets_cubit.dart';
 
 abstract class OperationCrudState extends Equatable {
   const OperationCrudState();

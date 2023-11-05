@@ -18,7 +18,8 @@ class RegisterCubit extends Cubit<RegisterState> {
   }) async {
     try {
       // ignore: unused_local_variable
-      final AuthResponse respositorio = await supabase.auth.signUp(
+      emit(RegisterLoading());
+      await supabase.auth.signUp(
         email: email,
         password: password,
       );

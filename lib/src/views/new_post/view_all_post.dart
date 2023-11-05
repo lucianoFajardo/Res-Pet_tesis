@@ -8,7 +8,7 @@ class ViewAllPostPets extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('data_pet'),
+        title: const Text('Ver todas las publicaciones'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {

@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:respet_app/main.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
 
 class SettingPageUI extends StatefulWidget {
@@ -37,8 +38,7 @@ class _SettingPageUIState extends State<SettingPageUI> {
 
   @override
   Widget build(BuildContext context) {
-    final _loginExitState = BlocProvider.of<LoginCubit>(context);
-
+    final loginExitState = BlocProvider.of<LoginCubit>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Configuraciones', style: TextStyle(fontSize: 22)),
@@ -74,18 +74,19 @@ class _SettingPageUIState extends State<SettingPageUI> {
                       color: Colors.blue,
                     ),
                     SizedBox(width: 10),
-                    Text("Mi Cuenta",
+                    Text(
+                        "Mi Cuenta:  ${client.auth.currentSession!.user.email}",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold))
                   ],
                 ),
                 Divider(height: 20, thickness: 1),
-                SizedBox(height: 10), //creador de separador de liena//
-                buildAccountOption(context, "Cuenta"),
-                buildAccountOption(context, "Privacidad"),
-                buildAccountOption(context, 'Seguridad'),
-                buildAccountOption(context, "lenguaje"),
-                buildAccountOption(context, "Temas de Servicios"),
+                SizedBox(height: 10), 
+                buildAccountOption(context, "Cuenta", 'view_account'),
+                buildAccountOption(context, "Mis publicaciones", 'view_my_publications'),
+                buildAccountOption(context, "Seguridad", 'home_view'),
+                buildAccountOption(context, "lenguaje" ,  'home_view'),
+                buildAccountOption(context, "Temas de Servicios", 'home_view'),
                 SizedBox(height: 40),
                 Row(
                   children: [
@@ -102,8 +103,6 @@ class _SettingPageUIState extends State<SettingPageUI> {
                 ),
                 buildNotificationOption(
                     "Nuevas Publicaciones", valNotify1, onChangeFunction1),
-                buildNotificationOption(
-                    "Previsualizar", valNotify2, onChangeFunction2),
                 SizedBox(height: 15),
                 Center(
                   child: OutlinedButton(
@@ -114,7 +113,7 @@ class _SettingPageUIState extends State<SettingPageUI> {
                             borderRadius: BorderRadius.circular(20))),
                     onPressed: () async {
                       Future.delayed(Duration(seconds: 1), () {
-                        _loginExitState.SingOut();
+                        loginExitState.SingOut();
                         //TODO : Agregar la ruta para volver al login o cerrar la sesion.
                         //Navigator.popUntil(context, ModalRoute.withName('login'));
                         Navigator.pushReplacementNamed(context, 'login');
@@ -163,7 +162,7 @@ class _SettingPageUIState extends State<SettingPageUI> {
     );
   }
 
-  GestureDetector buildAccountOption(BuildContext context, String title) {
+  GestureDetector buildAccountOption(BuildContext context, String title , String routePage) {
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -173,14 +172,23 @@ class _SettingPageUIState extends State<SettingPageUI> {
                 title: Text(title),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [Text('opcion 1'), Text('opcion 2')],
+                  children: [
+                    Text('Nombre:'),
+                    Text('Telefono:'),
+                    Text('direccion:')
+                  ],
                 ),
                 actions: [
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Close'))
+                      child: Text('Salir')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, routePage);
+                      },
+                      child: Text('Ver más')),
                 ],
               );
             });

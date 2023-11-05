@@ -7,19 +7,13 @@ sealed class RegisterState extends Equatable {
   List<Object> get props => [];
 }
 
-class RegisterInitial extends RegisterState {
+class RegisterInitial extends RegisterState {}
 
-}
-
-class RegisterSuccessfull extends RegisterState {
-  
-}
+class RegisterSuccessfull extends RegisterState {}
 
 class RegisterFailed extends RegisterState {
   final String errorView;
   const RegisterFailed(this.errorView);
 }
 
-class RegisterLoading extends RegisterState {
-
-}
+class RegisterLoading extends RegisterState {}

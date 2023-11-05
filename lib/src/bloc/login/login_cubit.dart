@@ -24,7 +24,6 @@ class LoginCubit extends Cubit<LoginState> {
         print('si existe un usuario');
         emit(LoginSuccesFull());
         pref.setString('userToken', userData.session!.accessToken);
-        print('${userData.session!.accessToken}');
       }
     } on AuthException catch (_) {
       emit(ErrorLogin("Credenciales invalidas intente de nuevo"));
@@ -39,16 +38,13 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoginLoading());
       await Future.delayed(Duration(seconds: 2));
       await client.auth.signOut();
-      if(exitUser == null){
+      if (exitUser == null) {
         emit(LoginExitSuccesfull());
-        print("Usuario salio del sesion");
       }
     } on AuthResponse catch (e) {
-      emit(ErrorExitUser("${e}"));
-    }
-    catch (e) {
-      emit(ErrorExitUser("${e}"));
-      print("Error Inesperado :( ${e}");
+      emit(ErrorExitUser('$e'));
+    } catch (e) {
+      emit(ErrorExitUser('$e'));
     }
   }
 }

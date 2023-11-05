@@ -1,23 +1,22 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:respet_app/main.dart';
 import 'package:respet_app/src/models/data_pet.dart';
+part 'get_all_data_pets_state.dart';
 
-part 'get_data_five_pets_state.dart';
-
-class GetDataFivePetsCubit extends Cubit<GetDataFivePetsState> {
-  GetDataFivePetsCubit() : super(GetDataFivePetsInitial());
-
-    Future fiveGetData() async {
+class OperationCrudCubit extends Cubit<OperationCrudState> {
+  OperationCrudCubit() : super(OperationCrudInitial());
+  Future getData() async {
     try {
-      emit(LoadingDataFive());
+      emit(LoadingStateOperation());
       final resdata = await client
           .from('publicaciones_prueba')
           .select('*,profile_data_user!inner(user_name)')
-          .order('created_at', ascending: true)
-          .limit(3).execute();
-      final dataFiveGet = resdata.data as List;
-      List<data_pet> dataListPet = dataFiveGet.map((i) {
+          .execute();
+      final data = resdata.data as List;
+      List<data_pet> dataList = data.map((i) {
         return data_pet(
             id_pet: i['id_pet'],
             gender: i['gender'],
@@ -29,8 +28,8 @@ class GetDataFivePetsCubit extends Cubit<GetDataFivePetsState> {
             id_photo_pet: i['photo_pet'],
             nameUser: i['profile_data_user']['user_name']);
       }).toList();
-      emit(GetDatafiveStateOperation(data: dataListPet)); 
-      return dataFiveGet ;
+      emit(AllDataGet(data: dataList));
+      return data;
     } catch (e) {
       emit(ErrorStateOperation('error encontrado -> ${e.toString()}'));
       // en caso de error devolver una lista vacia.

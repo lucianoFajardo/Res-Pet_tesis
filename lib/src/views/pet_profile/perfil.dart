@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:respet_app/src/models/data_pet.dart';
 
 class PerfilViewData extends StatelessWidget {
-  PerfilViewData({super.key, required this.dataPetGet});
+  const PerfilViewData({super.key, required this.dataPetGet});
 
   final data_pet dataPetGet;
 
   @override
   Widget build(BuildContext context) {
-    // TODO _< tengo un error aqui en el data formater MM revisar despues
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.transparent,
@@ -48,7 +47,7 @@ class PerfilViewData extends StatelessWidget {
           Row(children: [
             const Padding(
               padding: EdgeInsets.all(8.0),
-              child:  Icon(
+              child: Icon(
                 Icons.location_on,
                 color: Colors.grey,
                 size: 30,
@@ -84,11 +83,11 @@ class PerfilViewData extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                      color: Color.fromARGB(255, 0, 136, 248),
+                      color: const Color.fromARGB(255, 0, 136, 248),
                       width: 113,
                       height: 50,
                       alignment: Alignment.center,
-                      child: Text(
+                      child: const Text(
                         "COLOR : cafe",
                       ))),
               Padding(
@@ -126,7 +125,11 @@ class PerfilViewData extends StatelessWidget {
                 child: CircleAvatar(
                   backgroundColor: Colors.green,
                   radius: 30,
-                 child: Icon(Icons.person_sharp , size: 50, color: Colors.white,),
+                  child: Icon(
+                    Icons.person_sharp,
+                    size: 50,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Padding(
@@ -148,9 +151,9 @@ class PerfilViewData extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             side: const BorderSide(
                                 color: Color.fromARGB(255, 94, 218, 98))))),
-                child: Text(
+                child: const Text(
                   'CONTACTAR',
-                  style: const TextStyle(fontSize: 22),
+                  style: TextStyle(fontSize: 22),
                 ),
               )
             ],
@@ -164,7 +167,7 @@ class PerfilViewData extends StatelessWidget {
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
-                  child: Text(
+                  child: const Text(
                     "VACUNAS",
                   ),
                 ),
@@ -176,7 +179,7 @@ class PerfilViewData extends StatelessWidget {
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
-                  child: Text(
+                  child: const Text(
                     "ESTERELIZADO",
                   ),
                 ),
@@ -188,22 +191,22 @@ class PerfilViewData extends StatelessWidget {
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
-                  child: Text(
+                  child: const Text(
                     "TAMAÑO",
                   ),
                 ),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               'Cuidados Especificos',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
                 'AQUI HIRIA LOS CUIDADOS ESPECIFICOS DE LA MASCOTA, SI ESQUE UTILIZA ALGUN TIPO DE COMIDA O TIENE ENFERMEDASDES O POSEE ALERGIAS Y COSAS '),
           )

@@ -1,4 +1,4 @@
-part of 'get_data_five_pets_cubit.dart';
+part of 'get_data_filter_pets_cubit.dart';
 
 abstract class GetDataFivePetsState extends Equatable {
   const GetDataFivePetsState();

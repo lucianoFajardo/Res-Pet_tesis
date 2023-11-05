@@ -60,6 +60,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
               ),
             ),
             const Expanded(child: GridC()),
+
             const Padding(
               padding: EdgeInsets.all(5.0),
               child: Row(
@@ -86,7 +87,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                 ],
               ),
             ),
-            const Flexible(child: GridC()),
+            //const Flexible(child: GridC()),
           ],
         ));
   }

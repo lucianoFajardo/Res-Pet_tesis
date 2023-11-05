@@ -3,7 +3,6 @@ import 'package:respet_app/main.dart';
 
 class SplashScreeen extends StatefulWidget {
   const SplashScreeen({super.key});
-
   @override
   State<SplashScreeen> createState() => _SplashScreeenState();
 }

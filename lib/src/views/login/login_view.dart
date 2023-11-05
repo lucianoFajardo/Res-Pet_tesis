@@ -19,7 +19,7 @@ class LoginView extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(state.errorView.toString()),
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -30,7 +30,7 @@ class LoginView extends StatelessWidget {
       if (state is LoginLoading) {
         return Center(
             child: CircularProgressIndicator(
-          color: Colors.red,
+          color: Colors.blue,
         ));
       } else {
         return Stack(

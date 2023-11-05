@@ -5,6 +5,8 @@ import 'package:respet_app/src/views/login/login_view.dart';
 import 'package:respet_app/src/views/new_post/new_post_view.dart';
 import 'package:respet_app/src/views/new_post/view_all_post.dart';
 import 'package:respet_app/src/views/register/register_view.dart';
+import 'package:respet_app/src/views/setting/account_view.dart';
+import 'package:respet_app/src/views/setting/publications_view.dart';
 import 'package:respet_app/src/views/setting/settings_view.dart';
 import 'package:respet_app/src/views/splashScreen/splash_screen.dart';
 
@@ -18,7 +20,9 @@ class Routers {
     'new_post': (contex) => const NewPostView(),
     'settings': (context) => const SettingPageUI(),
     //'example': (context) => const HomePagePrueba(),
-    'view_all_post':(context) => const ViewAllPostPets()
+    'view_all_post':(context) => const ViewAllPostPets(),
+    'view_account':(context) => const ViewAccount(),
+    'view_my_publications':(context) => const ViewPublications()
   };
 
   static Route<dynamic> onGenerateRoutesProvider(RouteSettings) {

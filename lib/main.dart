@@ -1,8 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:respet_app/src/bloc/CRUD/get_data_five_pets_cubit.dart';
-import 'package:respet_app/src/bloc/CRUD/operation_crud_cubit.dart';
+import 'package:respet_app/src/bloc/get_data/data_user/get_all_post_user_cubit.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
 import 'package:respet_app/src/bloc/new_post/new_post_cubit.dart';
 import 'package:respet_app/src/bloc/register/register_cubit.dart';
@@ -10,6 +9,9 @@ import 'package:respet_app/src/routers/routers.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/services.dart';
+
+import 'src/bloc/get_data/data_post_all/get_all_data_pets_cubit.dart';
+import 'src/bloc/get_data/data_post_filter/get_data_filter_pets_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +41,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => RegisterCubit()),
         BlocProvider(create: (_) => NewPostCubit()),
         BlocProvider(create: (_) => OperationCrudCubit()),
-        BlocProvider(create: (_) => GetDataFivePetsCubit())
+        BlocProvider(create: (_) => GetDataFivePetsCubit()),
+        BlocProvider(create: (_) => GetAllPostUserCubit()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

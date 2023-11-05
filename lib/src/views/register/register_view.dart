@@ -23,6 +23,7 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController numCelularController = TextEditingController();
   TextEditingController dirCasaController = TextEditingController();
 
+
   //!LLave global
   final GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -33,7 +34,6 @@ class _RegisterViewState extends State<RegisterView> {
       } else {
         _esContrasena6Caracteres = false;
       }
-
       if (contra.isEmpty) {
         _formKey.currentState?.validate();
       } else {
@@ -45,7 +45,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    final _registerCubitState = BlocProvider.of<RegisterCubit>(context);
+    final registerCubitState = BlocProvider.of<RegisterCubit>(context);
 
     return Scaffold(
       //*Arriba
@@ -60,29 +60,34 @@ class _RegisterViewState extends State<RegisterView> {
 
       //*Medio
       body: BlocConsumer<RegisterCubit, RegisterState>(
-        listener: (context, state) {
-          // TODO: implement listener
-          if (state is RegisterFailed) {
-            print("Hay un Error: ${state.errorView.toString()}");
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorView.toString()),
-                duration: Duration(seconds: 4),
-              ),
-            );
-          }
-          if (state is RegisterSuccessfull) {
-            print("Usuario Registrado: ${state.toString()}");
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text("Registrado con Exito"),
-                duration: Duration(seconds: 4),
-              ),
-            );
-            Navigator.pushReplacementNamed(context, 'home_view');
-          }
-        },
-        builder: (context, state) {
+          listener: (context, state) {
+        if (state is RegisterFailed) {
+          print("Hay un Error: ${state.errorView.toString()}");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorView.toString()),
+              duration: Duration(seconds: 4),
+            ),
+          );
+        }
+
+        if (state is RegisterSuccessfull) {
+          print("Usuario Registrado: ${state.toString()}");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Registrado con Exito"),
+              duration: Duration(seconds: 4),
+            ),
+          );
+          Navigator.pushReplacementNamed(context, 'home_view');
+        }
+      }, builder: (context, state) {
+        if (state is RegisterLoading) {
+          return Center(
+              child: CircularProgressIndicator(
+            color: Colors.red,
+          ));
+        } else {
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
             child: Form(
@@ -315,7 +320,7 @@ class _RegisterViewState extends State<RegisterView> {
                             );
                           } else if (_formKey.currentState!.validate() &&
                               _esContrasena6Caracteres == true) {
-                            _registerCubitState.RegisterUser(
+                            registerCubitState.RegisterUser(
                               email: correo,
                               password: contrasena,
                               name: nombre,
@@ -331,8 +336,8 @@ class _RegisterViewState extends State<RegisterView> {
               ),
             ),
           );
-        },
-      ),
+        }
+      }),
     );
   }
 }
