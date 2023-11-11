@@ -22,7 +22,18 @@ class _ViewPublicationsState extends State<ViewPublications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('My Publications')),
+        appBar: AppBar(
+          title: const Text('Mis publicaciones'),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios, //flecha de regreso //
+              color: Colors.black,
+            ),
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BlocConsumer<GetAllPostUserCubit, GetAllPostUserState>(
@@ -40,43 +51,48 @@ class _ViewPublicationsState extends State<ViewPublications> {
               return Text(state.error.toString());
             }
             if (state is AlldataPostState) {
-              return ListView.builder(
-                  itemCount: state.dataPost.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final petDataGet = state.dataPost[index];
-                    return Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.amber),
-                          child: ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PerfilViewData(
-                                              dataPetGet: petDataGet,
-                                            )));
-                              },
-                              title: Text(petDataGet.name),
-                              subtitle: Text(petDataGet.years),
-                              leading: ClipRRect(
-                                child: Image.network(
-                                  'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
-                                  height: 100,
-                                ),
-                              ),
-                              trailing: Icon(
-                                petDataGet.gender ? Icons.male : Icons.female,
-                                color: petDataGet.gender
-                                    ? Colors.blue
-                                    : Colors.pink,
-                              )),
-                        ));
-                  });
+              return state.dataPost.isEmpty
+                  ? const Center(child: Text('Aún no tienes publicaciones creadas.'))
+                  : ListView.builder(
+                      itemCount: state.dataPost.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final petDataGet = state.dataPost[index];
+                        return Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.amber),
+                              child: ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                PerfilViewData(
+                                                  dataPetGet: petDataGet,
+                                                )));
+                                  },
+                                  title: Text(petDataGet.name),
+                                  subtitle: Text(petDataGet.years),
+                                  leading: ClipRRect(
+                                    child: Image.network(
+                                      'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
+                                      height: 100,
+                                    ),
+                                  ),
+                                  trailing: Icon(
+                                    petDataGet.gender
+                                        ? Icons.male
+                                        : Icons.female,
+                                    color: petDataGet.gender
+                                        ? Colors.blue
+                                        : Colors.pink,
+                                  )),
+                            ));
+                      });
             }
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }),
         ));
   }

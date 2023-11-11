@@ -13,11 +13,11 @@ AppBarView(){
         );
       },
     ),
-    title: const Text('Menu'),
+    title: const Text('Pagina principal'),
     actions: <Widget>[
       IconButton(
         icon: const Icon(Icons.notifications_sharp),
-        onPressed: () => print('open notifications'),
+        onPressed: () => print('Abrir notificaciones'),
       ),
     ],
   );

@@ -9,7 +9,10 @@ sealed class RegisterState extends Equatable {
 
 class RegisterInitial extends RegisterState {}
 
-class RegisterSuccessfull extends RegisterState {}
+class RegisterSuccessfull extends RegisterState {
+  final String idUser;
+  const RegisterSuccessfull({required this.idUser});
+}
 
 class RegisterFailed extends RegisterState {
   final String errorView;

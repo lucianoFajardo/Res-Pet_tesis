@@ -2,7 +2,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:respet_app/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'login_state.dart';
@@ -15,15 +14,12 @@ class LoginCubit extends Cubit<LoginState> {
     required String userName,
     required String passUser,
   }) async {
-    final pref = await SharedPreferences.getInstance();
     try {
       emit(LoginLoading());
       final userData = await clientSupabase.auth
           .signInWithPassword(email: userName, password: passUser);
       if (userData.user != null) {
-        print('si existe un usuario');
         emit(LoginSuccesFull());
-        pref.setString('userToken', userData.session!.accessToken);
       }
     } on AuthException catch (_) {
       emit(ErrorLogin("Credenciales invalidas intente de nuevo"));

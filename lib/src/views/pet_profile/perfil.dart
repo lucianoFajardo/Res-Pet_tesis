@@ -22,8 +22,17 @@ class PerfilViewData extends StatelessWidget {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-              'https://ornozywckhnefywxirvu.supabase.co/storage/v1/object/public/imagenes/a0ed9dbe-74e3-459a-82e9-522712b2c740/imagen2023-10-15T01:18:12.129808'),
+          Container(
+            margin: const EdgeInsets.all(10),
+            height:
+                350, //TODO -> verificar si todas las imagenes se pueden renderizar y ver de buena manera sino cambiar este atributo
+            width: double.infinity,
+            child: Image.network(
+              "https://images.dog.ceo/breeds/akita/512px-Akita_inu.jpg",
+              fit: BoxFit.contain,  // ! con cover puedo hacer que toda la imagen se quede en el cuadrado y ocupe todo el ancho y alto de la caja
+              alignment: Alignment.center,
+            ),
+          ),
           Row(
             children: [
               Padding(

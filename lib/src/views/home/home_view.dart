@@ -24,20 +24,20 @@ class _HomeViewPageState extends State<HomeViewPage> {
                   Navigator.pushNamed(context, 'new_post');
                 },
                 child: const Text(
-                  'subir imagen',
+                  'Subir imagen',
                   style: TextStyle(color: Colors.black),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(2),
               child: Row(
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       textAlign: TextAlign.right,
-                      'New Post',
+                      'Publicaciones recientes',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -51,7 +51,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                         },
                         child: const Text(
                           textAlign: TextAlign.right,
-                          'ver mas..',
+                          'Ver más..',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 15),
                         ),
@@ -59,7 +59,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                 ],
               ),
             ),
-            const Expanded(child: GridC()),
+            const Expanded(child: ListViewData()),
 
             const Padding(
               padding: EdgeInsets.all(5.0),

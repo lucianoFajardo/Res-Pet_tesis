@@ -4,7 +4,8 @@ import 'package:respet_app/src/views/home/home_view.dart';
 import 'package:respet_app/src/views/login/login_view.dart';
 import 'package:respet_app/src/views/new_post/new_post_view.dart';
 import 'package:respet_app/src/views/new_post/view_all_post.dart';
-import 'package:respet_app/src/views/register/register_view.dart';
+import 'package:respet_app/src/views/register/register_account.dart';
+import 'package:respet_app/src/views/register/register_data_user.dart';
 import 'package:respet_app/src/views/setting/account_view.dart';
 import 'package:respet_app/src/views/setting/publications_view.dart';
 import 'package:respet_app/src/views/setting/settings_view.dart';
@@ -14,7 +15,8 @@ class Routers {
   static const initialRoute = 'splash_screen';
   static Map<String, Widget Function(BuildContext)> routes = {
     'login': (context) => const LoginView(),
-    'register': (context) => const RegisterView(),
+    'register': (context) => const RegisterAccount(),
+    'register_data_user': (context) => const RegisterDataUser(), 
     'home_view': (context) => const HomeViewPage(),
     'splash_screen': (context) => const SplashScreeen(),
     'new_post': (contex) => const NewPostView(),

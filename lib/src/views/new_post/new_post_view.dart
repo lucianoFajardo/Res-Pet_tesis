@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:respet_app/main.dart';
 import 'package:respet_app/src/bloc/new_post/new_post_cubit.dart';
-import 'package:respet_app/src/views/example/example_view.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({super.key});
@@ -43,7 +42,7 @@ class _NewPostViewState extends State<NewPostView> {
 
   @override
   Widget build(BuildContext context) {
-    final _newPostCubitState = BlocProvider.of<NewPostCubit>(context);
+    final newPostCubitState = BlocProvider.of<NewPostCubit>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -103,7 +102,7 @@ class _NewPostViewState extends State<NewPostView> {
                             }
                           });
 
-                          _newPostCubitState.NewPostUpload(
+                          newPostCubitState.NewPostUpload(
                               fotoMascota: imagenUrl,
                               nombreMascota: nombreMascota,
                               descripcionMascota: descripcion,

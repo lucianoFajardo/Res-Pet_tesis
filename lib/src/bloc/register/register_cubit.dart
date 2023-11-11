@@ -13,26 +13,18 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> RegisterUser({
     required String email,
     required String password,
-    required String phone,
-    required String name,
   }) async {
     try {
-      // ignore: unused_local_variable
       emit(RegisterLoading());
-      await supabase.auth.signUp(
+      final res = await supabase.auth.signUp(
         email: email,
         password: password,
       );
-      await supabase.from('profile_data_user').insert({
-        'user_name': name,
-        'cellphone': phone,
-      });
-      emit(RegisterSuccessfull());
-      // ignore: avoid_print
-      print("Usuario Registrado");
+      final idUser = res.user!.id;
+      print(idUser);
+      emit(RegisterSuccessfull(idUser: idUser));
     } catch (e) {
       emit(RegisterFailed(e.toString()));
-      // ignore: avoid_print
     }
   }
 }

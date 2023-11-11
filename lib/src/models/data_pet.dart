@@ -1,4 +1,5 @@
-// ignore_for_file: unused_label, non_constant_identifier_names
+
+// ignore_for_file: camel_case_types, non_constant_identifier_names
 
 class data_pet {
   String id_pet;
@@ -7,7 +8,6 @@ class data_pet {
   String location;
   String years;
   String createdAt;
-  bool isFavoritePet;
   String id_User;
   String id_photo_pet;
   String nameUser;
@@ -19,7 +19,6 @@ class data_pet {
       required this.location,
       required this.name,
       required this.createdAt,
-      this.isFavoritePet = false,
       required this.id_User,
       required this.id_photo_pet,
       required this.nameUser});
@@ -32,7 +31,6 @@ class data_pet {
       location: map['location_pet'],
       name: map['name_pet'],
       createdAt: map['created_at'],
-      isFavoritePet: map['isFavorite'],
       id_User: map['id_user_created'],
       id_photo_pet: map['photo_pet'],
       nameUser: map['user_name'],
@@ -57,7 +55,6 @@ class data_pet {
         location: location ?? this.location,
         name: name ?? this.name,
         createdAt: createdAt ?? this.createdAt,
-        isFavoritePet: isFavoritePet ?? this.isFavoritePet,
         id_User: id_User ?? this.id_User,
         id_photo_pet: id_photo_pet ?? this.id_photo_pet,
         nameUser: nameUser ?? this.nameUser);
