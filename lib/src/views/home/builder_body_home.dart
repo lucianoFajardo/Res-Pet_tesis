@@ -53,6 +53,7 @@ class _ListViewDataState extends State<ListViewData> {
                     itemCount: state.data.length,
                     itemBuilder: (BuildContext context, int index) {
                       final petDataGet = state.data[index];
+                      print(petDataGet.years);
                       return Padding(
                           padding: const EdgeInsets.all(8),
                           child: Container(
