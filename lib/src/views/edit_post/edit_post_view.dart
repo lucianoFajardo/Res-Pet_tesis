@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:respet_app/main.dart';
+import 'package:respet_app/src/models/data_pet.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EditPostView extends StatefulWidget {
@@ -19,8 +20,6 @@ class _EditPostViewState extends State<EditPostView> {
   @override
   void initState() {
     super.initState();
-    traerImagen();
-    traerInformacion();
   }
 
   //!LLave global
@@ -36,7 +35,7 @@ class _EditPostViewState extends State<EditPostView> {
   TextEditingController tamanoController = TextEditingController();
   TextEditingController cuidadoController = TextEditingController();  
 
-  final supabase = Supabase.instance.client;
+
   String imagenURL = "";
   File? _imagenSeleccionada;
   bool _hayImagen = false;
@@ -449,7 +448,7 @@ class _EditPostViewState extends State<EditPostView> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Llene la casilla";
-                      } else if (!RegExp(r'^[a-zA-Z0-9_.-]*$').hasMatch(value)) {
+                      } else if (!RegExp(r'^[a-z A-Z0-9_.-]*$').hasMatch(value)) {
                         return "No ocupe signos ni simbolos";
                       } else {
                         return null;
@@ -523,7 +522,7 @@ class _EditPostViewState extends State<EditPostView> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-zA-Z0-9_.-]+$').hasMatch(value)) {
+                          } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$').hasMatch(value)) {
                             return "No ocupe signos ni simbolos";
                           } else {
                             return null;
@@ -545,78 +544,6 @@ class _EditPostViewState extends State<EditPostView> {
         ),
       )
     );
-  }
-
-  Future traerImagen() async {
-    final imagenSupabase = await supabase.from("created_post_adoption_pet").select("photo_pet");
-
-    setState(() {
-      imagenURL = imagenSupabase.toString().substring(13, imagenSupabase.toString().length - 2);
-      print(imagenURL);
-
-    });
-  }
-
-  Future traerInformacion() async{
-    try{
-      final infoSupDes = await supabase.from("created_post_adoption_pet").select("description_pet");
-      final infoSupNam = await supabase.from("created_post_adoption_pet").select("name_pet");
-      final infoSupCol = await supabase.from("created_post_adoption_pet").select("fur_color");
-      final infoSupPes = await supabase.from("created_post_adoption_pet").select("weight_pet");
-      final infoSupEda = await supabase.from("created_post_adoption_pet").select("age_pet");
-      final infoSupSex = await supabase.from("created_post_adoption_pet").select("gender_pet");
-      final infoSupLoc = await supabase.from("created_post_adoption_pet").select("location"); 
-      final infoSupEst = await supabase.from("created_post_adoption_pet").select("is_sterilization");
-      final infoSupVac = await supabase.from("created_post_adoption_pet").select("vaccines_pet");
-      final infoSupTam = await supabase.from("created_post_adoption_pet").select("size_pet");
-      final infoSupCui = await supabase.from("created_post_adoption_pet").select("specific_care");
-
-      setState(() {
-
-        final infoPetDes = infoSupDes.toString().substring(19, infoSupDes.toString().length - 2);
-        pieFotoController.text = infoPetDes;
-        
-        final infoPetName = infoSupNam.toString().substring(12, infoSupNam.toString().length - 2);
-        nombreController.text = infoPetName;
-
-        final infoPetCol = infoSupCol.toString().substring(13, infoSupCol.toString().length - 2);
-        colorPelajeController.text = infoPetCol;
-
-        final infoPetPes = infoSupPes.toString().substring(14, infoSupPes.toString().length - 2);
-        pesoController.text = infoPetPes;
-
-        final infoPetEda = infoSupEda.toString().substring(11, infoSupEda.toString().length - 2);
-        edadController.text = infoPetEda;
-
-        final infoPetSex = infoSupSex.toString().substring(14, infoSupSex.toString().length - 2);
-        selectedItemSexo = infoPetSex;
-        
-        final infoPetLoc = infoSupLoc.toString().substring(12, infoSupLoc.toString().length - 2);
-        selectedItemLocalidad = infoPetLoc;
-
-        final infoPetEst = infoSupEst.toString().substring(20, infoSupEst.toString().length - 2);
-        if(infoPetEst == "true"){
-          selectedItemEstirilizado = "Si";
-        }else{
-          selectedItemEstirilizado = "No";
-        }
-
-        final infoPetVac = infoSupVac.toString().substring(16, infoSupVac.toString().length - 2);
-        vacunaController.text = infoPetVac;
-        
-        final infoPetTam = infoSupTam.toString().substring(12, infoSupTam.toString().length - 2);
-        tamanoController.text = infoPetTam;
-
-        final infoPetCui = infoSupCui.toString().substring(17, infoSupCui.toString().length - 2);
-        cuidadoController.text = infoPetCui;
-
-      });
-
-    }catch (e){
-
-      print("Error: $e");
-    }
-
   }
 
   Future seleccionarImagenDeGaleria() async {

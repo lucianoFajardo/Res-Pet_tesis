@@ -3,60 +3,58 @@
 
 class data_pet {
   String id_pet;
-  String name;
-  bool gender;
+  String id_photo_pet;
+  String description_pet;
+  String name_pet;
+  String fur_color;
+  int age_pet;
+  int weight_pet;
+  String gender_pet;
+  bool is_sterilization;
+  int size_pet;
   String location;
-  String years;
+  String specific_care;
+  String vaccines_pet;
   String createdAt;
   String id_User;
-  String id_photo_pet;
-  String nameUser;
 
   data_pet(
-      {required this.gender,
+      {
       required this.id_pet,
-      required this.years,
-      required this.location,
-      required this.name,
-      required this.createdAt,
-      required this.id_User,
       required this.id_photo_pet,
-      required this.nameUser});
+      required this.description_pet,
+      required this.name_pet,
+      required this.fur_color,
+      required this.weight_pet,
+      required this.age_pet,
+      required this.is_sterilization,
+      required this.gender_pet,
+      required this.location,
+      required this.size_pet,
+      required this.specific_care,
+      required this.vaccines_pet,
+      required this.createdAt,
+      required this.id_User,});
 
   factory data_pet.fromMap(Map<dynamic, dynamic> map) {
     return data_pet(
-      id_pet: map['id_pet'],
-      gender: map['gender'],
-      years: map['years_pet'],
-      location: map['location_pet'],
-      name: map['name_pet'],
-      createdAt: map['created_at'],
-      id_User: map['id_user_created'],
+      id_pet: map['id_pet_adoption'],
       id_photo_pet: map['photo_pet'],
-      nameUser: map['user_name'],
+      description_pet: map['description_pet'],
+      fur_color: map['fur_color'],
+      weight_pet: map['weight_pet'],
+      age_pet: map['age_pet'],
+      gender_pet: map['gender_pet'],
+      location: map['location'],
+      is_sterilization: map['is_sterilization'],
+      id_User: map['id_user_created'],
+      createdAt: map['created_at'],
+      size_pet: map['size_pet'],
+      specific_care: map['specific_care'],
+      name_pet: map['name_pet'],
+      vaccines_pet: map['vaccines_pet'],
     );
   }
-
-  data_pet copyWith(
-      {String? id_pet,
-      String? name,
-      bool? gender,
-      String? location,
-      String? years,
-      String? createdAt,
-      bool? isFavoritePet,
-      String? id_User,
-      String? id_photo_pet,
-      String? nameUser}) {
-    return data_pet(
-        gender: gender ?? this.gender,
-        id_pet: id_pet ?? this.id_pet,
-        years: years ?? this.years,
-        location: location ?? this.location,
-        name: name ?? this.name,
-        createdAt: createdAt ?? this.createdAt,
-        id_User: id_User ?? this.id_User,
-        id_photo_pet: id_photo_pet ?? this.id_photo_pet,
-        nameUser: nameUser ?? this.nameUser);
-  }
+  
 }
+
