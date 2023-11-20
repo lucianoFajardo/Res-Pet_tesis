@@ -17,6 +17,8 @@ class data_pet {
   String vaccines_pet;
   String createdAt;
   String id_User;
+  String nameUser;
+  String celphoneUser;
 
   data_pet(
       {
@@ -34,7 +36,9 @@ class data_pet {
       required this.specific_care,
       required this.vaccines_pet,
       required this.createdAt,
-      required this.id_User,});
+      required this.id_User,
+      required this.nameUser,
+      required this.celphoneUser});
 
   factory data_pet.fromMap(Map<dynamic, dynamic> map) {
     return data_pet(
@@ -53,6 +57,8 @@ class data_pet {
       specific_care: map['specific_care'],
       name_pet: map['name_pet'],
       vaccines_pet: map['vaccines_pet'],
+      celphoneUser: map['user_metadata']['celphone_number'],
+      nameUser: map['user_metadata']['name_user']
     );
   }
   

@@ -5,6 +5,7 @@ class PerfilViewData extends StatelessWidget {
   const PerfilViewData({super.key, required this.dataPetGet});
 
   final data_pet dataPetGet;
+  //TODO -> realizar una funcion que evalua si el sexo es masculino o femenino
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +25,11 @@ class PerfilViewData extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.all(10),
-            height:
-                350, //TODO -> verificar si todas las imagenes se pueden renderizar y ver de buena manera sino cambiar este atributo
+            height: 350,
             width: double.infinity,
             child: Image.network(
-              "https://images.dog.ceo/breeds/akita/512px-Akita_inu.jpg",
-              fit: BoxFit.contain,  // ! con cover puedo hacer que toda la imagen se quede en el cuadrado y ocupe todo el ancho y alto de la caja
+              dataPetGet.id_photo_pet,
+              fit: BoxFit.contain,
               alignment: Alignment.center,
             ),
           ),
@@ -38,7 +38,7 @@ class PerfilViewData extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  dataPetGet.name,
+                  dataPetGet.name_pet,
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 35),
                 ),
@@ -46,8 +46,8 @@ class PerfilViewData extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
-                  dataPetGet.gender ? Icons.male : Icons.female,
-                  color: dataPetGet.gender ? Colors.blue : Colors.pink,
+                  Icons.female,
+                  color: Colors.pink,
                   size: 55.0,
                 ),
               )
@@ -64,10 +64,10 @@ class PerfilViewData extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(5.0),
-              child: Text(dataPetGet.location),
+              child: Text("Ciudad de ${dataPetGet.location}"),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10),
               child: Container(
                 color: Colors.blue,
                 width: 90,
@@ -88,7 +88,7 @@ class PerfilViewData extends StatelessWidget {
                       width: 113,
                       height: 50,
                       alignment: Alignment.center,
-                      child: Text(dataPetGet.years))),
+                      child: Text("${dataPetGet.age_pet.toString()} años"))),
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -96,8 +96,8 @@ class PerfilViewData extends StatelessWidget {
                       width: 113,
                       height: 50,
                       alignment: Alignment.center,
-                      child: const Text(
-                        "COLOR : cafe",
+                      child: Text(
+                        "Pelaje ${dataPetGet.fur_color}",
                       ))),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -106,9 +106,7 @@ class PerfilViewData extends StatelessWidget {
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
-                  child: const Text(
-                    "KILOS : 10 kg",
-                  ),
+                  child: Text("${dataPetGet.weight_pet} kilos"),
                 ),
               ),
             ],
@@ -123,7 +121,7 @@ class PerfilViewData extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              dataPetGet.id_pet,
+              dataPetGet.description_pet,
               style: const TextStyle(fontSize: 15),
             ),
           ),
@@ -141,15 +139,17 @@ class PerfilViewData extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 5),
+              SizedBox(
+                width: 150,
                 child: Text(
                   dataPetGet.nameUser,
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  print(dataPetGet.celphoneUser);
+                },
                 style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.white),
                     backgroundColor: MaterialStateProperty.all(
@@ -170,16 +170,25 @@ class PerfilViewData extends StatelessWidget {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10),
                 child: Container(
                   color: Colors.blue,
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
-                  child: const Text(
-                    "VACUNAS",
-                  ),
+                  child: Text(dataPetGet.vaccines_pet),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                    color: Colors.blue,
+                    width: 113,
+                    height: 50,
+                    alignment: Alignment.center,
+                    child: dataPetGet.is_sterilization
+                        ? const Text('Mascota esterilizada')
+                        : const Text('Mascota no esterilizada')),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -188,21 +197,7 @@ class PerfilViewData extends StatelessWidget {
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
-                  child: const Text(
-                    "ESTERELIZADO",
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.blue,
-                  width: 113,
-                  height: 50,
-                  alignment: Alignment.center,
-                  child: const Text(
-                    "TAMAÑO",
-                  ),
+                  child: Text("${dataPetGet.size_pet.toString()} cm"),
                 ),
               ),
             ],
@@ -214,10 +209,9 @@ class PerfilViewData extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-                'AQUI HIRIA LOS CUIDADOS ESPECIFICOS DE LA MASCOTA, SI ESQUE UTILIZA ALGUN TIPO DE COMIDA O TIENE ENFERMEDASDES O POSEE ALERGIAS Y COSAS '),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(dataPetGet.specific_care),
           )
         ],
       )),

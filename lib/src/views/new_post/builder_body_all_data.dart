@@ -19,7 +19,7 @@ class _GridCState extends State<ViewDataAllPet> {
     petdatas.getData();
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OperationCrudCubit, OperationCrudState>(
@@ -33,7 +33,6 @@ class _GridCState extends State<ViewDataAllPet> {
           );
         }
       },
-      
       builder: (context, state) {
         if (state is LoadingStateOperation) {
           return const Center(child: CircularProgressIndicator());
@@ -58,18 +57,17 @@ class _GridCState extends State<ViewDataAllPet> {
                                           dataPetGet: petDataGet,
                                         )));
                           },
-                          title: Text(petDataGet.name),
-                          subtitle: Text(petDataGet.years),
+                          title: Text(petDataGet.name_pet),
+                          subtitle: Text(petDataGet.age_pet.toString()),
                           leading: ClipRRect(
                             child: Image.network(
                               'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
                               height: 100,
                             ),
                           ),
-                          trailing: Icon(
-                            petDataGet.gender ? Icons.male : Icons.female,
-                            color:
-                                petDataGet.gender ? Colors.blue : Colors.pink,
+                          trailing: const Icon(
+                            Icons.female,
+                            color: Colors.pink,
                           )),
                     ));
               });

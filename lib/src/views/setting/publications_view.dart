@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/bloc/get_data/data_user/get_all_post_user_cubit.dart';
+import 'package:respet_app/src/views/edit_post/edit_post_view.dart';
 import 'package:respet_app/src/views/pet_profile/perfil.dart';
 
 class ViewPublications extends StatefulWidget {
@@ -52,7 +53,8 @@ class _ViewPublicationsState extends State<ViewPublications> {
             }
             if (state is AlldataPostState) {
               return state.dataPost.isEmpty
-                  ? const Center(child: Text('Aún no tienes publicaciones creadas.'))
+                  ? const Center(
+                      child: Text('Aún no tienes publicaciones creadas.'))
                   : ListView.builder(
                       itemCount: state.dataPost.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -73,21 +75,28 @@ class _ViewPublicationsState extends State<ViewPublications> {
                                                   dataPetGet: petDataGet,
                                                 )));
                                   },
-                                  title: Text(petDataGet.name),
-                                  subtitle: Text(petDataGet.years),
+                                  title: Text(petDataGet.name_pet),
+                                  subtitle: Text(petDataGet.age_pet.toString()),
                                   leading: ClipRRect(
                                     child: Image.network(
                                       'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
                                       height: 100,
                                     ),
                                   ),
-                                  trailing: Icon(
-                                    petDataGet.gender
-                                        ? Icons.male
-                                        : Icons.female,
-                                    color: petDataGet.gender
-                                        ? Colors.blue
-                                        : Colors.pink,
+                                  trailing: IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () {
+                                      //! en este apartado tengo que capturar la data del indice que seleccione de la publicacion y se la
+                                      //! mando al otro estado que es para editar esa data seleccionada.
+                                      //? Aqui se tiene que mandar los datos mediante el contexto,
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditPostView(
+                                                      dataPetGetEdit:
+                                                          petDataGet)));
+                                    },
                                   )),
                             ));
                       });
@@ -97,3 +106,26 @@ class _ViewPublicationsState extends State<ViewPublications> {
         ));
   }
 }
+
+//TODO -> tener en cuenta luego el eliminar una publicacion y con eso se terminaria el CRUD
+
+/**
+ *                                     petDataGet.gender_pet
+                                        ? Icons.male
+                                        : Icons.female,
+                                    color: petDataGet.gender_pet
+                                        ? Colors.blue
+                                        : Colors.pink,
+
+
+                                         actions: <Widget>[
+              Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 7, vertical: 11),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        
+                      },
+                      child: const Text("Modificar")))
+            ]
+ */

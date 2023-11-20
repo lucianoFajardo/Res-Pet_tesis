@@ -53,7 +53,6 @@ class _ListViewDataState extends State<ListViewData> {
                     itemCount: state.data.length,
                     itemBuilder: (BuildContext context, int index) {
                       final petDataGet = state.data[index];
-                      print(petDataGet.years);
                       return Padding(
                           padding: const EdgeInsets.all(8),
                           child: Container(
@@ -69,19 +68,17 @@ class _ListViewDataState extends State<ListViewData> {
                                                 dataPetGet: petDataGet,
                                               )));
                                 },
-                                title: Text(petDataGet.name),
-                                subtitle: Text(petDataGet.years),
+                                title: Text(petDataGet.name_pet),
+                                subtitle: Text("${petDataGet.age_pet.toString()} años"),
                                 leading: ClipRRect(
                                   child: Image.network(
-                                    'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
+                                    petDataGet.id_photo_pet,
                                     height: 100,
                                   ),
                                 ),
-                                trailing: Icon(
-                                  petDataGet.gender ? Icons.male : Icons.female,
-                                  color: petDataGet.gender
-                                      ? Colors.blue
-                                      : Colors.pink,
+                                trailing: const Icon(
+                                  Icons.female,
+                                  color: Colors.pink,
                                 )),
                           ));
                     });
@@ -97,3 +94,5 @@ class _ListViewDataState extends State<ListViewData> {
     );
   }
 }
+
+//'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg'

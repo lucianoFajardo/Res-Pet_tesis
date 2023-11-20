@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:respet_app/src/views/edit_post/edit_post_view.dart';
 // import 'package:respet_app/src/views/example/examplepruebaPubli.dart.lk';
 import 'package:respet_app/src/views/home/home_view.dart';
 import 'package:respet_app/src/views/login/login_view.dart';
@@ -24,7 +25,7 @@ class Routers {
     //'example': (context) => const HomePagePrueba(),
     'view_all_post':(context) => const ViewAllPostPets(),
     'view_account':(context) => const ViewAccount(),
-    'view_my_publications':(context) => const ViewPublications()
+    'view_my_publications':(context) => const ViewPublications(),
   };
 
   static Route<dynamic> onGenerateRoutesProvider(RouteSettings) {
