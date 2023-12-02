@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:respet_app/src/bloc/edit_post/edit_post_cubit.dart';
 import 'package:respet_app/src/bloc/get_data/data_user/get_all_post_user_cubit.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
 import 'package:respet_app/src/bloc/new_post/new_post_cubit.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => LoginCubit()),
         BlocProvider(create: (_) => RegisterCubit()),
         BlocProvider(create: (_) => NewPostCubit()),
+        BlocProvider(create: (_) => EditPostCubit()),
         BlocProvider(create: (_) => OperationCrudCubit()),
         BlocProvider(create: (_) => GetDataFivePetsCubit()),
         BlocProvider(create: (_) => GetAllPostUserCubit()),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:respet_app/src/views/edit_post/edit_post_view.dart';
 // import 'package:respet_app/src/views/example/examplepruebaPubli.dart.lk';
 import 'package:respet_app/src/views/home/home_view.dart';
 import 'package:respet_app/src/views/login/login_view.dart';
