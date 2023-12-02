@@ -65,10 +65,7 @@ class _GridCState extends State<ViewDataAllPet> {
                               height: 100,
                             ),
                           ),
-                          trailing: const Icon(
-                            Icons.female,
-                            color: Colors.pink,
-                          )),
+                          trailing: gender(petDataGet.gender_pet.toString())),
                     ));
               });
         }
@@ -82,3 +79,20 @@ class _GridCState extends State<ViewDataAllPet> {
     );
   }
 }
+
+gender(String gender) {
+  if (gender == 'Macho') {
+    return const Icon(
+      Icons.male,
+      color: Colors.blue,
+      size: 55.0,
+    );
+  } else {
+    return const Icon(
+      Icons.female,
+      color: Colors.pink,
+      size: 55.0,
+    );
+  }
+}
+

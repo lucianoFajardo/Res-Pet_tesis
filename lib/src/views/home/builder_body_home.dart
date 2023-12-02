@@ -76,10 +76,7 @@ class _ListViewDataState extends State<ListViewData> {
                                     height: 100,
                                   ),
                                 ),
-                                trailing: const Icon(
-                                  Icons.female,
-                                  color: Colors.pink,
-                                )),
+                                trailing:gender(petDataGet.gender_pet.toString())),
                           ));
                     });
           }
@@ -95,4 +92,18 @@ class _ListViewDataState extends State<ListViewData> {
   }
 }
 
-//'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg'
+gender(String gender) {
+  if (gender == 'Macho') {
+    return const Icon(
+      Icons.male,
+      color: Colors.blue,
+      size: 40.0,
+    );
+  } else {
+    return const Icon(
+      Icons.female,
+      color: Colors.pink,
+      size: 40.0,
+    );
+  }
+}

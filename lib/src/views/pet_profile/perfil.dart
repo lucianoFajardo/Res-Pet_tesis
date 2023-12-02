@@ -44,13 +44,8 @@ class PerfilViewData extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.female,
-                  color: Colors.pink,
-                  size: 55.0,
-                ),
-              )
+                  padding: const EdgeInsets.all(8.0),
+                  child: gender(dataPetGet.gender_pet.toString()))
             ],
           ),
           Row(children: [
@@ -215,6 +210,22 @@ class PerfilViewData extends StatelessWidget {
           )
         ],
       )),
+    );
+  }
+}
+
+gender(String gender) {
+  if (gender == 'Macho') {
+    return const Icon(
+      Icons.male,
+      color: Colors.blue,
+      size: 55.0,
+    );
+  } else {
+    return const Icon(
+      Icons.female,
+      color: Colors.pink,
+      size: 55.0,
     );
   }
 }
