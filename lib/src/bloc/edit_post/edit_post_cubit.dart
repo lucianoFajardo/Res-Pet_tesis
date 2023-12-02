@@ -1,14 +1,16 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:respet_app/main.dart';
-import 'package:respet_app/src/models/data_pet.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'edit_post_state.dart';
 
 class EditPostCubit extends Cubit<EditPostState> {
   EditPostCubit() : super(EditPostInitial());
 
-  Future editPostUpdate({
+  Future<void> EditPostUpdate({
     required String fotoMascota,
     required String nombreMascota,
     required String descripcionMascota,
@@ -20,13 +22,39 @@ class EditPostCubit extends Cubit<EditPostState> {
     required bool esterilizadoMascota,
     required int tamanoMascota,
     required String cuidadoMascota,
-    //todo implementar el bloc en el edit_post_view, verificar si se actualiza y funciona el cambio de imagen en el bucket
+    required String vacunasMascota,
+    required String mascotaID,
+
+    required final imagenBytes,
+    required final imagenTipo,
+    required final usuarioID,
+    
   }) async {
     try {
       emit(EditPostLoading());
-      final infoSupDes =
-          await client.from("created_post_adoption_pet").select("*");
-      infoSupDes.map((i) {
+      
+      String pathOriginal = fotoMascota.substring(113);
+      String imagenPath = "/$usuarioID/$pathOriginal";
+
+      await client.storage
+        .from("imagenes")
+        .updateBinary(imagenPath, imagenBytes!, fileOptions: FileOptions(contentType: "imagen/$imagenTipo"));
+
+      await client
+        .from("created_post_adoption_pet")
+        .update({'photo_pet': fotoMascota, 'name_pet': nombreMascota, 'description_pet': descripcionMascota, 'fur_color': colorPelaje, 
+                'weight_pet': pesoMascota, 'age_pet': edadMascota, 'gender_pet': generoMascota, 'location': localidadMascota, 
+                'is_sterilization': esterilizadoMascota, 'size_pet': tamanoMascota, 'specific_care': cuidadoMascota, 'vaccines_pet': vacunasMascota})
+        .match({"id_pet_adoption": mascotaID, "id_user_created": usuarioID});
+      
+      emit(EditPostSuccessful());
+    } catch (e) {
+
+      emit(EditPostFailed(e.toString()));
+    }
+  }
+}
+/*  infoSupDes.map((i) {
         return data_pet(
             id_pet: i['id_pet_adoption'],
             id_photo_pet: i['photo_pet'],
@@ -45,10 +73,4 @@ class EditPostCubit extends Cubit<EditPostState> {
             vaccines_pet: i['vaccines_pet'],
             celphoneUser: i['user_metadata']['celphone_number'],
             nameUser: i['user_metadata']['name_user']);
-      });
-      emit(EditPostSuccessful());
-    } catch (e) {
-      emit(EditPostFailed(e.toString()));
-    }
-  }
-}
+*/
