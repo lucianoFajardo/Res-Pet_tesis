@@ -64,13 +64,12 @@ class _SettingPageUIState extends State<SettingPageUI> {
                 buildRouterPage(context, "Cuenta", 'view_account'),
                 buildRouterPage(
                     context, "Mis publicaciones", 'view_my_publications'),
-                buildRouterPage(context, "Seguridad", 'home_view'),
-                buildRouterPage(context, "Temas de servicios", 'home_view'),
+
                 SizedBox(height: 40),
                 Center(
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.amber,
+                      backgroundColor: Colors.amber[300],
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 10),
                         shape: RoundedRectangleBorder(

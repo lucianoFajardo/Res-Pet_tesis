@@ -47,7 +47,7 @@ class _GridCState extends State<ViewDataAllPet> {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.amber),
+                          color: Colors.amber[300]),
                       child: ListTile(
                           onTap: () {
                             Navigator.push(
@@ -58,11 +58,12 @@ class _GridCState extends State<ViewDataAllPet> {
                                         )));
                           },
                           title: Text(petDataGet.name_pet),
-                          subtitle: Text(petDataGet.age_pet.toString()),
+                          subtitle: Text('${petDataGet.age_pet.toString()} años'),
                           leading: ClipRRect(
                             child: Image.network(
-                              'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
-                              height: 100,
+                              petDataGet.id_photo_pet,
+                              cacheHeight: 100,
+                              cacheWidth: 100,
                             ),
                           ),
                           trailing: gender(petDataGet.gender_pet.toString())),

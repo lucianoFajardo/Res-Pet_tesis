@@ -64,7 +64,7 @@ class PerfilViewData extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Container(
-                color: Colors.blue,
+                color: Colors.blue[200],
                 width: 90,
                 height: 25,
                 alignment: Alignment.center,
@@ -79,7 +79,7 @@ class PerfilViewData extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                      color: Colors.blue,
+                      color: Colors.blue[200],
                       width: 113,
                       height: 50,
                       alignment: Alignment.center,
@@ -87,7 +87,7 @@ class PerfilViewData extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                      color: const Color.fromARGB(255, 0, 136, 248),
+                      color: Colors.blue[200],
                       width: 113,
                       height: 50,
                       alignment: Alignment.center,
@@ -97,7 +97,7 @@ class PerfilViewData extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  color: Colors.blue,
+                  color: Colors.blue[200],
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
@@ -167,7 +167,7 @@ class PerfilViewData extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
-                  color: Colors.blue,
+                  color: Colors.blue[200],
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,
@@ -177,18 +177,21 @@ class PerfilViewData extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                    color: Colors.blue,
+                    color: Colors.blue[200],
                     width: 113,
                     height: 50,
                     alignment: Alignment.center,
                     child: dataPetGet.is_sterilization
-                        ? const Text('Mascota esterilizada')
+                        ? const Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('Mascota esterilizada'),
+                          )
                         : const Text('Mascota no esterilizada')),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  color: Colors.blue,
+                  color: Colors.blue[200],
                   width: 113,
                   height: 50,
                   alignment: Alignment.center,

@@ -12,7 +12,7 @@ class OperationCrudCubit extends Cubit<OperationCrudState> {
     try {
       emit(LoadingStateOperation());
       final resdata = await client
-          .from('publicaciones_prueba')
+          .from('created_post_adoption_pet')
           .select('*,user_metadata!inner(name_user,celphone_number)')
           .execute();
       final data = resdata.data as List;

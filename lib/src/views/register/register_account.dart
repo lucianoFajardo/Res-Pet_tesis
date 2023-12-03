@@ -170,7 +170,7 @@ class _RegisterAccountState extends State<RegisterAccount> {
                           width: 150,
                           child: MaterialButton(
                             height: 50,
-                            color: Colors.amber,
+                            color: Colors.amber[300],
                             onPressed: () async {
                               String email = emailController.text.trim();
                               String password = passwordController.text.trim();

@@ -64,7 +64,7 @@ class _ViewPublicationsState extends State<ViewPublications> {
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.amber),
+                                  color: Colors.amber[300]),
                               child: ListTile(
                                   onTap: () {
                                     Navigator.push(
@@ -76,19 +76,18 @@ class _ViewPublicationsState extends State<ViewPublications> {
                                                 )));
                                   },
                                   title: Text(petDataGet.name_pet),
-                                  subtitle: Text(petDataGet.age_pet.toString()),
+                                  subtitle: Text('${petDataGet.age_pet.toString()} años'),
                                   leading: ClipRRect(
                                     child: Image.network(
-                                      'https://images.dog.ceo/breeds/spaniel-japanese/n02085782_1774.jpg',
-                                      height: 100,
+                                      petDataGet.id_photo_pet,
+                                      cacheHeight: 100,
+                                      cacheWidth: 100,
                                     ),
                                   ),
                                   trailing: IconButton(
                                     icon: const Icon(Icons.edit),
+                                    color: Colors.black,
                                     onPressed: () {
-                                      //! en este apartado tengo que capturar la data del indice que seleccione de la publicacion y se la
-                                      //! mando al otro estado que es para editar esa data seleccionada.
-                                      //? Aqui se tiene que mandar los datos mediante el contexto,
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -106,26 +105,3 @@ class _ViewPublicationsState extends State<ViewPublications> {
         ));
   }
 }
-
-//TODO -> tener en cuenta luego el eliminar una publicacion y con eso se terminaria el CRUD
-
-/**
- *                                     petDataGet.gender_pet
-                                        ? Icons.male
-                                        : Icons.female,
-                                    color: petDataGet.gender_pet
-                                        ? Colors.blue
-                                        : Colors.pink,
-
-
-                                         actions: <Widget>[
-              Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 7, vertical: 11),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        
-                      },
-                      child: const Text("Modificar")))
-            ]
- */

@@ -58,7 +58,7 @@ class _ListViewDataState extends State<ListViewData> {
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.amber),
+                                color: Colors.amber[300]),
                             child: ListTile(
                                 onTap: () {
                                   Navigator.push(
@@ -69,14 +69,17 @@ class _ListViewDataState extends State<ListViewData> {
                                               )));
                                 },
                                 title: Text(petDataGet.name_pet),
-                                subtitle: Text("${petDataGet.age_pet.toString()} años"),
+                                subtitle: Text(
+                                    "${petDataGet.age_pet.toString()} años"),
                                 leading: ClipRRect(
                                   child: Image.network(
                                     petDataGet.id_photo_pet,
-                                    height: 100,
+                                    cacheHeight: 100,
+                                    cacheWidth: 100,
                                   ),
                                 ),
-                                trailing:gender(petDataGet.gender_pet.toString())),
+                                trailing:
+                                    gender(petDataGet.gender_pet.toString())),
                           ));
                     });
           }

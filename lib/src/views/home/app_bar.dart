@@ -14,11 +14,5 @@ AppBarView(){
       },
     ),
     title: const Text('Pagina principal'),
-    actions: <Widget>[
-      IconButton(
-        icon: const Icon(Icons.notifications_sharp),
-        onPressed: () => print('Abrir notificaciones'),
-      ),
-    ],
   );
 }

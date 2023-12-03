@@ -38,25 +38,20 @@ class LoginView extends StatelessWidget {
             SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  //? aqui va el logo
-                  Padding(
-                      padding: EdgeInsets.only(top: 80, bottom: 10),
-                      child: SizedBox(
-                        width: 150,
-                        height: 200,
-                        child: Card(
-                            child: Text(
-                          'logo',
-                          textAlign: TextAlign.center,
-                        )),
-                      )),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  SizedBox(
+                    height: 320,
+                    child: Image.asset('assets/respetlogo.png'),
+                  ),
                   SizedBox(
                     width: double
                         .maxFinite, //! tener en cuenta esto para las posibles actualizaciones de pantalla que se tengan.
                     child: Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Center(
-                        child: Text("Inicio de sesión",
+                        child: Text("Inicio de sesión ResPet",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 30,
@@ -95,12 +90,11 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   Padding(
                       padding: EdgeInsets.only(bottom: 5),
                       child: MaterialButton(
                         height: 50,
-                        color: Colors.amber,
+                        color: Colors.amber[300],
                         onPressed: () {
                           _loginCubitState.SingInUser(
                               userName: _inputUser.text,
@@ -111,9 +105,6 @@ class LoginView extends StatelessWidget {
                           style: TextStyle(color: Colors.black),
                         ),
                       )),
-
-                  //TODO: habilitar el boton para agregar un usuario
-
                   SizedBox(
                     height: 30,
                     child: Text("o"),
@@ -122,7 +113,7 @@ class LoginView extends StatelessWidget {
                       padding: EdgeInsets.only(bottom: 5),
                       child: MaterialButton(
                         height: 50,
-                        color: Colors.amber,
+                        color: Colors.amber[300],
                         onPressed: () {
                           Navigator.pushNamed(context, 'register');
                         },
@@ -131,30 +122,6 @@ class LoginView extends StatelessWidget {
                           style: TextStyle(color: Colors.black),
                         ),
                       )),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5, left: 90),
-                    child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: const BeveledRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
-                          ),
-                          onPressed: () {
-                            print('Pressed');
-                          },
-                          child: Text('¿Olvidaste tu contraseña? Te ayudamos',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black)),
-                        )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                        "los datos de la aplicación como los terminos y condiciones que se ocuparanal desarrollar la app"),
-                  ),
                 ],
               ),
             ),

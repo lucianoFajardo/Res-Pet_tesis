@@ -46,10 +46,13 @@ class _NewPostViewState extends State<NewPostView> {
 
     return Scaffold(
         appBar: AppBar(
-          foregroundColor: Colors.deepPurple[600],
-          backgroundColor: Colors.grey[300],
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
           title: const Text("Nueva Publicacion"),
-
           //*Boton
           actions: <Widget>[
             Padding(
@@ -67,7 +70,6 @@ class _NewPostViewState extends State<NewPostView> {
                           final usuarioID = client.auth.currentUser!.id;
                           String fechaHora = DateTime.now().toIso8601String();
                           final imagenPath = "/$usuarioID/imagen$fechaHora";
-
                           String imagenUrl = client.storage
                               .from("imagenes")
                               .getPublicUrl(imagenPath);
@@ -76,7 +78,6 @@ class _NewPostViewState extends State<NewPostView> {
                             "t":
                                 DateTime.now().millisecondsSinceEpoch.toString()
                           }).toString();
-
                           String nombreMascota = nombreController.text.trim();
                           String descripcion = pieFotoController.text.trim();
                           String colorPelaje =
@@ -93,7 +94,6 @@ class _NewPostViewState extends State<NewPostView> {
                           //
                           String cuidadoEspecial =
                               cuidadoController.text.trim();
-
                           setState(() {
                             if (selectedItemEstirilizado == "Si") {
                               esterilizado = true;
@@ -101,7 +101,6 @@ class _NewPostViewState extends State<NewPostView> {
                               esterilizado = false;
                             }
                           });
-
                           newPostCubitState.NewPostUpload(
                               fotoMascota: imagenUrl,
                               nombreMascota: nombreMascota,
@@ -246,7 +245,7 @@ class _NewPostViewState extends State<NewPostView> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-zA-Z0-9_.-]+$')
+                          } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$')
                               .hasMatch(value)) {
                             return "No ocupe signos ni simbolos";
                           } else {
@@ -515,7 +514,7 @@ class _NewPostViewState extends State<NewPostView> {
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-zA-Z0-9_.-]*$')
+                          } else if (!RegExp(r'^[a-z A-Z0-9_.-]*$')
                               .hasMatch(value)) {
                             return "No ocupe signos ni simbolos";
                           } else {
@@ -587,7 +586,7 @@ class _NewPostViewState extends State<NewPostView> {
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Llene la casilla";
-                                } else if (!RegExp(r'^[a-zA-Z0-9_.-]+$')
+                                } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$')
                                     .hasMatch(value)) {
                                   return "No ocupe signos ni simbolos";
                                 } else {
