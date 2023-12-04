@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,27 +62,22 @@ class _NewPostViewState extends State<NewPostView> {
                 onPressed: _hayImagen && _formKey.currentState!.validate()
                     ? () async {
                         try {
-                          final imagenTipo = _imagenSeleccionada?.path
-                              .split(".")
-                              .last
-                              .toLowerCase();
-                          final imagenBytes =
-                              await _imagenSeleccionada?.readAsBytes();
+
+                          final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
+                          final imagenBytes = await _imagenSeleccionada?.readAsBytes();
                           final usuarioID = client.auth.currentUser!.id;
                           String fechaHora = DateTime.now().toIso8601String();
                           final imagenPath = "/$usuarioID/imagen$fechaHora";
-                          String imagenUrl = client.storage
-                              .from("imagenes")
-                              .getPublicUrl(imagenPath);
+                          String imagenUrl = client.storage.from("imagenes").getPublicUrl(imagenPath);
+
                           imagenUrl = Uri.parse(imagenUrl)
-                              .replace(queryParameters: {
-                            "t":
-                                DateTime.now().millisecondsSinceEpoch.toString()
-                          }).toString();
+                              .replace(queryParameters: {"t":DateTime.now().millisecondsSinceEpoch.toString()}).toString();
+
                           String nombreMascota = nombreController.text.trim();
                           String descripcion = pieFotoController.text.trim();
-                          String colorPelaje =
-                              colorPelajeController.text.trim();
+                          String colorPelaje = colorPelajeController.text.trim();
+                          String cuidadoEspecial = cuidadoController.text.trim();
+                          String vacunasMascota = vacunaController.text.trim();
                           //
                           String peso = pesoController.text.trim();
                           double pesoFloat = double.parse(peso);
@@ -92,8 +88,7 @@ class _NewPostViewState extends State<NewPostView> {
                           String tamano = tamanoController.text.trim();
                           int? tamanoInt = int.tryParse(tamano);
                           //
-                          String cuidadoEspecial =
-                              cuidadoController.text.trim();
+
                           setState(() {
                             if (selectedItemEstirilizado == "Si") {
                               esterilizado = true;
@@ -101,21 +96,14 @@ class _NewPostViewState extends State<NewPostView> {
                               esterilizado = false;
                             }
                           });
+
                           newPostCubitState.NewPostUpload(
-                              fotoMascota: imagenUrl,
-                              nombreMascota: nombreMascota,
-                              descripcionMascota: descripcion,
-                              colorPelaje: colorPelaje,
-                              pesoMascota: pesoFloat,
-                              edadMascota: edadInt!,
-                              generoMascota: selectedItemSexo!,
-                              localidadMascota: selectedItemLocalidad!,
-                              esterilizadoMascota: esterilizado!,
-                              tamanoMascota: tamanoInt!,
-                              cuidadoMascota: cuidadoEspecial,
-                              imagenPath: imagenPath,
-                              imagenBytes: imagenBytes,
-                              imagenTipo: imagenTipo);
+                              fotoMascota: imagenUrl, usuarioID: usuarioID,
+                              nombreMascota: nombreMascota, descripcionMascota: descripcion, colorPelaje: colorPelaje,
+                              pesoMascota: pesoFloat, edadMascota: edadInt!, generoMascota: selectedItemSexo!,
+                              localidadMascota: selectedItemLocalidad!, esterilizadoMascota: esterilizado!, 
+                              tamanoMascota: tamanoInt!, cuidadoMascota: cuidadoEspecial, imagenPath: imagenPath, 
+                              imagenBytes: imagenBytes, imagenTipo: imagenTipo, vacunasMascota: vacunasMascota);
                         } catch (e) {
                           print("Tipo de Error: $e");
                         }
@@ -135,7 +123,7 @@ class _NewPostViewState extends State<NewPostView> {
             listener: (context, state) {
           // TODO: implement listener
           if (state is NewPostFailed) {
-            // ignore: avoid_print
+
             print("Hay un Error: ${state.errorView.toString()}");
 
             ScaffoldMessenger.of(context).showSnackBar(
@@ -147,7 +135,7 @@ class _NewPostViewState extends State<NewPostView> {
           }
 
           if (state is NewPostSuccessful) {
-            // ignore: avoid_print
+
             print("Nuevo Post: ${state.toString()}");
 
             ScaffoldMessenger.of(context).showSnackBar(
