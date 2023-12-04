@@ -12,11 +12,10 @@ class EditPostView extends StatefulWidget {
   @override
   State<EditPostView> createState() => _EditPostViewState();
   final data_pet dataPetGetEdit;
-  
 }
 
 class _EditPostViewState extends State<EditPostView> {
-  
+
   //?Traer los Datos
   @override
   void initState() {
@@ -72,7 +71,6 @@ class _EditPostViewState extends State<EditPostView> {
 
   @override
   Widget build(BuildContext context) {
-    //final petdatas = context.watch<EditPostCubit>();
     final editPostCubitState = BlocProvider.of<EditPostCubit>(context);
 
     return Scaffold(
@@ -83,10 +81,11 @@ class _EditPostViewState extends State<EditPostView> {
               Navigator.pop(context);
             },
             icon: const Icon(
-              Icons.arrow_back_ios, //flecha de regreso //
+              Icons.arrow_back_ios, //*flecha de regreso
               color: Colors.black,
             ),
           ),
+          
           //*BOTON MODIFICAR
           actions: <Widget>[
             Padding(
@@ -95,15 +94,13 @@ class _EditPostViewState extends State<EditPostView> {
                     onPressed: () async{
                       try {
                         
-                        print(widget.dataPetGetEdit.id_photo_pet);
-                        
                         final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
                         final imagenBytes = await _imagenSeleccionada?.readAsBytes();
                         final usuarioID = client.auth.currentUser!.id;
                         
                         String nombreMascota = nombreController.text.trim();
                         String descripcion = pieFotoController.text.trim();
-                        String colorPelaje =colorPelajeController.text.trim();
+                        String colorPelaje = colorPelajeController.text.trim();
                         String cuidadoEspecial = cuidadoController.text.trim();
                         String vacunas = vacunaController.text.trim();
                         String mascotaID = widget.dataPetGetEdit.id_pet;
@@ -125,30 +122,23 @@ class _EditPostViewState extends State<EditPostView> {
                           }
                         });
 
-                          editPostCubitState.EditPostUpdate(
-                            fotoMascota: imagenURL,
-                            nombreMascota: nombreMascota,
-                            descripcionMascota: descripcion,
-                            colorPelaje: colorPelaje,
-                            pesoMascota: pesoFloat,
-                            edadMascota: edadInt!,
-                            generoMascota: selectedItemSexo!,
-                            localidadMascota: selectedItemLocalidad!,
-                            esterilizadoMascota: esterilizado!,
-                            tamanoMascota: tamanoInt!,
-                            cuidadoMascota: cuidadoEspecial,
-                            imagenBytes: imagenBytes,
-                            imagenTipo: imagenTipo,
-                            vacunasMascota: vacunas,
-                            mascotaID: mascotaID,
-                            usuarioID: usuarioID);
-                            
+                        editPostCubitState.EditPostUpdate(
+                          fotoMascota: imagenURL, nombreMascota: nombreMascota, descripcionMascota: descripcion,
+                          colorPelaje: colorPelaje, pesoMascota: pesoFloat, edadMascota: edadInt!,
+                          generoMascota: selectedItemSexo!, localidadMascota: selectedItemLocalidad!, 
+                          esterilizadoMascota: esterilizado!, tamanoMascota: tamanoInt!, 
+                          cuidadoMascota: cuidadoEspecial, vacunasMascota: vacunas,
+                          imagenBytes: imagenBytes, imagenTipo: imagenTipo, 
+                          mascotaID: mascotaID, usuarioID: usuarioID, hayImagen: _hayImagen);
                       
                       } catch (error) {
                         print("Error: $error");
                       }
                     },
-                    child: const Text("Modificar"))),
+                    
+                  child: const Text("Modificar")
+                )
+              ),
           ],
         ),
 
@@ -616,8 +606,8 @@ class _EditPostViewState extends State<EditPostView> {
   }
 
   Future selectImageGalery() async {
-    final imagenIngresada =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final imagenIngresada = await ImagePicker().pickImage(source: ImageSource.gallery);
+
     setState(() {
       _imagenSeleccionada = File(imagenIngresada!.path);
       if (_imagenSeleccionada.toString().isNotEmpty) {
