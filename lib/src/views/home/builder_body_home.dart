@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_final_fields
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/views/pet_profile/perfil.dart';
@@ -48,7 +47,7 @@ class _ListViewDataState extends State<ListViewData> {
           }
           if (state is GetDatafiveStateOperation) {
             return state.data.isEmpty
-                ? const Text('No existen post disponibles.')
+                ? const Text('No existen publicaciones disponibles.')
                 : ListView.builder(
                     itemCount: state.data.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -110,3 +109,4 @@ gender(String gender) {
     );
   }
 }
+

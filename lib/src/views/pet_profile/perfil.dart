@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:respet_app/src/models/data_pet.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PerfilViewData extends StatelessWidget {
   const PerfilViewData({super.key, required this.dataPetGet});
-
   final data_pet dataPetGet;
-  //TODO -> realizar una funcion que evalua si el sexo es masculino o femenino
-
   @override
   Widget build(BuildContext context) {
+    final pathImage = dataPetGet.id_photo_pet;
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -24,15 +22,20 @@ class PerfilViewData extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.all(10),
-            height: 350,
-            width: double.infinity,
-            child: Image.network(
-              dataPetGet.id_photo_pet,
-              fit: BoxFit.contain,
-              alignment: Alignment.center,
-            ),
-          ),
+              margin: const EdgeInsets.all(10),
+              height: 350,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: pathImage,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover)),
+                ),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              )),
           Row(
             children: [
               Padding(
@@ -68,7 +71,7 @@ class PerfilViewData extends StatelessWidget {
                 width: 90,
                 height: 25,
                 alignment: Alignment.center,
-                child: Text(
+                child: const Text(
                   'estado',
                 ),
               ),
