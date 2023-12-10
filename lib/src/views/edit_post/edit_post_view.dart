@@ -32,7 +32,6 @@ class _EditPostViewState extends State<EditPostView> {
     
     if(widget.dataPetGetEdit.is_sterilization){
       selectedItemEstirilizado = "Si";
-
     }else{
       selectedItemEstirilizado = "No";
     }
@@ -93,7 +92,7 @@ class _EditPostViewState extends State<EditPostView> {
                 child: ElevatedButton(
                     onPressed: () async{
                       try {
-                        
+
                         final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
                         final imagenBytes = await _imagenSeleccionada?.readAsBytes();
                         final usuarioID = client.auth.currentUser!.id;
@@ -113,6 +112,8 @@ class _EditPostViewState extends State<EditPostView> {
 
                         String tamano = tamanoController.text.trim();
                         int? tamanoInt = int.tryParse(tamano);
+                        
+                        String tiempoAhora = DateTime.now().toString();
 
                         setState(() {
                           if (selectedItemEstirilizado == "Si") {
@@ -129,8 +130,8 @@ class _EditPostViewState extends State<EditPostView> {
                           esterilizadoMascota: esterilizado!, tamanoMascota: tamanoInt!, 
                           cuidadoMascota: cuidadoEspecial, vacunasMascota: vacunas,
                           imagenBytes: imagenBytes, imagenTipo: imagenTipo, 
-                          mascotaID: mascotaID, usuarioID: usuarioID, hayImagen: _hayImagen);
-                      
+                          mascotaID: mascotaID, usuarioID: usuarioID, hayImagen: _hayImagen, tiempoAhora: tiempoAhora);
+                        
                       } catch (error) {
                         print("Error: $error");
                       }
@@ -152,18 +153,18 @@ class _EditPostViewState extends State<EditPostView> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.errorView.toString()),
-                  duration: const Duration(seconds: 4),
+                  duration: const Duration(seconds: 6),
                 ),
               );
             }
 
             if(state is EditPostSuccessful){
-              print("Nuevo Post: ${state.toString()}");
+              print("Post Editado: ${state.toString()}");
 
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Post Modificado con Exito"),
-                  duration: Duration(seconds: 4),
+                  duration: Duration(seconds: 6),
                 ),
               );
 

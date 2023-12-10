@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:respet_app/src/bloc/delete_post/delete_post_cubit.dart';
 import 'package:respet_app/src/bloc/get_data/data_user/get_all_post_user_cubit.dart';
 import 'package:respet_app/src/views/edit_post/edit_post_view.dart';
 import 'package:respet_app/src/views/pet_profile/perfil.dart';
+import 'package:timer_button/timer_button.dart';
 
 class ViewPublications extends StatefulWidget {
   const ViewPublications({super.key});
@@ -22,6 +25,8 @@ class _ViewPublicationsState extends State<ViewPublications> {
 
   @override
   Widget build(BuildContext context) {
+    final deletePostCubitState = BlocProvider.of<DeletePostCubit>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Mis publicaciones'),
@@ -51,6 +56,7 @@ class _ViewPublicationsState extends State<ViewPublications> {
             if (state is ErrorPostState) {
               return Text(state.error.toString());
             }
+            
             if (state is AlldataPostState) {
               return state.dataPost.isEmpty
                   ? const Center(
@@ -72,8 +78,7 @@ class _ViewPublicationsState extends State<ViewPublications> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 PerfilViewData(
-                                                  dataPetGet: petDataGet,
-                                                )));
+                                                    dataPetGet: petDataGet)));
                                   },
                                   title: Text(petDataGet.name_pet),
                                   subtitle: Text('${petDataGet.age_pet.toString()} años'),
@@ -84,18 +89,83 @@ class _ViewPublicationsState extends State<ViewPublications> {
                                       cacheWidth: 100,
                                     ),
                                   ),
-                                  trailing: IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    color: Colors.black,
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EditPostView(
-                                                      dataPetGetEdit:
-                                                          petDataGet)));
-                                    },
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      IconButton(
+                                        onPressed: () => showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                                  title: const Center(
+                                                      child: Text("Eliminar")),
+                                                  content: const Text(
+                                                      "¿Desea Eliminar este Post?"),
+                                                  actions: <Widget>[
+                                                    BlocConsumer<DeletePostCubit, DeletePostState>(
+                                                      listener:(context, state) {
+                                                        
+                                                        if(state is DeletePostFailed){
+                                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                              SnackBar(
+                                                                content: Text(state.errorView.toString()),
+                                                                duration: const Duration(seconds: 6),
+                                                              ),
+                                                            );
+                                                          }
+
+                                                        if(state is DeletePostSuccessful){
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text("Publicacion Eliminada."),
+                                                                duration: Duration(seconds: 6)
+                                                              )
+                                                          );
+
+                                                          Navigator.pushReplacementNamed(context, "home_view");
+                                                        }
+                                                      },
+
+                                                      builder:(context, state) {
+                                                        return TimerButton(
+                                                            buttonType: ButtonType.textButton,
+                                                            label: "Si",
+                                                            timeOutInSeconds: 0,
+                                                            color: Colors.deepPurple,
+                                                            onPressed: () {
+                                                              deletePostCubitState.DeletePostPublication(
+                                                                idPet: petDataGet.id_pet, pathImagen: petDataGet.id_photo_pet);
+                                                              }
+                                                          );
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+
+                                                      child: const Text("No")
+                                                    )
+                                                  ],
+                                                )),
+                                        icon: const Icon(
+                                            Icons.delete_forever_rounded),
+                                        color: Colors.black,
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        color: Colors.black,
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditPostView(
+                                                          dataPetGetEdit:
+                                                              petDataGet)));
+                                        },
+                                      ),
+                                    ],
                                   )),
                             ));
                       });
