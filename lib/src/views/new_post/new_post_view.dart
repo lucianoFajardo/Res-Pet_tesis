@@ -42,6 +42,12 @@ class _NewPostViewState extends State<NewPostView> {
   bool? esterilizado;
 
   @override
+  void initState() {
+    super.initState();
+    _hayImagen;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final newPostCubitState = BlocProvider.of<NewPostCubit>(context);
 
@@ -62,16 +68,12 @@ class _NewPostViewState extends State<NewPostView> {
                 onPressed: _hayImagen && _formKey.currentState!.validate()
                     ? () async {
                         try {
-
                           final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
                           final imagenBytes = await _imagenSeleccionada?.readAsBytes();
                           final usuarioID = client.auth.currentUser!.id;
                           String fechaHora = DateTime.now().toIso8601String();
                           final imagenPath = "/$usuarioID/imagen$fechaHora";
                           String imagenUrl = client.storage.from("imagenes").getPublicUrl(imagenPath);
-
-                          imagenUrl = Uri.parse(imagenUrl)
-                              .replace(queryParameters: {"t":DateTime.now().millisecondsSinceEpoch.toString()}).toString();
 
                           String nombreMascota = nombreController.text.trim();
                           String descripcion = pieFotoController.text.trim();
@@ -104,6 +106,7 @@ class _NewPostViewState extends State<NewPostView> {
                               localidadMascota: selectedItemLocalidad!, esterilizadoMascota: esterilizado!, 
                               tamanoMascota: tamanoInt!, cuidadoMascota: cuidadoEspecial, imagenPath: imagenPath, 
                               imagenBytes: imagenBytes, imagenTipo: imagenTipo, vacunasMascota: vacunasMascota);
+                        
                         } catch (e) {
                           print("Tipo de Error: $e");
                         }
@@ -129,7 +132,7 @@ class _NewPostViewState extends State<NewPostView> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorView.toString()),
-                duration: const Duration(seconds: 4),
+                duration: const Duration(seconds: 6),
               ),
             );
           }
@@ -141,7 +144,7 @@ class _NewPostViewState extends State<NewPostView> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Post agregado con Exito"),
-                duration: Duration(seconds: 4),
+                duration: Duration(seconds: 6),
               ),
             );
 
@@ -597,8 +600,7 @@ class _NewPostViewState extends State<NewPostView> {
   }
 
   Future seleccionarImagenDeGaleria() async {
-    final _imagenIngresada =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final _imagenIngresada = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imagenSeleccionada = File(_imagenIngresada!.path);

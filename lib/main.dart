@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, unused_local_variable
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:respet_app/src/bloc/delete_post/delete_post_cubit.dart';
 import 'package:respet_app/src/bloc/edit_post/edit_post_cubit.dart';
 import 'package:respet_app/src/bloc/get_data/data_user/get_all_post_user_cubit.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
@@ -9,7 +10,6 @@ import 'package:respet_app/src/bloc/register/register_cubit.dart';
 import 'package:respet_app/src/bloc/register_metadata/register_metadata_cubit.dart';
 import 'package:respet_app/src/routers/routers.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:respet_app/src/views/register/register_account.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/services.dart';
 import 'src/bloc/get_data/data_post_all/get_all_data_pets_cubit.dart';
@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => GetDataFivePetsCubit()),
         BlocProvider(create: (_) => GetAllPostUserCubit()),
         BlocProvider(create: (_) => RegisterMetadataCubit()),
+        BlocProvider(create: (_) => DeletePostCubit()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
