@@ -13,7 +13,7 @@ class UserInformationError extends GetUserInformationState {
 class UserInformationLoading extends GetUserInformationState {}
 
 class UserInformationAllData extends GetUserInformationState {
-  final dynamic informationUser;
+  final List<userMetaData> informationUser;
   const UserInformationAllData({required this.informationUser});
 }
 

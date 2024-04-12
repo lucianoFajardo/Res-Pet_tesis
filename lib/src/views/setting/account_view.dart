@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:respet_app/src/models/user_data.dart';
 import '../../bloc/get_data/user_information/get_user_information_cubit.dart';
 
-class ViewAccount extends StatelessWidget {
-  final getUserInformationCubit = GetUserInformationCubit();
+class ViewAccount extends StatefulWidget {
+  const ViewAccount({super.key});
+  @override
+  // ignore: library_private_types_in_public_api
+  _ViewAccountState createState() => _ViewAccountState();
+}
 
+class _ViewAccountState extends State<ViewAccount> {
+  late final GetUserInformationCubit getUserInformationCubit;
+  @override
+  void initState() {
+    super.initState();
+    getUserInformationCubit = GetUserInformationCubit();
+    getUserInformationCubit.getUserInformation();
+  }
   @override
   Widget build(BuildContext context) {
-    // Llama al método para obtener la información del usuario
-    getUserInformationCubit.getUserInformation();
-    print(getUserInformationCubit);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mis datos'),
@@ -23,23 +33,26 @@ class ViewAccount extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocBuilder<GetUserInformationCubit, GetUserInformationState>(
+      body: BlocConsumer<GetUserInformationCubit, GetUserInformationState>(
+        bloc: getUserInformationCubit,
+        listener: (context, state) {
+        },
         builder: (context, state) {
           if (state is UserInformationLoading) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (state is UserInformationAllData) {
-            // Aquí muestras la información del usuario
+            final stateData = state.informationUser.first; 
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0), 
               child: Column(
                 children: [
-                  Text("Nombre: ${state.informationUser.nombre}"),
-                  Text('Apellido: ${state.informationUser.apellido}'),
-                  Text('Teléfono: ${state.informationUser.telefono}'),
-                  Text('Dirección: ${state.informationUser.direccion}'),
-                  //TODO : Aquí el usuario debe poder editar sus datos, como nombre, apellido, teléfono, dirección
+                  Text(stateData.idUser),
+                  Text("Nombre: ${stateData.name}"),
+                  Text("Apellido: ${stateData.lastName}"),
+                  Text("Celular: ${stateData.celphoneNumber}"),
+                  Text("Direccion: ${stateData.locationUser}"),
                 ],
               ),
             );
@@ -48,8 +61,8 @@ class ViewAccount extends StatelessWidget {
               child: Text(state.error.toString()),
             );
           } else {
-            return Center(
-              child: Text('Estado desconocido'),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }
         },
