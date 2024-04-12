@@ -50,7 +50,6 @@ class _NewPostViewState extends State<NewPostView> {
   @override
   Widget build(BuildContext context) {
     final newPostCubitState = BlocProvider.of<NewPostCubit>(context);
-
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -68,17 +67,25 @@ class _NewPostViewState extends State<NewPostView> {
                 onPressed: _hayImagen && _formKey.currentState!.validate()
                     ? () async {
                         try {
-                          final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
-                          final imagenBytes = await _imagenSeleccionada?.readAsBytes();
+                          final imagenTipo = _imagenSeleccionada?.path
+                              .split(".")
+                              .last
+                              .toLowerCase();
+                          final imagenBytes =
+                              await _imagenSeleccionada?.readAsBytes();
                           final usuarioID = client.auth.currentUser!.id;
                           String fechaHora = DateTime.now().toIso8601String();
                           final imagenPath = "/$usuarioID/imagen$fechaHora";
-                          String imagenUrl = client.storage.from("imagenes").getPublicUrl(imagenPath);
+                          String imagenUrl = client.storage
+                              .from("imagenes")
+                              .getPublicUrl(imagenPath);
 
                           String nombreMascota = nombreController.text.trim();
                           String descripcion = pieFotoController.text.trim();
-                          String colorPelaje = colorPelajeController.text.trim();
-                          String cuidadoEspecial = cuidadoController.text.trim();
+                          String colorPelaje =
+                              colorPelajeController.text.trim();
+                          String cuidadoEspecial =
+                              cuidadoController.text.trim();
                           String vacunasMascota = vacunaController.text.trim();
                           //
                           String peso = pesoController.text.trim();
@@ -100,13 +107,22 @@ class _NewPostViewState extends State<NewPostView> {
                           });
 
                           newPostCubitState.NewPostUpload(
-                              fotoMascota: imagenUrl, usuarioID: usuarioID,
-                              nombreMascota: nombreMascota, descripcionMascota: descripcion, colorPelaje: colorPelaje,
-                              pesoMascota: pesoFloat, edadMascota: edadInt!, generoMascota: selectedItemSexo!,
-                              localidadMascota: selectedItemLocalidad!, esterilizadoMascota: esterilizado!, 
-                              tamanoMascota: tamanoInt!, cuidadoMascota: cuidadoEspecial, imagenPath: imagenPath, 
-                              imagenBytes: imagenBytes, imagenTipo: imagenTipo, vacunasMascota: vacunasMascota);
-                        
+                              fotoMascota: imagenUrl,
+                              usuarioID: usuarioID,
+                              nombreMascota: nombreMascota,
+                              descripcionMascota: descripcion,
+                              colorPelaje: colorPelaje,
+                              pesoMascota: pesoFloat,
+                              edadMascota: edadInt!,
+                              generoMascota: selectedItemSexo!,
+                              localidadMascota: selectedItemLocalidad!,
+                              esterilizadoMascota: esterilizado!,
+                              tamanoMascota: tamanoInt!,
+                              cuidadoMascota: cuidadoEspecial,
+                              imagenPath: imagenPath,
+                              imagenBytes: imagenBytes,
+                              imagenTipo: imagenTipo,
+                              vacunasMascota: vacunasMascota);
                         } catch (e) {
                           print("Tipo de Error: $e");
                         }
@@ -126,7 +142,6 @@ class _NewPostViewState extends State<NewPostView> {
             listener: (context, state) {
           // TODO: implement listener
           if (state is NewPostFailed) {
-
             print("Hay un Error: ${state.errorView.toString()}");
 
             ScaffoldMessenger.of(context).showSnackBar(
@@ -138,7 +153,6 @@ class _NewPostViewState extends State<NewPostView> {
           }
 
           if (state is NewPostSuccessful) {
-
             print("Nuevo Post: ${state.toString()}");
 
             ScaffoldMessenger.of(context).showSnackBar(
@@ -600,7 +614,8 @@ class _NewPostViewState extends State<NewPostView> {
   }
 
   Future seleccionarImagenDeGaleria() async {
-    final _imagenIngresada = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final _imagenIngresada =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imagenSeleccionada = File(_imagenIngresada!.path);

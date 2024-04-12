@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/main.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
+import 'package:respet_app/src/views/setting/account_view.dart';
 
 class SettingPageUI extends StatefulWidget {
   const SettingPageUI({super.key});
@@ -61,10 +62,8 @@ class _SettingPageUIState extends State<SettingPageUI> {
                 ),
                 Divider(height: 20, thickness: 1),
                 SizedBox(height: 10),
-                buildRouterPage(context, "Cuenta", 'view_account'),
-                buildRouterPage(
-                    context, "Mis publicaciones", 'view_my_publications'),
-
+              buildRouterPage(context, "Cuenta", 'view_account'),  //TODO : Aqui esta la ruta para ver los datos de cuenta
+              buildRouterPage(context, "Mis publicaciones", 'view_my_publications'),
                 SizedBox(height: 40),
                 Center(
                   child: OutlinedButton(
@@ -122,3 +121,4 @@ class _SettingPageUIState extends State<SettingPageUI> {
     );
   }
 }
+

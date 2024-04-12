@@ -1,37 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/get_data/user_information/get_user_information_cubit.dart';
 
 class ViewAccount extends StatelessWidget {
-  const ViewAccount({super.key});
+  final getUserInformationCubit = GetUserInformationCubit();
 
   @override
   Widget build(BuildContext context) {
+    // Llama al método para obtener la información del usuario
+    getUserInformationCubit.getUserInformation();
+    print(getUserInformationCubit);
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Mis datos'),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios, //flecha de regreso //
-              color: Colors.black,
-            ),
+      appBar: AppBar(
+        title: const Text('Mis datos'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
           ),
         ),
-        body: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-
-              // AQUI crear un boton que si el usuario no tiene data registrada el pueda ingresar su data,
-              // Si el usuario ya tiene data mostrar su data SI NO mostrar el boton para que pueda registrar su data
-              
-              Text('Nombre:'),
-              Text('Ape'),
-              Text('telefono'),
-              //TODO : Aqui el usuario debe poder editar sus datos , como , nombre, ape, edad
-            ],
-          ),
-        ));
+      ),
+      body: BlocBuilder<GetUserInformationCubit, GetUserInformationState>(
+        builder: (context, state) {
+          if (state is UserInformationLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is UserInformationAllData) {
+            // Aquí muestras la información del usuario
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text("Nombre: ${state.informationUser.nombre}"),
+                  Text('Apellido: ${state.informationUser.apellido}'),
+                  Text('Teléfono: ${state.informationUser.telefono}'),
+                  Text('Dirección: ${state.informationUser.direccion}'),
+                  //TODO : Aquí el usuario debe poder editar sus datos, como nombre, apellido, teléfono, dirección
+                ],
+              ),
+            );
+          } else if (state is UserInformationError) {
+            return Center(
+              child: Text(state.error.toString()),
+            );
+          } else {
+            return Center(
+              child: Text('Estado desconocido'),
+            );
+          }
+        },
+      ),
+    );
   }
 }

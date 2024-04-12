@@ -26,7 +26,6 @@ class _ViewPublicationsState extends State<ViewPublications> {
   @override
   Widget build(BuildContext context) {
     final deletePostCubitState = BlocProvider.of<DeletePostCubit>(context);
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Mis publicaciones'),

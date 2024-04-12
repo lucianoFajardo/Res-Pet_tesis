@@ -9,7 +9,6 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _loginCubitState = BlocProvider.of<LoginCubit>(context);
-
     final _inputPass = TextEditingController();
     final _inputUser = TextEditingController();
 

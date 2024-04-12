@@ -23,8 +23,8 @@ class Routers {
     'settings': (context) => const SettingPageUI(),
     //'example': (context) => const HomePagePrueba(),
     'view_all_post':(context) => const ViewAllPostPets(),
-    'view_account':(context) => const ViewAccount(),
-    'view_my_publications':(context) => const ViewPublications(),
+    'view_account':(context) => ViewAccount(),
+    'view_my_publications':(_) => const ViewPublications(),
   };
 
   static Route<dynamic> onGenerateRoutesProvider(RouteSettings) {
