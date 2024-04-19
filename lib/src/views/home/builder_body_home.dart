@@ -71,6 +71,7 @@ class _ListViewDataState extends State<ListViewData> {
                                 subtitle: Text(
                                     "${petDataGet.age_pet.toString()} años"),
                                 leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
                                   child: Image.network(
                                     petDataGet.id_photo_pet,
                                     cacheHeight: 100,
