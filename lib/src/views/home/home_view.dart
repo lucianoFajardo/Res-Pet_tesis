@@ -41,7 +41,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                     height: 50,
                     color: Colors.purple[200],
                     onPressed: () {
-                      Navigator.pushNamed(context, 'new_post');
+                      Navigator.pushNamed(context, 'new_post_perdida');
                     },
                     child: const Text(
                       'Mascota perdida',

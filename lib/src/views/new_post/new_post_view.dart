@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,8 +14,9 @@ class NewPostView extends StatefulWidget {
 }
 
 class _NewPostViewState extends State<NewPostView> {
+
   //!Controladores de Texto
-  TextEditingController pieFotoController = TextEditingController();
+  TextEditingController descripcionFotoController = TextEditingController();
   TextEditingController nombreController = TextEditingController();
   TextEditingController colorPelajeController = TextEditingController();
   TextEditingController pesoController = TextEditingController();
@@ -27,13 +28,8 @@ class _NewPostViewState extends State<NewPostView> {
   //!LLave global
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  List<String> itemsEstirilizado = ["Si", "No"];
   String? selectedItemEstirilizado;
-
-  List<String> itemsLocalidad = ["Iquique", "Alto Hospicio"];
   String? selectedItemLocalidad;
-
-  List<String> itemsSexo = ["Macho", "Hembra"];
   String? selectedItemSexo;
 
   File? _imagenSeleccionada;
@@ -50,6 +46,7 @@ class _NewPostViewState extends State<NewPostView> {
   @override
   Widget build(BuildContext context) {
     final newPostCubitState = BlocProvider.of<NewPostCubit>(context);
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -58,34 +55,29 @@ class _NewPostViewState extends State<NewPostView> {
               Navigator.pop(context);
             },
           ),
-          title: const Text("Nueva Publicacion"),
+          title: const Text("Mascota en Adopcion", style: TextStyle(fontSize: 20),),
+          titleSpacing: 0.00,
+          backgroundColor: Colors.grey[300],
+
           //*Boton
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
               child: ElevatedButton(
                 onPressed: _hayImagen && _formKey.currentState!.validate()
                     ? () async {
                         try {
-                          final imagenTipo = _imagenSeleccionada?.path
-                              .split(".")
-                              .last
-                              .toLowerCase();
-                          final imagenBytes =
-                              await _imagenSeleccionada?.readAsBytes();
+                          final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
+                          final imagenBytes = await _imagenSeleccionada?.readAsBytes();
                           final usuarioID = client.auth.currentUser!.id;
                           String fechaHora = DateTime.now().toIso8601String();
                           final imagenPath = "/$usuarioID/imagen$fechaHora";
-                          String imagenUrl = client.storage
-                              .from("imagenes")
-                              .getPublicUrl(imagenPath);
+                          String imagenUrl = client.storage.from("imagenes").getPublicUrl(imagenPath);
 
                           String nombreMascota = nombreController.text.trim();
-                          String descripcion = pieFotoController.text.trim();
-                          String colorPelaje =
-                              colorPelajeController.text.trim();
-                          String cuidadoEspecial =
-                              cuidadoController.text.trim();
+                          String descripcion = descripcionFotoController.text.trim();
+                          String colorPelaje = colorPelajeController.text.trim();
+                          String cuidadoEspecial = cuidadoController.text.trim();
                           String vacunasMascota = vacunaController.text.trim();
                           //
                           String peso = pesoController.text.trim();
@@ -107,22 +99,13 @@ class _NewPostViewState extends State<NewPostView> {
                           });
 
                           newPostCubitState.NewPostUpload(
-                              fotoMascota: imagenUrl,
-                              usuarioID: usuarioID,
-                              nombreMascota: nombreMascota,
-                              descripcionMascota: descripcion,
-                              colorPelaje: colorPelaje,
-                              pesoMascota: pesoFloat,
-                              edadMascota: edadInt!,
-                              generoMascota: selectedItemSexo!,
-                              localidadMascota: selectedItemLocalidad!,
-                              esterilizadoMascota: esterilizado!,
-                              tamanoMascota: tamanoInt!,
-                              cuidadoMascota: cuidadoEspecial,
-                              imagenPath: imagenPath,
-                              imagenBytes: imagenBytes,
-                              imagenTipo: imagenTipo,
-                              vacunasMascota: vacunasMascota);
+                              fotoMascota: imagenUrl, usuarioID: usuarioID,
+                              nombreMascota: nombreMascota, descripcionMascota: descripcion, colorPelaje: colorPelaje,
+                              pesoMascota: pesoFloat, edadMascota: edadInt!, generoMascota: selectedItemSexo!,
+                              localidadMascota: selectedItemLocalidad!, esterilizadoMascota: esterilizado!, 
+                              tamanoMascota: tamanoInt!, cuidadoMascota: cuidadoEspecial, imagenPath: imagenPath, 
+                              imagenBytes: imagenBytes, imagenTipo: imagenTipo, vacunasMascota: vacunasMascota);
+                        
                         } catch (e) {
                           print("Tipo de Error: $e");
                         }
@@ -140,30 +123,31 @@ class _NewPostViewState extends State<NewPostView> {
         //*Medio
         body: BlocConsumer<NewPostCubit, NewPostState>(
             listener: (context, state) {
-          // TODO: implement listener
-          if (state is NewPostFailed) {
-            print("Hay un Error: ${state.errorView.toString()}");
+            if (state is NewPostFailed) {
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorView.toString()),
-                duration: const Duration(seconds: 6),
-              ),
-            );
-          }
+              print("Hay un Error: ${state.errorView.toString()}");
 
-          if (state is NewPostSuccessful) {
-            print("Nuevo Post: ${state.toString()}");
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorView.toString()),
+                  duration: const Duration(seconds: 8),
+                ),
+              );
+            }
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Post agregado con Exito"),
-                duration: Duration(seconds: 6),
-              ),
-            );
+            if (state is NewPostSuccessful) {
 
-            Navigator.pushReplacementNamed(context, 'home_view');
-          }
+              print("Nuevo Post: ${state.toString()}");
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Post agregado con Exito"),
+                  duration: Duration(seconds: 6),
+                ),
+              );
+
+              Navigator.pushReplacementNamed(context, 'home_view');
+            }
         }, builder: (context, state) {
           return Form(
             key: _formKey,
@@ -228,11 +212,8 @@ class _NewPostViewState extends State<NewPostView> {
                             ),
                           ),
                         ),
-                  Divider(
-                      indent: 5,
-                      endIndent: 5,
-                      thickness: 1,
-                      color: Colors.grey[500]),
+                  Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500]),
+
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
@@ -240,13 +221,13 @@ class _NewPostViewState extends State<NewPostView> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 5, right: 5),
                       child: TextFormField(
-                        controller: pieFotoController,
+                        controller: descripcionFotoController,
                         textCapitalization: TextCapitalization.words,
                         enableInteractiveSelection: true,
                         maxLength: 200,
                         decoration: const InputDecoration(
                             border: UnderlineInputBorder(),
-                            hintText: "Pie de Foto"),
+                            hintText: "Descripcion de la Mascota"),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
@@ -264,6 +245,7 @@ class _NewPostViewState extends State<NewPostView> {
                     ),
                   ),
                   const SizedBox(height: 10),
+
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
@@ -292,7 +274,9 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 10),
+
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
@@ -322,7 +306,9 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 10),
+
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
@@ -352,7 +338,9 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 10),
+                  
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
@@ -365,7 +353,7 @@ class _NewPostViewState extends State<NewPostView> {
                         maxLines: 1,
                         keyboardType: TextInputType.phone,
                         decoration: const InputDecoration(
-                            border: UnderlineInputBorder(), hintText: "Edad"),
+                            border: UnderlineInputBorder(), hintText: "Edad (años)"),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Llene la casilla";
@@ -381,122 +369,172 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 40,
-                    ),
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 5),
-                        child: Row(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Sexo",
-                                style: TextStyle(
-                                    color: Colors.deepPurple[600],
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.bold),
-                              ),
+
+                  const SizedBox(height: 8),
+                  
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Text("Sexo",
+                            style: TextStyle(
+                                color: Colors.deepPurple[600],
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          
+                          const SizedBox(width: 30),
+
+                          ConstrainedBox(constraints: const BoxConstraints(
+                              maxHeight: 50,
+                              maxWidth: 150,
+                            
                             ),
-                            const SizedBox(width: 30),
-                            DropdownButton<String>(
-                                value: selectedItemSexo,
-                                items: itemsSexo
-                                    .map((e) => DropdownMenuItem<String>(
-                                        value: e,
-                                        child: Text(
-                                          e,
-                                          style: const TextStyle(fontSize: 15),
-                                        )))
-                                    .toList(),
-                                onChanged: (e) =>
-                                    setState(() => selectedItemSexo = e)),
-                          ],
-                        )),
-                  ),
-                  Divider(
-                      height: 30,
-                      indent: 5,
-                      endIndent: 5,
-                      thickness: 1,
-                      color: Colors.grey[500]),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 40,
+
+                            child: DropdownButtonFormField<String>(
+                              items: const[
+                                DropdownMenuItem<String>(
+                                  value: "Macho",
+                                  child: Text("Macho")
+                                ),
+                                                    
+                                DropdownMenuItem<String>(
+                                value: "Hembra",
+                                child: Text("Hembra")
+                                ),
+                              ],
+                                                  
+                              onChanged: (value) async{
+                                setState(() {
+                                  if(value!.isNotEmpty){
+                                    selectedItemSexo = value;
+                                    print(selectedItemSexo);
+                                  }
+                                });
+                              },
+
+                              value: selectedItemSexo,
+                                
+                              validator: ((value) => value == null 
+                                ? "Escoge un Sexo" : null),
+                                
+                              style: const TextStyle(color: Colors.black, fontSize: 16),
+                            )
+                          )
+                        ],
+                      ),
                     ),
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 5),
-                        child: Row(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Localidad",
-                                style: TextStyle(
-                                    color: Colors.deepPurple[600],
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.bold),
-                              ),
+
+                  Divider(height: 30,indent: 5, endIndent: 5, thickness: 1, color: Colors.grey[500]),
+
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Text("Localidad Encontrada",
+                            style: TextStyle(
+                                color: Colors.deepPurple[600],
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          
+                          const SizedBox(width: 20),
+
+                          ConstrainedBox(constraints: const BoxConstraints(
+                              maxHeight: 60,
+                              maxWidth: 150,
+                            
                             ),
-                            const SizedBox(width: 30),
-                            DropdownButton<String>(
-                                value: selectedItemLocalidad,
-                                items: itemsLocalidad
-                                    .map((e) => DropdownMenuItem<String>(
-                                        value: e,
-                                        child: Text(
-                                          e,
-                                          style: const TextStyle(fontSize: 15),
-                                        )))
-                                    .toList(),
-                                onChanged: (e) =>
-                                    setState(() => selectedItemLocalidad = e)),
-                          ],
-                        )),
-                  ),
-                  Divider(
-                      indent: 5,
-                      endIndent: 5,
-                      thickness: 1,
-                      color: Colors.grey[500],
-                      height: 30),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 40,
+
+                            child: DropdownButtonFormField<String>(
+                              items: const[
+                                DropdownMenuItem<String>(
+                                  value: "Iquique",
+                                  child: Text("Iquique")
+                                ),
+                                                    
+                                DropdownMenuItem<String>(
+                                value: "Alto Hospicio",
+                                child: Text("Alto Hospicio")
+                                ),
+                              ],
+                                                  
+                              onChanged: (value) async{
+                                setState(() {
+                                  if(value!.isNotEmpty){
+                                    selectedItemLocalidad = value;
+                                    print(selectedItemLocalidad);
+                                  }
+                                });
+                              },
+
+                              value: selectedItemLocalidad,
+                                
+                              validator: ((value) => value == null 
+                                ? "Escoge Localidad" : null),
+                                                    
+                              style: const TextStyle(color: Colors.black, fontSize: 16),
+                            )
+                          )
+                        ],
+                      ),
                     ),
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 5),
-                        child: Row(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Estirilizado",
-                                style: TextStyle(
-                                    color: Colors.deepPurple[600],
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.bold),
-                              ),
+
+                  Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500],height: 30),
+
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Text("Estirilizado",
+                            style: TextStyle(
+                                color: Colors.deepPurple[600],
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          
+                          const SizedBox(width: 30),
+
+                          ConstrainedBox(constraints: const BoxConstraints(
+                              maxHeight: 50,
+                              maxWidth: 150,
+                            
                             ),
-                            const SizedBox(width: 40),
-                            DropdownButton<String>(
+
+                            child: DropdownButtonFormField<String>(
+                              items: const[
+                                DropdownMenuItem<String>(
+                                  value: "Si",
+                                  child: Text("Si")
+                                ),
+                                                    
+                                DropdownMenuItem<String>(
+                                value: "No",
+                                child: Text("No")
+                                ),
+                              ],
+                                                  
+                              onChanged: (value) async{
+                                setState(() {
+                                  if(value!.isNotEmpty){
+                                    selectedItemEstirilizado = value;
+                                    print(selectedItemEstirilizado);
+                                  }
+                                });
+                              },
+
                               value: selectedItemEstirilizado,
-                              items: itemsEstirilizado
-                                  .map((e) => DropdownMenuItem<String>(
-                                      value: e,
-                                      child: Text(
-                                        e,
-                                        style: const TextStyle(fontSize: 15),
-                                      )))
-                                  .toList(),
-                              onChanged: (e) =>
-                                  setState(() => selectedItemEstirilizado = e),
-                            ),
-                          ],
-                        )),
-                  ),
+                                
+                              validator: ((value) => value == null 
+                                ? "Escoge una opcion" : null),
+                                
+                              style: const TextStyle(color: Colors.black, fontSize: 16),
+                            )
+                          )
+                        ],
+                      ),
+                    ),
+                  
                   Divider(
                       indent: 5,
                       endIndent: 5,
@@ -532,7 +570,9 @@ class _NewPostViewState extends State<NewPostView> {
                       ),
                     ),
                   ),
+                  
                   const SizedBox(height: 10),
+
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 300,
@@ -603,7 +643,8 @@ class _NewPostViewState extends State<NewPostView> {
                               },
                             ),
                           ],
-                        )),
+                        )
+                      ),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -614,8 +655,7 @@ class _NewPostViewState extends State<NewPostView> {
   }
 
   Future seleccionarImagenDeGaleria() async {
-    final _imagenIngresada =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final _imagenIngresada = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imagenSeleccionada = File(_imagenIngresada!.path);

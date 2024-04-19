@@ -7,6 +7,7 @@ import 'package:respet_app/src/bloc/get_data/data_user/get_all_post_user_cubit.d
 import 'package:respet_app/src/bloc/get_data/user_information/get_user_information_cubit.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
 import 'package:respet_app/src/bloc/new_post/new_post_cubit.dart';
+import 'package:respet_app/src/bloc/new_post_perdida/new_post_perdida_cubit.dart';
 import 'package:respet_app/src/bloc/register/register_cubit.dart';
 import 'package:respet_app/src/bloc/register_metadata/register_metadata_cubit.dart';
 import 'package:respet_app/src/routers/routers.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => LoginCubit()),
         BlocProvider(create: (_) => RegisterCubit()),
         BlocProvider(create: (_) => NewPostCubit()),
+        BlocProvider(create: (_) => NewPostPerdidaCubit()),
         BlocProvider(create: (_) => EditPostCubit()),
         BlocProvider(create: (_) => OperationCrudCubit()),
         BlocProvider(create: (_) => GetDataFivePetsCubit()),
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => DeletePostCubit()),
         BlocProvider(
           create: (context) => getUserInformationCubit,
-          child: ViewAccount(),
+          child: ViewAccount()
         ),
       ],
       child: MaterialApp(

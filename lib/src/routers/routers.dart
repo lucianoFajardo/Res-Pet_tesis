@@ -4,6 +4,7 @@ import 'package:respet_app/src/views/home/home_view.dart';
 import 'package:respet_app/src/views/login/login_view.dart';
 import 'package:respet_app/src/views/new_post/new_post_view.dart';
 import 'package:respet_app/src/views/new_post/view_all_post.dart';
+import 'package:respet_app/src/views/new_post_perdida/new_post_perdida_view.dart';
 import 'package:respet_app/src/views/register/register_account.dart';
 import 'package:respet_app/src/views/register/register_data_user.dart';
 import 'package:respet_app/src/views/setting/account_view.dart';
@@ -22,8 +23,9 @@ class Routers {
     'new_post': (contex) => const NewPostView(),
     'settings': (context) => const SettingPageUI(),
     //'example': (context) => const HomePagePrueba(),
+    'new_post_perdida': (context) => const NewPostPerdidaView(),
     'view_all_post':(context) => const ViewAllPostPets(),
-    'view_account':(context) => ViewAccount(),
+    'view_account':(context) => const ViewAccount(),
     'view_my_publications':(_) => const ViewPublications(),
   };
 
