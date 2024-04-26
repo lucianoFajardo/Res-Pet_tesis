@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:respet_app/src/views/home/app_bar.dart';
 import 'package:respet_app/src/views/home/builder_body_home.dart';
+import 'package:respet_app/src/views/home/builder_body_lostpet.dart';
 
 class HomeViewPage extends StatefulWidget {
   const HomeViewPage({super.key});
@@ -33,7 +34,6 @@ class _HomeViewPageState extends State<HomeViewPage> {
                     ),
                   ),
                 ),
-                //TODO -> aqui el usuario debe de crear la publicacion en la tabla de mascotas perdidas.
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: MaterialButton(
@@ -108,7 +108,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                 ],
               ),
             ),
-            //const Flexible(child: GridC()),
+          const Expanded(child: ListDataLostPet()),  //TODO > aqui tiene que ir la mascota perdida
           ],
         ));
   }

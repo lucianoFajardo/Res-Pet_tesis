@@ -47,7 +47,7 @@ class data_pet {
       description_pet: map['description_pet'],
       fur_color: map['fur_color'],
       weight_pet: map['weight_pet'],
-      age_pet: map['age_pet'],
+      age_pet: map['age_pet'],  
       gender_pet: map['gender_pet'],
       location: map['location'],
       is_sterilization: map['is_sterilization'],

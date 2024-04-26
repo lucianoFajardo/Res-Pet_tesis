@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/bloc/delete_post/delete_post_cubit.dart';
 import 'package:respet_app/src/bloc/edit_post/edit_post_cubit.dart';
+import 'package:respet_app/src/bloc/get_data/data_lost_pet/data_lost_pet_cubit.dart';
 import 'package:respet_app/src/bloc/get_data/data_user/get_all_post_user_cubit.dart';
 import 'package:respet_app/src/bloc/get_data/user_information/get_user_information_cubit.dart';
 import 'package:respet_app/src/bloc/login/login_cubit.dart';
@@ -55,8 +56,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => DeletePostCubit()),
         BlocProvider(
           create: (context) => getUserInformationCubit,
-          child: ViewAccount()
+          child: const ViewAccount()
         ),
+        BlocProvider(create: (_) => DataLostPetCubit()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

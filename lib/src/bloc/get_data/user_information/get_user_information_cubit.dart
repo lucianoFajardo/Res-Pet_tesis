@@ -9,6 +9,7 @@ class GetUserInformationCubit extends Cubit<GetUserInformationState> {
   Future getUserInformation() async {
     try {
       emit(UserInformationLoading());
+      // ignore: deprecated_member_use
       final resDataUser = await client.from('user_metadata').select('*').eq('id_user', client.auth.currentSession!.user.id).execute();
       final dataUser = resDataUser.data as List;
       List<userMetaData> userDataList = dataUser.map((e) {
