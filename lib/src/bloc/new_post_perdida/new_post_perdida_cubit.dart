@@ -20,7 +20,7 @@ class NewPostPerdidaCubit extends Cubit<NewPostPerdidaState> {
     required String generoMascota,
     required String localidadMascota,
 
-    required double pesoMascota,
+    required int pesoMascota,
     required int edadMascota,
     required int tamanoMascota,
 

@@ -27,6 +27,7 @@ class PerfilViewData extends StatelessWidget {
               width: double.infinity,
               child: CachedNetworkImage(
                 imageUrl: pathImage,
+                cacheKey: pathImage + DateTime.now().day.toString(), //Todo -> cambio agregado revisar
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(

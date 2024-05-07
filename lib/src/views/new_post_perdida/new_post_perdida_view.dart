@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/main.dart';
 import 'package:respet_app/src/bloc/new_post_perdida/new_post_perdida_cubit.dart';
 import 'package:image_picker/image_picker.dart';
-    
+
 class NewPostPerdidaView extends StatefulWidget {
   const NewPostPerdidaView({super.key});
 
@@ -14,7 +14,6 @@ class NewPostPerdidaView extends StatefulWidget {
 }
 
 class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
-
   //!Controladores de Texto
   TextEditingController descripcionFotoController = TextEditingController();
   TextEditingController nombreController = TextEditingController();
@@ -40,65 +39,83 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
 
   @override
   Widget build(BuildContext context) {
-    final newPostPerdidaCubitState = BlocProvider.of<NewPostPerdidaCubit>(context);
+    final newPostPerdidaCubitState =
+        BlocProvider.of<NewPostPerdidaCubit>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
+        appBar: AppBar(
+          leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          title: const Text("Mascota Perdida", style: TextStyle(fontSize: 20),),
+          title: const Text(
+            "Mascota Perdida",
+            style: TextStyle(fontSize: 20),
+          ),
           titleSpacing: 0.00,
           backgroundColor: Colors.grey[300],
 
-        //*Boton
+          //*Boton
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
               child: ElevatedButton(
                 onPressed: _hayImagen && _formKey.currentState!.validate()
-                  ? () async { 
-                    try {
+                    ? () async {
+                        try {
+                          final imagenTipo = _imagenSeleccionada?.path
+                              .split(".")
+                              .last
+                              .toLowerCase();
+                          final imagenBytes =
+                              await _imagenSeleccionada?.readAsBytes();
+                          final usuarioID = client.auth.currentUser!.id;
+                          String fechaHora = DateTime.now().toIso8601String();
+                          final imagenPath =
+                              "/$usuarioID/imagenPerdida$fechaHora";
+                          String imagenUrl = client.storage
+                              .from("imagenesPerdida")
+                              .getPublicUrl(imagenPath);
 
-                      final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
-                      final imagenBytes = await _imagenSeleccionada?.readAsBytes();
-                      final usuarioID = client.auth.currentUser!.id;
-                      String fechaHora = DateTime.now().toIso8601String();
-                      final imagenPath = "/$usuarioID/imagenPerdida$fechaHora";
-                      String imagenUrl = client.storage.from("imagenesPerdida").getPublicUrl(imagenPath);
+                          String nombreMascota = nombreController.text.trim();
+                          String descripcion =
+                              descripcionFotoController.text.trim();
+                          String colorPelaje =
+                              colorPelajeController.text.trim();
 
-                      String nombreMascota = nombreController.text.trim();
-                      String descripcion = descripcionFotoController.text.trim();
-                      String colorPelaje = colorPelajeController.text.trim();
+                          String peso = pesoController.text.trim();
+                          int pesoInt = int.parse(peso);
 
-                      String peso = pesoController.text.trim();
-                      double pesoFloat = double.parse(peso);
-                      
-                      String edad = edadController.text.trim();
-                      int? edadInt = int.tryParse(edad);
+                          String edad = edadController.text.trim();
+                          int? edadInt = int.tryParse(edad);
 
-                      edadInt ??= 0;
-                      
+                          edadInt ??= 0;
 
-                      String tamano = tamanoController.text.trim();
-                      int? tamanoInt = int.tryParse(tamano);
+                          String tamano = tamanoController.text.trim();
+                          int? tamanoInt = int.tryParse(tamano);
 
-                      newPostPerdidaCubitState.NewPostPerdidaUpload(
-                        fotoMascota: imagenUrl, usuarioID: usuarioID, descripcionMascota: descripcion,
-                        nombreMascota: nombreMascota, colorPelaje: colorPelaje, pesoMascota: pesoFloat, 
-                        edadMascota: edadInt, generoMascota: selectedItemSexo!, localidadMascota: selectedItemLocalidad!,
-                        tamanoMascota: tamanoInt!, imagenPath: imagenPath, imagenBytes: imagenBytes, 
-                        imagenTipo: imagenTipo,
-                      );
-
-                    } catch (e){
-                      print("Tipo de Error: $e");
-                    }
-                  } : null,
-
+                          newPostPerdidaCubitState.NewPostPerdidaUpload(
+                            fotoMascota: imagenUrl,
+                            usuarioID: usuarioID,
+                            descripcionMascota: descripcion,
+                            nombreMascota: nombreMascota,
+                            colorPelaje: colorPelaje,
+                            pesoMascota: pesoInt,
+                            edadMascota: edadInt,
+                            generoMascota: selectedItemSexo!,
+                            localidadMascota: selectedItemLocalidad!,
+                            tamanoMascota: tamanoInt!,
+                            imagenPath: imagenPath,
+                            imagenBytes: imagenBytes,
+                            imagenTipo: imagenTipo,
+                          );
+                        } catch (e) {
+                          print("Tipo de Error: $e");
+                        }
+                      }
+                    : null,
                 style: TextButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 18),
                 ),
@@ -106,14 +123,12 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
               ),
             ),
           ],
-      ),
+        ),
 
-      //*Medio
-      body: BlocConsumer<NewPostPerdidaCubit,NewPostPerdidaState>(
-          listener:  (context, state){
-
-            if(state is NewPostPerdidaFailed){
-
+        //*Medio
+        body: BlocConsumer<NewPostPerdidaCubit, NewPostPerdidaState>(
+          listener: (context, state) {
+            if (state is NewPostPerdidaFailed) {
               print("Hay un Error: ${state.errorView.toString()}");
 
               ScaffoldMessenger.of(context).showSnackBar(
@@ -124,7 +139,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
               );
             }
 
-            if(state is NewPostPerdidaSuccessful){
+            if (state is NewPostPerdidaSuccessful) {
               print("Nuevo Post: ${state.toString()}");
 
               ScaffoldMessenger.of(context).showSnackBar(
@@ -136,76 +151,77 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
 
               Navigator.pushReplacementNamed(context, 'home_view');
             }
-
-          }, builder: (context, state) {
-
+          },
+          builder: (context, state) {
             return Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.always,
-
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-
                     const Divider(height: 5),
-
                     _imagenSeleccionada != null
-                      ? Stack(
-                          children: <Widget>[
-                            Card(
-                              clipBehavior: Clip.hardEdge,
-                              color: Colors.blueGrey[100],
-                              child: InkWell(
-                                splashColor: Colors.purple,
-                                onTap: () {
-                                  seleccionarImagenDeGaleria();
-                                },
-                                child: SizedBox(
-                                    height: 300,
-                                    width: 370,
-                                    child: Image.file(_imagenSeleccionada!,
-                                        fit: BoxFit.fill,
-                                        filterQuality: FilterQuality.low)),
+                        ? Stack(
+                            children: <Widget>[
+                              Card(
+                                clipBehavior: Clip.hardEdge,
+                                color: Colors.blueGrey[100],
+                                child: InkWell(
+                                  splashColor: Colors.purple,
+                                  onTap: () {
+                                    seleccionarImagenDeGaleria();
+                                  },
+                                  child: SizedBox(
+                                      height: 300,
+                                      width: 370,
+                                      child: Image.file(_imagenSeleccionada!,
+                                          fit: BoxFit.fill,
+                                          filterQuality: FilterQuality.low)),
+                                ),
                               ),
-                            ),
-                            Positioned( bottom: 6, right: 8,
-                                child: SizedBox(
-                                  child: IconButton(
-                                      color: const Color.fromARGB(
-                                          255, 209, 13, 13),
-                                      splashColor: const Color.fromARGB(
-                                          255, 255, 41, 41),
-                                      iconSize: 30,
-                                      icon: const Icon(Icons.cancel_outlined),
-                                      onPressed: () {
-                                        setState(() {
-                                          _imagenSeleccionada = null;
-                                          _hayImagen = false;
-                                        });
-                                      }),
-                                )),
-                          ],
-                        )
-                      : Card(
-                          clipBehavior: Clip.hardEdge,
-                          color: Colors.blueGrey[100],
-                          child: InkWell(
-                            splashColor: Colors.purple,
-                            onTap: () {
-                              seleccionarImagenDeGaleria();
-                            },
-                            child: const SizedBox(
-                              height: 300,
-                              width: 370,
-                              child: Center(
-                                child: Text("Seleccione una Imagen de su Galeria."),
+                              Positioned(
+                                  bottom: 6,
+                                  right: 8,
+                                  child: SizedBox(
+                                    child: IconButton(
+                                        color: const Color.fromARGB(
+                                            255, 209, 13, 13),
+                                        splashColor: const Color.fromARGB(
+                                            255, 255, 41, 41),
+                                        iconSize: 30,
+                                        icon: const Icon(Icons.cancel_outlined),
+                                        onPressed: () {
+                                          setState(() {
+                                            _imagenSeleccionada = null;
+                                            _hayImagen = false;
+                                          });
+                                        }),
+                                  )),
+                            ],
+                          )
+                        : Card(
+                            clipBehavior: Clip.hardEdge,
+                            color: Colors.blueGrey[100],
+                            child: InkWell(
+                              splashColor: Colors.purple,
+                              onTap: () {
+                                seleccionarImagenDeGaleria();
+                              },
+                              child: const SizedBox(
+                                height: 300,
+                                width: 370,
+                                child: Center(
+                                  child: Text(
+                                      "Seleccione una Imagen de su Galeria."),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        
-                    Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500]),
-
+                    Divider(
+                        indent: 5,
+                        endIndent: 5,
+                        thickness: 1,
+                        color: Colors.grey[500]),
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxHeight: 300,
@@ -236,9 +252,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
-                  
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxHeight: 300,
@@ -251,11 +265,13 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                           maxLength: 10,
                           maxLines: 1,
                           decoration: const InputDecoration(
-                              border: UnderlineInputBorder(), hintText: "Nombre (opcional)"),
+                              border: UnderlineInputBorder(),
+                              hintText: "Nombre (opcional)"),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return null;
-                            } else if (!RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
+                            } else if (!RegExp(r'^[a-z A-Z]+$')
+                                .hasMatch(value)) {
                               return "No ocupe signos, simbolos y numeros";
                             } else {
                               return null;
@@ -267,9 +283,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxHeight: 300,
@@ -287,7 +301,8 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Llene la casilla";
-                            } else if (!RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
+                            } else if (!RegExp(r'^[a-z A-Z]+$')
+                                .hasMatch(value)) {
                               return "No ocupe signos, simbolos y numeros";
                             } else {
                               return null;
@@ -299,9 +314,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxHeight: 300,
@@ -331,9 +344,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                         ),
                       ),
                     ),
-                  
                     const SizedBox(height: 10),
-                  
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxHeight: 300,
@@ -346,7 +357,8 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                           maxLines: 1,
                           keyboardType: TextInputType.phone,
                           decoration: const InputDecoration(
-                              border: UnderlineInputBorder(), hintText: "Edad en años (opcional)"),
+                              border: UnderlineInputBorder(),
+                              hintText: "Edad en años (opcional)"),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return null;
@@ -362,9 +374,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxHeight: 300,
@@ -396,131 +406,113 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
-                  
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: [
-                          Text("Sexo",
+                          Text(
+                            "Sexo",
                             style: TextStyle(
                                 color: Colors.deepPurple[600],
                                 fontSize: 21,
                                 fontWeight: FontWeight.bold),
                           ),
-                          
                           const SizedBox(width: 30),
-
-                          ConstrainedBox(constraints: const BoxConstraints(
-                              maxHeight: 50,
-                              maxWidth: 150,
-                            
-                            ),
-
-                            child: DropdownButtonFormField<String>(
-                              items: const[
-                                DropdownMenuItem<String>(
-                                  value: "Macho",
-                                  child: Text("Macho")
-                                ),
-                                                    
-                                DropdownMenuItem<String>(
-                                value: "Hembra",
-                                child: Text("Hembra")
-                                ),
-                              ],
-                                                  
-                              onChanged: (value) async{
-                                setState(() {
-                                  if(value!.isNotEmpty){
-                                    selectedItemSexo = value;
-                                    print(selectedItemSexo);
-                                  }
-                                });
-                              },
-
-                              value: selectedItemSexo,
-                                
-                              validator: ((value) => value == null 
-                                ? "Escoge un Sexo" : null),
-                                
-                              style: const TextStyle(color: Colors.black, fontSize: 16),
-                            )
-                          )
+                          ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxHeight: 50,
+                                maxWidth: 150,
+                              ),
+                              child: DropdownButtonFormField<String>(
+                                items: const [
+                                  DropdownMenuItem<String>(
+                                      value: "Macho", child: Text("Macho")),
+                                  DropdownMenuItem<String>(
+                                      value: "Hembra", child: Text("Hembra")),
+                                ],
+                                onChanged: (value) async {
+                                  setState(() {
+                                    if (value!.isNotEmpty) {
+                                      selectedItemSexo = value;
+                                      print(selectedItemSexo);
+                                    }
+                                  });
+                                },
+                                value: selectedItemSexo,
+                                validator: ((value) =>
+                                    value == null ? "Escoge un Sexo" : null),
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ))
                         ],
                       ),
                     ),
-                      
-                    Divider(height: 30,indent: 5, endIndent: 5, thickness: 1, color: Colors.grey[500]),
-
+                    Divider(
+                        height: 30,
+                        indent: 5,
+                        endIndent: 5,
+                        thickness: 1,
+                        color: Colors.grey[500]),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: [
-                          Text("Localidad Encontrada",
+                          Text(
+                            "Localidad Encontrada",
                             style: TextStyle(
                                 color: Colors.deepPurple[600],
                                 fontSize: 21,
                                 fontWeight: FontWeight.bold),
                           ),
-                          
                           const SizedBox(width: 20),
-
-                          ConstrainedBox(constraints: const BoxConstraints(
-                              maxHeight: 60,
-                              maxWidth: 150,
-                            
-                            ),
-
-                            child: DropdownButtonFormField<String>(
-                              items: const[
-                                DropdownMenuItem<String>(
-                                  value: "Iquique",
-                                  child: Text("Iquique")
-                                ),
-                                                    
-                                DropdownMenuItem<String>(
-                                value: "Alto Hospicio",
-                                child: Text("Alto Hospicio")
-                                ),
-                              ],
-                                                  
-                              onChanged: (value) async{
-                                setState(() {
-                                  if(value!.isNotEmpty){
-                                    selectedItemLocalidad = value;
-                                    print(selectedItemLocalidad);
-                                  }
-                                });
-                              },
-
-                              value: selectedItemLocalidad,
-                                
-                              validator: ((value) => value == null 
-                                ? "Escoge Localidad" : null),
-                                                    
-                              style: const TextStyle(color: Colors.black, fontSize: 16),
-                            )
-                          )
+                          ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxHeight: 60,
+                                maxWidth: 150,
+                              ),
+                              child: DropdownButtonFormField<String>(
+                                items: const [
+                                  DropdownMenuItem<String>(
+                                      value: "Iquique", child: Text("Iquique")),
+                                  DropdownMenuItem<String>(
+                                      value: "Alto Hospicio",
+                                      child: Text("Alto Hospicio")),
+                                ],
+                                onChanged: (value) async {
+                                  setState(() {
+                                    if (value!.isNotEmpty) {
+                                      selectedItemLocalidad = value;
+                                      print(selectedItemLocalidad);
+                                    }
+                                  });
+                                },
+                                value: selectedItemLocalidad,
+                                validator: ((value) =>
+                                    value == null ? "Escoge Localidad" : null),
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 16),
+                              ))
                         ],
                       ),
                     ),
-
-                    Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500],height: 30),
-                  
+                    Divider(
+                        indent: 5,
+                        endIndent: 5,
+                        thickness: 1,
+                        color: Colors.grey[500],
+                        height: 30),
                   ],
                 ),
               ),
             );
-
           },
-        )
-    );
+        ));
   }
 
   Future seleccionarImagenDeGaleria() async {
-    final _imagenIngresada = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final _imagenIngresada =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imagenSeleccionada = File(_imagenIngresada!.path);

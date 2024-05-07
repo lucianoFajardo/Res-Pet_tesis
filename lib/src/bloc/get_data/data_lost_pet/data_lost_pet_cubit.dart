@@ -11,7 +11,7 @@ class DataLostPetCubit extends Cubit<DataLostPetState> {
     try {
       emit(DataLostPetLoading());
       final resLostPet =
-          await client.from('created_post_lost_pet').select('*,user_metadata!inner(name_user,celphone_number)').execute();
+          await client.from('created_post_lost_pet').select('*,user_metadata!inner(name_user,celphone_number)').range(0,2).execute();
       final listLostPet = resLostPet.data as List;
       List<data_Lost_Pet> dataLostPet = listLostPet.map((e) {
         return data_Lost_Pet( id_pet_adoption: e['id_pet_adoption'],
@@ -30,7 +30,6 @@ class DataLostPetCubit extends Cubit<DataLostPetState> {
         nameUser: e['user_metadata']['celphone_number'],
         modificated_at: e['modificated_at']);
       }).toList();
-      print(dataLostPet);
       emit(DataLostPetThreData(dataLostPetList: dataLostPet));
       return dataLostPet;
     } catch (e) {
