@@ -46,14 +46,16 @@ class _ViewAccountState extends State<ViewAccount> {
             final stateData = state.informationUser.first; 
             return Padding(
               padding: const EdgeInsets.all(8.0), 
-              child: Column(
-                children: [
-                  Text(stateData.idUser),
-                  Text("Nombre: ${stateData.name}"),
-                  Text("Apellido: ${stateData.lastName}"),
-                  Text("Celular: ${stateData.celphoneNumber}"),
-                  Text("Direccion: ${stateData.locationUser}"),
-                ],
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(stateData.idUser),
+                    Text("Nombre: ${stateData.name}"),
+                    Text("Apellido: ${stateData.lastName}"),
+                    Text("Celular: ${stateData.celphoneNumber}"),
+                    Text("Direccion: ${stateData.locationUser}"),
+                  ],
+                ),
               ),
             );
           } else if (state is UserInformationError) {
