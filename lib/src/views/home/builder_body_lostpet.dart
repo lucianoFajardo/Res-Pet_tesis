@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:respet_app/src/bloc/get_data/data_lost_pet/data_lost_pet_cubit.dart';
+import 'package:respet_app/src/views/pet_lost_profile/pet_lost_profile.dart';
 
 class ListDataLostPet extends StatefulWidget {
   const ListDataLostPet({super.key});
@@ -28,17 +29,23 @@ class _ListDataLostPetState extends State<ListDataLostPet> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
         onRefresh: _refreshDataLost,
-        child: BlocConsumer<DataLostPetCubit,DataLostPetState>(
+        child: BlocConsumer<DataLostPetCubit, DataLostPetState>(
             builder: (context, state) {
-              if (state is DataLostPetLoading) {
-                return const Center(child: CircularProgressIndicator(),);
-              }
-              if (state is DataLostPetThreData) {
-                return state.dataLostPetList.isEmpty ? const Center(child: CircularProgressIndicator(),) : ListView.builder(
-                  itemCount: state.dataLostPetList.length,
-                  itemBuilder: (BuildContext context , int i) {
-                    final dataLostPet = state.dataLostPetList[i];
-                    return Padding(
+          if (state is DataLostPetLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is DataLostPetThreData) {
+            return state.dataLostPetList.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: state.dataLostPetList.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      final dataLostPet = state.dataLostPetList[i];
+                      return Padding(
                           padding: const EdgeInsets.all(8),
                           child: Container(
                             decoration: BoxDecoration(
@@ -46,37 +53,45 @@ class _ListDataLostPetState extends State<ListDataLostPet> {
                                 color: Colors.amber[300]),
                             child: ListTile(
                                 onTap: () {
-                                //  Navigator.push(
-                                  //    context,
-                                    //  MaterialPageRoute(
-                                      //    builder: (context) => PerfilViewData(
-                                        //        dataPetGet: dataLostPet,
-                                          //    )));
+                                  print(i);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DataLostPerfileViewData(
+                                                dataPetGet: dataLostPet,
+                                              )));
                                 },
                                 title: Text(dataLostPet.name_pet),
                                 subtitle: Text(
                                     "${dataLostPet.age_pet.toString()} años"),
+                                leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    dataLostPet.photo_pet,
+                                    cacheHeight: 100,
+                                    cacheWidth: 100,
+                                  ),
+                                ),
                                 trailing:
                                     gender(dataLostPet.gender_pet.toString())),
                           ));
-                  });
-              }
-              if (state is DataLostPetError) {
-                return Center(child: Text(state.error.toString()));
-                
-              }
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.amber),
-              );
-            },
-            listener: (context, state) {
-              if (state is DataLostPetError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(state.error.toString()),
-                  duration: const Duration(hours: 1),
-                ));
-              }
-            }));
+                    });
+          }
+          if (state is DataLostPetError) {
+            return Center(child: Text(state.error.toString()));
+          }
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.amber),
+          );
+        }, listener: (context, state) {
+          if (state is DataLostPetError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(state.error.toString()),
+              duration: const Duration(hours: 1),
+            ));
+          }
+        }));
   }
 }
 

@@ -30,13 +30,10 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> SingOut() async {
     try {
-      final exitUser = clientSupabase.auth.currentSession;
       emit(LoginLoading());
       await Future.delayed(Duration(seconds: 2));
       await client.auth.signOut();
-      if (exitUser == null) {
-        emit(LoginExitSuccesfull());
-      }
+      emit(LoginExitSuccesfull());
     } on AuthResponse catch (e) {
       emit(ErrorExitUser('$e'));
     } catch (e) {
