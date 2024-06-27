@@ -34,7 +34,6 @@ class OperationCrudCubit extends Cubit<OperationCrudState> {
             name_pet: i['name_pet'],
             vaccines_pet: i['vaccines_pet'],
             celphoneUser: i['user_metadata']['celphone_number'],
-            
             nameUser: i['user_metadata']['name_user']);
       }).toList();
       emit(AllDataGet(data: dataList));

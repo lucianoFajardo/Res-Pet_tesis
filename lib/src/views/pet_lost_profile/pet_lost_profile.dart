@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:respet_app/src/models/data_lost_pet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -146,8 +147,8 @@ class DataLostPerfileViewData extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  print(dataPetGet.celphoneUser);
+                onPressed: () async {
+                  await FlutterPhoneDirectCaller.callNumber(dataPetGet.celphoneUser);
                 },
                 style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.white),

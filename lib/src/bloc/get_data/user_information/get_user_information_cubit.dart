@@ -10,10 +10,19 @@ class GetUserInformationCubit extends Cubit<GetUserInformationState> {
     try {
       emit(UserInformationLoading());
       // ignore: deprecated_member_use
-      final resDataUser = await client.from('user_metadata').select('*').eq('id_user', client.auth.currentSession!.user.id).execute();
+      final resDataUser = await client
+          .from('user_metadata')
+          .select('*')
+          .eq('id_user', client.auth.currentSession!.user.id)
+          .execute();
       final dataUser = resDataUser.data as List;
       List<userMetaData> userDataList = dataUser.map((e) {
-        return userMetaData(name: e['name_user'], lastName: e['last_name'], celphoneNumber: e['celphone_number'], idUser: e['id_user'], locationUser: e['location_user']);
+        return userMetaData(
+            name: e['name_user'],
+            lastName: e['last_name'],
+            celphoneNumber: e['celphone_number'],
+            idUser: e['id_user'],
+            locationUser: e['location_user']);
       }).toList();
       emit(UserInformationAllData(informationUser: userDataList));
       return dataUser;
