@@ -27,7 +27,7 @@ class DataLostPetCubit extends Cubit<DataLostPetState> {
         name_pet: e['name_pet'],
         id_user_created: e['id_user_created'],
         celphoneUser: e['user_metadata']['celphone_number'],
-        nameUser: e['user_metadata']['celphone_number'],
+        nameUser: e['user_metadata']['name_user'],
         modificated_at: e['modificated_at']);
       }).toList();
       emit(DataLostPetThreData(dataLostPetList: dataLostPet));
