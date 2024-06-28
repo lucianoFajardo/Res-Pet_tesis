@@ -65,25 +65,16 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                 onPressed: _hayImagen && _formKey.currentState!.validate()
                     ? () async {
                         try {
-                          final imagenTipo = _imagenSeleccionada?.path
-                              .split(".")
-                              .last
-                              .toLowerCase();
-                          final imagenBytes =
-                              await _imagenSeleccionada?.readAsBytes();
+                          final imagenTipo = _imagenSeleccionada?.path.split(".").last.toLowerCase();
+                          final imagenBytes = await _imagenSeleccionada?.readAsBytes();
                           final usuarioID = client.auth.currentUser!.id;
                           String fechaHora = DateTime.now().toIso8601String();
-                          final imagenPath =
-                              "/$usuarioID/imagenPerdida$fechaHora";
-                          String imagenUrl = client.storage
-                              .from("imagenesPerdida")
-                              .getPublicUrl(imagenPath);
+                          final imagenPath ="/$usuarioID/imagenPerdida$fechaHora";
+                          String imagenUrl = client.storage.from("imagenesPerdida").getPublicUrl(imagenPath);
 
                           String nombreMascota = nombreController.text.trim();
-                          String descripcion =
-                              descripcionFotoController.text.trim();
-                          String colorPelaje =
-                              colorPelajeController.text.trim();
+                          String descripcion = descripcionFotoController.text.trim();
+                          String colorPelaje = colorPelajeController.text.trim();
 
                           String peso = pesoController.text.trim();
                           int pesoInt = int.parse(peso);
@@ -217,11 +208,10 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                               ),
                             ),
                           ),
-                    Divider(
-                        indent: 5,
-                        endIndent: 5,
-                        thickness: 1,
-                        color: Colors.grey[500]),
+
+                    Divider(indent: 5, endIndent: 5, thickness: 1, color: Colors.grey[500]),
+                    const SizedBox(height: 8),
+
                     ConstrainedBox(
                       constraints: const BoxConstraints(
                         maxHeight: 300,
@@ -239,8 +229,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Llene la casilla";
-                            } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$')
-                                .hasMatch(value)) {
+                            } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$').hasMatch(value)) {
                               return "No ocupe signos ni simbolos";
                             } else {
                               return null;
@@ -269,9 +258,8 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                               hintText: "Nombre (opcional)"),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return null;
-                            } else if (!RegExp(r'^[a-z A-Z]+$')
-                                .hasMatch(value)) {
+                              return "Llene la casilla";
+                            } else if (!RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                               return "No ocupe signos, simbolos y numeros";
                             } else {
                               return null;
@@ -361,7 +349,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                               hintText: "Edad en años (opcional)"),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return null;
+                              return "Llene la casilla";
                             } else if (!RegExp(r'^[0-9]*$').hasMatch(value)) {
                               return "Ocupe solamente numeros.";
                             } else {
@@ -407,6 +395,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -474,7 +463,9 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                               child: DropdownButtonFormField<String>(
                                 items: const [
                                   DropdownMenuItem<String>(
-                                      value: "Iquique", child: Text("Iquique")),
+                                      value: "Iquique", 
+                                      child: Text("Iquique")),
+
                                   DropdownMenuItem<String>(
                                       value: "Alto Hospicio",
                                       child: Text("Alto Hospicio")),
@@ -496,12 +487,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
                         ],
                       ),
                     ),
-                    Divider(
-                        indent: 5,
-                        endIndent: 5,
-                        thickness: 1,
-                        color: Colors.grey[500],
-                        height: 30),
+                    Divider(indent: 5, endIndent: 5,thickness: 1,color: Colors.grey[500],height: 30),
                   ],
                 ),
               ),
@@ -511,8 +497,7 @@ class _NewPostPerdidaViewState extends State<NewPostPerdidaView> {
   }
 
   Future seleccionarImagenDeGaleria() async {
-    final _imagenIngresada =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final _imagenIngresada = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       _imagenSeleccionada = File(_imagenIngresada!.path);

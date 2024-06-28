@@ -148,17 +148,55 @@ class _NewPostViewState extends State<NewPostView> {
 
               Navigator.pushReplacementNamed(context, 'home_view');
             }
-        }, builder: (context, state) {
-          return Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  const Divider(height: 5),
-                  _imagenSeleccionada != null
-                      ? Stack(
-                          children: <Widget>[
-                            Card(
+          }, 
+            builder: (context, state) {
+              return Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      const Divider(height: 5),
+                      _imagenSeleccionada != null
+                          ? Stack(
+                              children: <Widget>[
+                                Card(
+                                  clipBehavior: Clip.hardEdge,
+                                  color: Colors.blueGrey[100],
+                                  child: InkWell(
+                                    splashColor: Colors.purple,
+                                    onTap: () {
+                                      seleccionarImagenDeGaleria();
+                                    },
+                                    child: SizedBox(
+                                        height: 300,
+                                        width: 370,
+                                        child: Image.file(_imagenSeleccionada!,
+                                            fit: BoxFit.fill,
+                                            filterQuality: FilterQuality.low)),
+                                  ),
+                                ),
+                                Positioned(
+                                    bottom: 6,
+                                    right: 8,
+                                    child: SizedBox(
+                                      child: IconButton(
+                                          color: const Color.fromARGB(
+                                              255, 209, 13, 13),
+                                          splashColor: const Color.fromARGB(
+                                              255, 255, 41, 41),
+                                          iconSize: 30,
+                                          icon: const Icon(Icons.cancel_outlined),
+                                          onPressed: () {
+                                            setState(() {
+                                              _imagenSeleccionada = null;
+                                              _hayImagen = false;
+                                            });
+                                          }),
+                                    )),
+                              ],
+                            )
+                          : Card(
                               clipBehavior: Clip.hardEdge,
                               color: Colors.blueGrey[100],
                               child: InkWell(
@@ -166,492 +204,455 @@ class _NewPostViewState extends State<NewPostView> {
                                 onTap: () {
                                   seleccionarImagenDeGaleria();
                                 },
-                                child: SizedBox(
-                                    height: 300,
-                                    width: 370,
-                                    child: Image.file(_imagenSeleccionada!,
-                                        fit: BoxFit.fill,
-                                        filterQuality: FilterQuality.low)),
+                                child: const SizedBox(
+                                  height: 300,
+                                  width: 370,
+                                  child: Center(
+                                    child: Text(
+                                        "Seleccione una Imagen de su Galeria."),
+                                  ),
+                                ),
                               ),
                             ),
-                            Positioned(
-                                bottom: 6,
-                                right: 8,
-                                child: SizedBox(
-                                  child: IconButton(
-                                      color: const Color.fromARGB(
-                                          255, 209, 13, 13),
-                                      splashColor: const Color.fromARGB(
-                                          255, 255, 41, 41),
-                                      iconSize: 30,
-                                      icon: const Icon(Icons.cancel_outlined),
-                                      onPressed: () {
-                                        setState(() {
-                                          _imagenSeleccionada = null;
-                                          _hayImagen = false;
-                                        });
-                                      }),
-                                )),
-                          ],
-                        )
-                      : Card(
-                          clipBehavior: Clip.hardEdge,
-                          color: Colors.blueGrey[100],
-                          child: InkWell(
-                            splashColor: Colors.purple,
-                            onTap: () {
-                              seleccionarImagenDeGaleria();
+                      Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500]),
+                      const SizedBox(height: 10),
+
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 300,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: TextFormField(
+                            controller: descripcionFotoController,
+                            textCapitalization: TextCapitalization.words,
+                            enableInteractiveSelection: true,
+                            maxLength: 200,
+                            decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                hintText: "Descripcion de la Mascota"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Llene la casilla";
+                              } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$')
+                                  .hasMatch(value)) {
+                                return "No ocupe signos ni simbolos";
+                              } else {
+                                return null;
+                              }
                             },
-                            child: const SizedBox(
-                              height: 300,
-                              width: 370,
-                              child: Center(
-                                child: Text(
-                                    "Seleccione una Imagen de su Galeria."),
-                              ),
-                            ),
+                            onChanged: (value) {
+                              _formKey.currentState?.validate();
+                            },
                           ),
                         ),
-                  Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500]),
-
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 300,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: TextFormField(
-                        controller: descripcionFotoController,
-                        textCapitalization: TextCapitalization.words,
-                        enableInteractiveSelection: true,
-                        maxLength: 200,
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            hintText: "Descripcion de la Mascota"),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$')
-                              .hasMatch(value)) {
-                            return "No ocupe signos ni simbolos";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (value) {
-                          _formKey.currentState?.validate();
-                        },
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
+                      const SizedBox(height: 10),
 
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 300,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: TextFormField(
-                        controller: nombreController,
-                        textCapitalization: TextCapitalization.words,
-                        maxLength: 10,
-                        maxLines: 1,
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(), hintText: "Nombre"),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
-                            return "No ocupe signos, simbolos y numeros";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (value) {
-                          _formKey.currentState?.validate();
-                        },
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 300,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: TextFormField(
-                        controller: colorPelajeController,
-                        textCapitalization: TextCapitalization.words,
-                        maxLength: 8,
-                        maxLines: 1,
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            hintText: "Color del Pelaje"),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
-                            return "No ocupe signos, simbolos y numeros";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (value) {
-                          _formKey.currentState?.validate();
-                        },
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 300,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: TextFormField(
-                        controller: pesoController,
-                        maxLength: 2,
-                        maxLines: 1,
-                        keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            hintText: "Peso en Kilos"),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Llene la casilla";
-                          } else if (!RegExp(r'^[0-9]*$').hasMatch(value)) {
-                            return "Ocupe solamente numeros.";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (value) {
-                          _formKey.currentState?.validate();
-                        },
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-                  
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 300,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: TextFormField(
-                        controller: edadController,
-                        maxLength: 2,
-                        maxLines: 1,
-                        keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(), hintText: "Edad (años)"),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Llene la casilla";
-                          } else if (!RegExp(r'^[0-9]*$').hasMatch(value)) {
-                            return "Ocupe solamente numeros.";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (value) {
-                          _formKey.currentState?.validate();
-                        },
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-                  
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Text("Sexo",
-                            style: TextStyle(
-                                color: Colors.deepPurple[600],
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          
-                          const SizedBox(width: 30),
-
-                          ConstrainedBox(constraints: const BoxConstraints(
-                              maxHeight: 50,
-                              maxWidth: 150,
-                            
-                            ),
-
-                            child: DropdownButtonFormField<String>(
-                              items: const[
-                                DropdownMenuItem<String>(
-                                  value: "Macho",
-                                  child: Text("Macho")
-                                ),
-                                                    
-                                DropdownMenuItem<String>(
-                                value: "Hembra",
-                                child: Text("Hembra")
-                                ),
-                              ],
-                                                  
-                              onChanged: (value) async{
-                                setState(() {
-                                  if(value!.isNotEmpty){
-                                    selectedItemSexo = value;
-                                    print(selectedItemSexo);
-                                  }
-                                });
-                              },
-
-                              value: selectedItemSexo,
-                                
-                              validator: ((value) => value == null 
-                                ? "Escoge un Sexo" : null),
-                                
-                              style: const TextStyle(color: Colors.black, fontSize: 16),
-                            )
-                          )
-                        ],
-                      ),
-                    ),
-
-                  Divider(height: 30,indent: 5, endIndent: 5, thickness: 1, color: Colors.grey[500]),
-
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Text("Localidad Encontrada",
-                            style: TextStyle(
-                                color: Colors.deepPurple[600],
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          
-                          const SizedBox(width: 20),
-
-                          ConstrainedBox(constraints: const BoxConstraints(
-                              maxHeight: 60,
-                              maxWidth: 150,
-                            
-                            ),
-
-                            child: DropdownButtonFormField<String>(
-                              items: const[
-                                DropdownMenuItem<String>(
-                                  value: "Iquique",
-                                  child: Text("Iquique")
-                                ),
-                                                    
-                                DropdownMenuItem<String>(
-                                value: "Alto Hospicio",
-                                child: Text("Alto Hospicio")
-                                ),
-                              ],
-                                                  
-                              onChanged: (value) async{
-                                setState(() {
-                                  if(value!.isNotEmpty){
-                                    selectedItemLocalidad = value;
-                                    print(selectedItemLocalidad);
-                                  }
-                                });
-                              },
-
-                              value: selectedItemLocalidad,
-                                
-                              validator: ((value) => value == null 
-                                ? "Escoge Localidad" : null),
-                                                    
-                              style: const TextStyle(color: Colors.black, fontSize: 16),
-                            )
-                          )
-                        ],
-                      ),
-                    ),
-
-                  Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500],height: 30),
-
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Text("Estirilizado",
-                            style: TextStyle(
-                                color: Colors.deepPurple[600],
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          
-                          const SizedBox(width: 30),
-
-                          ConstrainedBox(constraints: const BoxConstraints(
-                              maxHeight: 50,
-                              maxWidth: 150,
-                            
-                            ),
-
-                            child: DropdownButtonFormField<String>(
-                              items: const[
-                                DropdownMenuItem<String>(
-                                  value: "Si",
-                                  child: Text("Si")
-                                ),
-                                                    
-                                DropdownMenuItem<String>(
-                                value: "No",
-                                child: Text("No")
-                                ),
-                              ],
-                                                  
-                              onChanged: (value) async{
-                                setState(() {
-                                  if(value!.isNotEmpty){
-                                    selectedItemEstirilizado = value;
-                                    print(selectedItemEstirilizado);
-                                  }
-                                });
-                              },
-
-                              value: selectedItemEstirilizado,
-                                
-                              validator: ((value) => value == null 
-                                ? "Escoge una opcion" : null),
-                                
-                              style: const TextStyle(color: Colors.black, fontSize: 16),
-                            )
-                          )
-                        ],
-                      ),
-                    ),
-                  
-                  Divider(
-                      indent: 5,
-                      endIndent: 5,
-                      thickness: 1,
-                      color: Colors.grey[500],
-                      height: 25),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 300,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: TextFormField(
-                        controller: vacunaController,
-                        textCapitalization: TextCapitalization.words,
-                        maxLength: 150,
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            hintText: "Vacunas"),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Llene la casilla";
-                          } else if (!RegExp(r'^[a-z A-Z0-9_.-]*$')
-                              .hasMatch(value)) {
-                            return "No ocupe signos ni simbolos";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (value) {
-                          _formKey.currentState?.validate();
-                        },
-                      ),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 10),
-
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 300,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      child: TextFormField(
-                        controller: tamanoController,
-                        keyboardType: TextInputType.phone,
-                        textCapitalization: TextCapitalization.words,
-                        maxLines: 1,
-                        maxLength: 3,
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: "Tamaño en centimetros",
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 300,
                         ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Llene la casilla";
-                          } else if (!RegExp(r'^[0-9]*$').hasMatch(value)) {
-                            return "Ocupe solamente numeros.";
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (value) {
-                          _formKey.currentState?.validate();
-                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: TextFormField(
+                            controller: nombreController,
+                            textCapitalization: TextCapitalization.words,
+                            maxLength: 10,
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                                border: UnderlineInputBorder(), hintText: "Nombre"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Llene la casilla";
+                              } else if (!RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
+                                return "No ocupe signos, simbolos y numeros";
+                              } else {
+                                return null;
+                              }
+                            },
+                            
+                            onChanged: (value) {
+                              _formKey.currentState?.validate();
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 5),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "Cuidados Específicos",
+
+                      const SizedBox(height: 10),
+
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 300,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: TextFormField(
+                            controller: colorPelajeController,
+                            textCapitalization: TextCapitalization.words,
+                            maxLength: 8,
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                hintText: "Color del Pelaje"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Llene la casilla";
+                              } else if (!RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
+                                return "No ocupe signos, simbolos y numeros";
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (value) {
+                              _formKey.currentState?.validate();
+                            },
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 300,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: TextFormField(
+                            controller: pesoController,
+                            maxLength: 2,
+                            maxLines: 1,
+                            keyboardType: TextInputType.phone,
+                            decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                hintText: "Peso en Kilos"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Llene la casilla";
+                              } else if (!RegExp(r'^[0-9]*$').hasMatch(value)) {
+                                return "Ocupe solamente numeros.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (value) {
+                              _formKey.currentState?.validate();
+                            },
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+                      
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 300,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: TextFormField(
+                            controller: edadController,
+                            maxLength: 2,
+                            maxLines: 1,
+                            keyboardType: TextInputType.phone,
+                            decoration: const InputDecoration(
+                                border: UnderlineInputBorder(), hintText: "Edad (años)"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Llene la casilla";
+                              } else if (!RegExp(r'^[0-9]*$').hasMatch(value)) {
+                                return "Ocupe solamente numeros.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (value) {
+                              _formKey.currentState?.validate();
+                            },
+                          ),
+                        ),
+                      ),
+                      
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 300,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: TextFormField(
+                            controller: vacunaController,
+                            textCapitalization: TextCapitalization.words,
+                            maxLength: 150,
+                            decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                hintText: "Vacunas"),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Llene la casilla";
+                              } else if (!RegExp(r'^[a-z A-Z0-9_.-]*$')
+                                  .hasMatch(value)) {
+                                return "No ocupe signos ni simbolos";
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (value) {
+                              _formKey.currentState?.validate();
+                            },
+                          ),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 10),
+
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 300,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: TextFormField(
+                            controller: tamanoController,
+                            keyboardType: TextInputType.phone,
+                            textCapitalization: TextCapitalization.words,
+                            maxLines: 1,
+                            maxLength: 3,
+                            decoration: const InputDecoration(
+                              border: UnderlineInputBorder(),
+                              hintText: "Tamaño en centimetros",
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Llene la casilla";
+                              } else if (!RegExp(r'^[0-9]*$').hasMatch(value)) {
+                                return "Ocupe solamente numeros.";
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (value) {
+                              _formKey.currentState?.validate();
+                            },
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Cuidados Específicos",
+                                    style: TextStyle(
+                                        color: Colors.deepPurple[600],
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                TextFormField(
+                                  controller: cuidadoController,
+                                  textAlign: TextAlign.left,
+                                  maxLength: 200,
+                                  decoration: const InputDecoration(
+                                    hintText: "Escriba aqui.",
+                                  ),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Llene la casilla";
+                                    } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$')
+                                        .hasMatch(value)) {
+                                      return "No ocupe signos ni simbolos";
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    _formKey.currentState?.validate();
+                                  },
+                                ),
+                              ],
+                            )
+                          ),
+                      ),
+
+                      const SizedBox(height: 8),
+                     //Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500],height: 25),
+                      
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Text("Sexo",
                                 style: TextStyle(
                                     color: Colors.deepPurple[600],
-                                    fontSize: 18,
+                                    fontSize: 21,
                                     fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            TextFormField(
-                              controller: cuidadoController,
-                              textAlign: TextAlign.left,
-                              maxLength: 200,
-                              decoration: const InputDecoration(
-                                hintText: "Escriba aqui.",
+                              
+                              const SizedBox(width: 30),
+
+                              ConstrainedBox(constraints: const BoxConstraints(
+                                  maxHeight: 50,
+                                  maxWidth: 150,
+                                
+                                ),
+
+                                child: DropdownButtonFormField<String>(
+                                  items: const[
+                                    DropdownMenuItem<String>(
+                                      value: "Macho",
+                                      child: Text("Macho")
+                                    ),
+                                                        
+                                    DropdownMenuItem<String>(
+                                    value: "Hembra",
+                                    child: Text("Hembra")
+                                    ),
+                                  ],
+                                                      
+                                  onChanged: (value) async{
+                                    setState(() {
+                                      if(value!.isNotEmpty){
+                                        selectedItemSexo = value;
+                                        print(selectedItemSexo);
+                                      }
+                                    });
+                                  },
+
+                                  value: selectedItemSexo,
+                                    
+                                  validator: ((value) => value == null 
+                                    ? "Escoge un Sexo" : null),
+                                    
+                                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                                )
+                              )
+                            ],
+                          ),
+                        ),
+
+                      Divider(height: 30,indent: 5, endIndent: 5, thickness: 1, color: Colors.grey[500]),
+
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Text("Localidad Encontrada",
+                                style: TextStyle(
+                                    color: Colors.deepPurple[600],
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Llene la casilla";
-                                } else if (!RegExp(r'^[a-z A-Z0-9_.-]+$')
-                                    .hasMatch(value)) {
-                                  return "No ocupe signos ni simbolos";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              onChanged: (value) {
-                                _formKey.currentState?.validate();
-                              },
-                            ),
-                          ],
-                        )
-                      ),
+                              
+                              const SizedBox(width: 20),
+
+                              ConstrainedBox(constraints: const BoxConstraints(
+                                  maxHeight: 60,
+                                  maxWidth: 150,
+                                
+                                ),
+
+                                child: DropdownButtonFormField<String>(
+                                  items: const[
+                                    DropdownMenuItem<String>(
+                                      value: "Iquique",
+                                      child: Text("Iquique")
+                                    ),
+                                                        
+                                    DropdownMenuItem<String>(
+                                    value: "Alto Hospicio",
+                                    child: Text("Alto Hospicio")
+                                    ),
+                                  ],
+                                                      
+                                  onChanged: (value) async{
+                                    setState(() {
+                                      if(value!.isNotEmpty){
+                                        selectedItemLocalidad = value;
+                                        print(selectedItemLocalidad);
+                                      }
+                                    });
+                                  },
+
+                                  value: selectedItemLocalidad,
+                                  validator: ((value) => 
+                                  value == null ? "Escoge Localidad" : null),
+                                                        
+                                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                                )
+                              )
+                            ],
+                          ),
+                        ),
+
+                      Divider(indent: 5,endIndent: 5,thickness: 1,color: Colors.grey[500],height: 30),
+
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Text("Estirilizado",
+                                style: TextStyle(
+                                    color: Colors.deepPurple[600],
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              
+                              const SizedBox(width: 30),
+
+                              ConstrainedBox(constraints: const BoxConstraints(
+                                  maxHeight: 50,
+                                  maxWidth: 150,
+                                
+                                ),
+
+                                child: DropdownButtonFormField<String>(
+                                  items: const[
+                                    DropdownMenuItem<String>(
+                                      value: "Si",
+                                      child: Text("Si")
+                                    ),
+                                                        
+                                    DropdownMenuItem<String>(
+                                    value: "No",
+                                    child: Text("No")
+                                    ),
+                                  ],
+                                                      
+                                  onChanged: (value) async{
+                                    setState(() {
+                                      if(value!.isNotEmpty){
+                                        selectedItemEstirilizado = value;
+                                        print(selectedItemEstirilizado);
+                                      }
+                                    });
+                                  },
+
+                                  value: selectedItemEstirilizado,
+                                    
+                                  validator: ((value) => value == null 
+                                    ? "Escoge una opcion" : null),
+                                    
+                                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                                )
+                              )
+                            ],
+                          ),
+                        ),
+
+                      const SizedBox(height: 10),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                ],
-              ),
-            ),
-          );
-        }));
+                ),
+              );
+            }));
   }
 
   Future seleccionarImagenDeGaleria() async {
