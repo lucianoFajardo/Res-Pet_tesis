@@ -60,6 +60,7 @@ class _RegisterDataUserState extends State<RegisterDataUser> {
                       TextFormField(
                           controller: nameUser,
                           textCapitalization: TextCapitalization.words,
+                          maxLength: 10,
                           enableInteractiveSelection: true,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -75,6 +76,7 @@ class _RegisterDataUserState extends State<RegisterDataUser> {
                       TextFormField(
                           controller: lastName,
                           textCapitalization: TextCapitalization.words,
+                          maxLength: 12,
                           enableInteractiveSelection: true,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -89,13 +91,14 @@ class _RegisterDataUserState extends State<RegisterDataUser> {
                       ),
                       TextFormField(
                           controller: celphone,
-                          maxLength: 9,
+                          maxLength: 8,
                           keyboardType: TextInputType.number,
                           enableInteractiveSelection: true,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: "Telefono",
                               hintText: "Ingresar Telefono"),
+
                           validator: (value) =>
                               validateField(value, RegExp(r'^[0-9]+$')),
                           onChanged: (value) =>
@@ -104,6 +107,7 @@ class _RegisterDataUserState extends State<RegisterDataUser> {
                       TextFormField(
                           controller: location,
                           keyboardType: TextInputType.streetAddress,
+                          maxLength: 15,
                           enableInteractiveSelection: true,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),

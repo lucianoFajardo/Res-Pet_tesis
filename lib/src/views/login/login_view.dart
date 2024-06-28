@@ -117,7 +117,7 @@ class LoginView extends StatelessWidget {
                           Navigator.pushNamed(context, 'register');
                         },
                         child: const Text(
-                          'Registrate',
+                          'Registrarse',
                           style: TextStyle(color: Colors.black),
                         ),
                       )),

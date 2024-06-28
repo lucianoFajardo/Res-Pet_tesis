@@ -52,7 +52,7 @@ class _ViewAccountState extends State<ViewAccount> {
                     Text(stateData.idUser),
                     Text("Nombre: ${stateData.name}"),
                     Text("Apellido: ${stateData.lastName}"),
-                    Text("Celular: ${stateData.celphoneNumber}"),
+                    Text("Celular: +56 9 ${stateData.celphoneNumber}"),
                     Text("Direccion: ${stateData.locationUser}"),
                   ],
                 ),

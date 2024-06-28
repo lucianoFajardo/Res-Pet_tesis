@@ -66,18 +66,7 @@ class PerfilViewData extends StatelessWidget {
               padding: const EdgeInsets.all(5.0),
               child: Text("Ciudad de ${dataPetGet.location}"),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Container(
-                color: Colors.blue[200],
-                width: 90,
-                height: 25,
-                alignment: Alignment.center,
-                child: const Text(
-                  'estado',
-                ),
-              ),
-            ),
+            
           ]),
           Row(
             children: [
@@ -148,7 +137,7 @@ class PerfilViewData extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () async {
-                  await FlutterPhoneDirectCaller.callNumber(dataPetGet.celphoneUser);
+                  await FlutterPhoneDirectCaller.callNumber("+56 9 ${dataPetGet.celphoneUser}");
                 },
                 style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.white),

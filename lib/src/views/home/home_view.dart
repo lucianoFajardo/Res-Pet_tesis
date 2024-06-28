@@ -29,7 +29,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                       Navigator.pushNamed(context, 'new_post');
                     },
                     child: const Text(
-                      'Crear publicación',
+                      'Mascota en Adopcion',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -44,7 +44,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                       Navigator.pushNamed(context, 'new_post_perdida');
                     },
                     child: const Text(
-                      'Mascota perdida',
+                      'Mascota Perdida',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -59,7 +59,7 @@ class _HomeViewPageState extends State<HomeViewPage> {
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       textAlign: TextAlign.right,
-                      'Publicaciones recientes',
+                      'Mascota en Adopcion',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -82,29 +82,31 @@ class _HomeViewPageState extends State<HomeViewPage> {
               ),
             ),
             const Expanded(child: ListViewData()),
-            const Padding(
+            Padding(
               padding: EdgeInsets.all(5.0),
               child: Row(
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       textAlign: TextAlign.right,
-                      'Mascota perdida',
+                      'Mascota Perdida',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Padding(
-                    padding: EdgeInsets.only(right: 15),
-                    child: Text(
-                      textAlign: TextAlign.right,
-                      'ver mas..',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                    ),
-                  ),
+                      padding: const EdgeInsets.only(right: 15),
+                      child: TextButton(
+                        onPressed: (){},
+                        child: const Text(
+                          textAlign: TextAlign.right,
+                          'Ver más..',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
+                      )),
                 ],
               ),
             ),
